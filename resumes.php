@@ -70,14 +70,45 @@ include "connection.php";
         <div class="job-listing-area pt-120 pb-120">
             <div class="form-container ml-5 mr-5">
                 <h3>Users Resumes</h3>
-                <div class="mt-4">
-                    <div class="card" style="width: 18rem;">
+                <div class="row">
+                <div class="mt-3 ml-3 mr-3 mb-3" style="border-radius:5px;">
+                    <div class="card" style="width: 17rem;">
                         <img src="..." class="card-img-top" alt="...">
                         <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            <span><p>Name : </p> <span class="ml-5 mr-5"><i class="fa-solid fa-paperclip fa-lg"></i></span> <span class="ml-5 mr-5"><i class="fa-solid fa-download fa-lg"></i></span></span>
                         </div>
                     </div>
                 </div>
+
+                <div class="mt-3 ml-3 mr-3 mb-3" style="border-radius:5px;">
+                    <div class="card" style="width: 17rem;">
+                        <img src="..." class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <span><p>Name : </p> <span class="ml-5 mr-5"><i class="fa-solid fa-paperclip fa-lg"></i></span> <span class="ml-5 mr-5"><i class="fa-solid fa-download fa-lg"></i></span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-3 ml-3 mr-3 mb-3" style="border-radius:5px;">
+                    <div class="card" style="width: 17rem;">
+                        <img src="..." class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <span><p>Name : </p> <span class="ml-5 mr-5"><i class="fa-solid fa-paperclip fa-lg"></i></span> <span class="ml-5 mr-5"><i class="fa-solid fa-download fa-lg"></i></span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-3 ml-3 mr-3 mb-3" style="border-radius:5px;">
+                    <div class="card" style="width: 17rem;">
+                        <img src="..." class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <span><p>Name : </p> <span class="ml-5 mr-5"><i class="fa-solid fa-paperclip fa-lg"></i></span> <span class="ml-5 mr-5"><i class="fa-solid fa-download fa-lg"></i></span></span>
+                        </div>
+                    </div>
+                </div>
+
+                
+            </div>
             </div>
         </div>
         <!-- Job List Area End -->
