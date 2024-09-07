@@ -122,7 +122,6 @@ if(isset($_POST['submit'])){
     visibility: visible;
 }
 
-
             </style>
 </head>
 
@@ -266,12 +265,12 @@ if ($result->num_rows > 0) {
       <form action="users_contact.php" method="POST" style="display:inline;">
             <input type="hidden" name="contact_id" value="<?php echo $row['contact_id']; ?>">
             <div class="tooltip-container">
-    <span class="tooltip-icon"><i class="fa-solid fa-reply fa-lg" style="color: #35D7FF;"></i></span>
-    <div class="tooltip-text">
-        <!-- Replace the SVG with your text -->
-         Reply 
-        <div class="tooltip-arrow"></div>
-    </div>
+                <span class="tooltip-icon"><i class="fa-solid fa-reply fa-lg" style="color: #35D7FF;"></i></span>
+                <div class="tooltip-text">
+                    <!-- Replace the SVG with your text -->
+                    Reply 
+                <div class="tooltip-arrow"></div>
+            </div>
 </div>
 
 

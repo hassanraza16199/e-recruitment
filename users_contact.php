@@ -48,7 +48,56 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     white-space: pre-wrap; /* Preserve white spaces and wrap text */
     overflow-wrap: break-word; /* Break long words if necessary */
 }
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
 
+.tooltip-icon {
+    font-size: 24px;
+    padding: 5px;
+    border: none;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 100px;
+    background-color: #fff;
+    color: #000;
+    text-align: center;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    position: absolute;
+    top: 130%; /* Adjusts tooltip to appear below the icon */
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    white-space: nowrap;
+}
+
+.tooltip-text svg {
+    display: block;
+    margin: 0 auto;
+}
+
+.tooltip-arrow {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #ccc;
+    position: absolute;
+    bottom: 100%; /* Places the arrow above the tooltip */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.tooltip-container:hover .tooltip-text {
+    visibility: visible;
+}
             </style>
    </head>
 
@@ -101,7 +150,14 @@ if ($result->num_rows > 0) {
       <form action="users_contact.php" method="POST" style="display:inline;">
             <input type="hidden" name="contact_id" value="<?php echo $row['contact_id']; ?>">
             <button type="submit" style="border:none; background:none;">
-                <i class="fa-solid fa-trash fa-xl" style="color:#FF0000; cursor: pointer;"></i>
+                
+                <div class="tooltip-container">
+                <span class="tooltip-icon"><i class="fa-solid fa-trash fa-lg" style="color:#FF0000; cursor: pointer;"></i></span>
+                <div class="tooltip-text">
+                    <!-- Replace the SVG with your text -->
+                    Delete 
+                <div class="tooltip-arrow"></div>
+            </div>
             </button>
         </form>
     </td>

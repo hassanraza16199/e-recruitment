@@ -65,7 +65,7 @@
                                             ?>
                                             <li><a href="dashboard.php">Home</a></li>
                                             <li><a href="job_listing.php">Find a Jobs </a></li>
-                                            <li><a href="resumes.php">Recumes</a></li>
+                                            <li><a href="resumes.php">Resumes</a></li>
                                             <li><a href="#">Page</a>
                                             
                                                 <ul class="submenu">

@@ -124,7 +124,56 @@ if (isset($_GET['id'])) {
     text-decoration: none;
     cursor: pointer;
 }
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
 
+.tooltip-icon {
+    font-size: 24px;
+    padding: 5px;
+    border: none;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 100px;
+    background-color: #fff;
+    color: #000;
+    text-align: center;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    position: absolute;
+    top: 130%; /* Adjusts tooltip to appear below the icon */
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    white-space: nowrap;
+}
+
+.tooltip-text svg {
+    display: block;
+    margin: 0 auto;
+}
+
+.tooltip-arrow {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #ccc;
+    position: absolute;
+    bottom: 100%; /* Places the arrow above the tooltip */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.tooltip-container:hover .tooltip-text {
+    visibility: visible;
+}
             </style>
    </head>
 
@@ -156,7 +205,7 @@ if (isset($_GET['id'])) {
       <th scope="col">Date of Birth</th>
       <th scope="col">Counrty</th>
       <th scope="col">Role</th>
-      <th scope="col">Action</th>
+      <th scope="col" colspan="2"><span class="ml-5">Action</span></th>
     </tr>
   </thead>
   <tbody>
@@ -182,8 +231,23 @@ if ($result->num_rows > 0) {
       <td><?php echo $row['user_type']; ?></td>
       
       <td>
-        <i  style="color:blue" class="fa-regular fa-pen-to-square fa-xl" ></i>
-        <i id="delete-<?php echo $row['id']; ?>" class="fa-solid fa-trash ml-3 fa-xl" style="color:#FF0000; cursor: pointer;"></i>
+        
+        <div class="tooltip-container">
+                <span class="tooltip-icon"><i  style="color:blue" class="fa-regular fa-pen-to-square fa-lg" ></i></span>
+                <div class="tooltip-text">
+                    <!-- Replace the SVG with your text -->
+                    Edit 
+                <div class="tooltip-arrow"></div>
+            </div> 
+        </td>
+            <td>
+        <div class="tooltip-container">
+                <span class="tooltip-icon"><i id="delete-<?php echo $row['id']; ?>" class="fa-solid fa-trash ml-3 fa-lg" style="color:#FF0000; cursor: pointer;"></i></span>
+                <div class="tooltip-text">
+                    <!-- Replace the SVG with your text -->
+                    Delete 
+                <div class="tooltip-arrow"></div>
+            </div>
     </td>
     </tr>
 <?php
