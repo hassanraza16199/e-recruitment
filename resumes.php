@@ -71,42 +71,26 @@ include "connection.php";
             <div class="form-container ml-5 mr-5">
                 <h3>Users Resumes</h3>
                 <div class="row">
+                    <?php
+                    include "connection.php";
+                        $sql = "SELECT * FROM applications ";
+                        $result = mysqli_query($conn, $sql);
+
+                        if (mysqli_num_rows($result)>0) {
+                            while($row = mysqli_fetch_assoc($result)){
+                    ?>
                 <div class="mt-3 ml-3 mr-3 mb-3" style="border-radius:5px;">
                     <div class="card" style="width: 17rem;">
-                        <img src="..." class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <span><p>Name : </p> <span class="ml-5 mr-5"><i class="fa-solid fa-paperclip fa-lg"></i></span> <span class="ml-5 mr-5"><i class="fa-solid fa-download fa-lg"></i></span></span>
+                    <embed src="/e-recruitment/cv/<?php echo $row['cv'] ?>" type="application/pdf" width="100%" height="200px" />
+                        <div class="card-body" style="border-top:1px solid rgba(0, 0, 0, .125); height: 100px;">
+                            <span><p>Name : <?php echo $row['firstname'] ?></p> <span class="ml-4 mr-5"><img src="assets/img/go-to.png" style="width:20px; margin-top:-7px;" alt=""></span> <span><i class="fa-solid fa-paperclip fa-lg"></i></span> <span class="ml-5 mr-4"><i class="fa-solid fa-download fa-lg"></i></span></span>
                         </div>
                     </div>
                 </div>
-
-                <div class="mt-3 ml-3 mr-3 mb-3" style="border-radius:5px;">
-                    <div class="card" style="width: 17rem;">
-                        <img src="..." class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <span><p>Name : </p> <span class="ml-5 mr-5"><i class="fa-solid fa-paperclip fa-lg"></i></span> <span class="ml-5 mr-5"><i class="fa-solid fa-download fa-lg"></i></span></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-3 ml-3 mr-3 mb-3" style="border-radius:5px;">
-                    <div class="card" style="width: 17rem;">
-                        <img src="..." class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <span><p>Name : </p> <span class="ml-5 mr-5"><i class="fa-solid fa-paperclip fa-lg"></i></span> <span class="ml-5 mr-5"><i class="fa-solid fa-download fa-lg"></i></span></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-3 ml-3 mr-3 mb-3" style="border-radius:5px;">
-                    <div class="card" style="width: 17rem;">
-                        <img src="..." class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <span><p>Name : </p> <span class="ml-5 mr-5"><i class="fa-solid fa-paperclip fa-lg"></i></span> <span class="ml-5 mr-5"><i class="fa-solid fa-download fa-lg"></i></span></span>
-                        </div>
-                    </div>
-                </div>
-
+                <?php
+                            }
+                        }
+                    ?>
                 
             </div>
             </div>
