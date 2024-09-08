@@ -28,8 +28,8 @@ if(isset($_POST['submit'])) {
     
     $company_logo = time().$_FILES['company_logo']['name'];
     
-    if(move_uploaded_file($_FILES['company_logo']['tmp_name'], $_SERVER['DOCUMENT_ROOT']. '/E-Recruitment system/upload/' . $company_logo)){
-        $target_file = $_SERVER['DOCUMENT_ROOT']. '/E-Recruitment system/upload/' . $company_logo;
+    if(move_uploaded_file($_FILES['company_logo']['tmp_name'], $_SERVER['DOCUMENT_ROOT']. '/e-recruitment/upload/' . $company_logo)){
+        $target_file = $_SERVER['DOCUMENT_ROOT']. '/e-recruitment/upload/' . $company_logo;
         $imagefiletype = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
         $picname = basename($_FILES['company_logo']['name']);
         $photo = time().$picname;

@@ -27,8 +27,8 @@ if(isset($_POST['submit'])) {
 
     $resume = time().$_FILES['resume']['name'];
     
-    if(move_uploaded_file($_FILES['resume']['tmp_name'], $_SERVER['DOCUMENT_ROOT']. '/E-Recruitment system/cv/' . $resume)){
-        $target_file = $_SERVER['DOCUMENT_ROOT']. '/E-Recruitment system/cv/' . $resume;
+    if(move_uploaded_file($_FILES['resume']['tmp_name'], $_SERVER['DOCUMENT_ROOT']. '/e-recruitment/cv/' . $resume)){
+        $target_file = $_SERVER['DOCUMENT_ROOT']. '/e-recruitment/cv/' . $resume;
         $resumefiletype = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
         $resumename = basename($_FILES['resume']['name']);
         $resumefile = time().$resumename;

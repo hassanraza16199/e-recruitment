@@ -89,7 +89,7 @@ include "connection.php";
                         <div class="single-job-items mb-50">
                             <div class="job-items">
                                 <div class="company-img company-img-details">
-                                    <a href=""><img style='width:120px; height:120px;' src='/E-Recruitment system/upload/<?php echo $row['company_logo'] ?> '></a>
+                                    <a href=""><img style='width:120px; height:120px;' src='/e-recruitment/upload/<?php echo $row['company_logo'] ?> '></a>
                                 </div>
                                 <div class="job-tittle">
                                     <a href="#">
