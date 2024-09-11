@@ -68,8 +68,8 @@ include "connection.php";
                         <div class="col-xl-12">
                             <div class="hero-cap text-center">
                                 <h2>Resumes</h2>
-                                <form class="d-flex mt-4">
-                                    <input class="select-input" type="search" placeholder="Enter resume keyword" aria-label="Search">
+                                <form class="d-flex mt-4" method="GET" action="resumes.php">
+                                    <input class="select-input" type="search" name="search" placeholder="Enter resume keyword" aria-label="Search">
                                     <button class="btn btn-outline" type="submit">Search</button>
                                 </form>
                             </div>
@@ -86,7 +86,19 @@ include "connection.php";
                 <div class="row">
                     <?php
                     include "connection.php";
-                        $sql = "SELECT * FROM applications ";
+
+// Check if the search keyword is set
+$searchKeyword = 'search';
+if (isset($_GET['search']) && !empty($_GET['search'])) {
+    $searchKeyword = mysqli_real_escape_string($conn, $_GET['search']);
+}
+
+// Modify the SQL query to search by first name
+$sql = "SELECT * FROM applications";
+if (!empty($searchKeyword)) {
+    $sql .= " WHERE firstname LIKE '%$searchKeyword%'";
+}
+
                         $result = mysqli_query($conn, $sql);
 
                         if (mysqli_num_rows($result)>0) {
