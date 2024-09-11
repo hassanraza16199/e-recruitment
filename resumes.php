@@ -30,7 +30,16 @@ include "connection.php";
             <link rel="stylesheet" href="assets/css/slick.css">
             <link rel="stylesheet" href="assets/css/nice-select.css">
             <link rel="stylesheet" href="assets/css/style.css">
-            
+            <style>
+                .d-flex{
+                    justify-content:center;
+                }
+                .select-input{
+                    width: 25%;
+                    border:none;
+                    border-radius:0;
+                }
+            </style>
    </head>
 
    <body>
@@ -59,6 +68,10 @@ include "connection.php";
                         <div class="col-xl-12">
                             <div class="hero-cap text-center">
                                 <h2>Resumes</h2>
+                                <form class="d-flex mt-4">
+                                    <input class="select-input" type="search" placeholder="Enter resume keyword" aria-label="Search">
+                                    <button class="btn btn-outline" type="submit">Search</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -83,7 +96,18 @@ include "connection.php";
                     <div class="card" style="width: 17rem;">
                     <embed src="/e-recruitment/cv/<?php echo $row['resume'] ?>" type="application/pdf" width="100%" height="200px" />
                         <div class="card-body" style="border-top:1px solid rgba(0, 0, 0, .125); height: 100px;">
-                            <span><p>Name : <?php echo $row['firstname'] ?></p> <span class="ml-4 mr-5"><img src="assets/img/go-to.png" style="width:20px; margin-top:-7px;" alt=""></span> <span><i class="fa-solid fa-paperclip fa-lg"></i></span> <span class="ml-5 mr-4"><i class="fa-solid fa-download fa-lg"></i></span></span>
+                            <span>
+                                <p>Name : <?php echo $row['firstname'] ?></p> 
+                                <span class="ml-4 mr-5">
+                                    <img src="assets/img/go-to.png" style="width:20px; margin-top:-7px; cursor:pointer;" alt="">
+                                </span> 
+                                <span>
+                                    <i class="fa-solid fa-paperclip fa-lg open-pdf" data-pdf="/e-recruitment/cv/<?php echo $row['resume'] ?>" style="cursor:pointer;"></i>
+                                </span>  
+                                <span class="ml-5 mr-4">
+                                    <i class="fa-solid fa-download fa-lg" style="cursor:pointer;" onclick="openPdfPopup('/e-recruitment/cv/<?php echo $row['resume'] ?>')"></i>
+                                </span>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -97,10 +121,82 @@ include "connection.php";
         </div>
         <!-- Job List Area End -->
     </main>
-
+    <!-- Modal for displaying the PDF -->
+<div id="pdfModal" class="modal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background-color:rgba(0, 0, 0, 0.5);">
+    <div class="modal-content" style="margin:auto; background-color:white; padding:20px; width:80%; height:80%;">
+        <span id="closeModal" style="float:right; cursor:pointer; font-size:24px;">&times;</span>
+        <embed id="pdfViewer" src="" type="application/pdf" width="100%" height="100%" />
+    </div>
+</div>
 
     <?php include "footer.php"; ?>
-    
+    <script>
+    function openPdfPopup(pdfUrl) {
+        var modal = document.createElement('div');
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.width = '100%';
+        modal.style.height = '100%';
+        modal.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.style.zIndex = '1000';
+        
+        var iframe = document.createElement('iframe');
+        iframe.src = pdfUrl;
+        iframe.style.width = '80%';
+        iframe.style.height = '80%';
+        iframe.style.border = 'none';
+        
+        var closeButton = document.createElement('button');
+        closeButton.innerText = 'x';
+        closeButton.style.position = 'absolute';
+        closeButton.style.top = '10px';
+        closeButton.style.right = '10px';
+        closeButton.style.backgroundColor = 'black';
+        closeButton.style.border = 'none';
+        closeButton.style.padding = '10px';
+        closeButton.style.cursor = 'pointer';
+        closeButton.onclick = function() {
+            document.body.removeChild(modal);
+        };
+
+        modal.appendChild(iframe);
+        modal.appendChild(closeButton);
+        document.body.appendChild(modal);
+    }
+    // Get the modal element and close button
+    var modal = document.getElementById("pdfModal");
+    var closeModal = document.getElementById("closeModal");
+    var pdfViewer = document.getElementById("pdfViewer");
+
+    // Add click event listener to all elements with the 'open-pdf' class (both img and icon)
+    document.querySelectorAll('.open-pdf').forEach(function (element) {
+        element.addEventListener('click', function () {
+            // Get the PDF file path from the data-pdf attribute
+            var pdfPath = this.getAttribute('data-pdf');
+            // Set the src of the embed element to display the PDF
+            pdfViewer.setAttribute('src', pdfPath);
+            // Show the modal
+            modal.style.display = 'block';
+        });
+    });
+
+    // Close the modal when the 'close' button is clicked
+    closeModal.onclick = function () {
+        modal.style.display = 'none';
+    };
+
+    // Close the modal when clicking outside the modal content
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    };
+</script>
+
 	<!-- JS here -->
         <script src="https://kit.fontawesome.com/3acead0521.js" crossorigin="anonymous"></script>
 		<!-- All JS Custom Plugins Link Here here -->
