@@ -99,8 +99,8 @@ include 'connection.php';
                                 <!-- Select job items start -->
                                 <div class="select-job-items2">
                                     <select name="select">
+                                        <option selected>Select Job Category</option>
                                         <option value="">All Category</option>
-                                        <option selected>Open this select menu</option>
                                         <option value="Design & Creative">Design & Creative</option>
                                         <option value="Design & Development">Design & Development</option>
                                         <option value="Sales & Marketing">Sales & Marketing</option>
@@ -285,7 +285,7 @@ include 'connection.php';
                                         echo "<div class='single-job-items mb-30'>";
                                         echo "<div class='job-items'>";
                                         echo "<div class='company-img'>";
-                                        echo "<a href='job_details.php?id=" . $row['job_id'] . "'><img style='width:120px; height:120px;' src='/E-Recruitment system/upload/" . $row['company_logo'] . "'></a>";
+                                        echo "<a href='job_details.php?id=" . $row['job_id'] . "'><img style='width:120px; height:120px;' src='/e-recruitment/upload/" . $row['company_logo'] . "'></a>";
                                         echo "</div>";
                                         echo "<div class='job-tittle job-tittle2'>";
                                         echo "<a href='job_details.php?id=" . $row['job_id'] . "'>";

@@ -145,7 +145,7 @@ if(isset($_POST['submit'])) {
                     
                 <div class="mb-3 ml-4 mr-4">
                     <label  class="form-label">Company Logo</label>
-                    <input type="file" accept=".jpg, .jpeg, .png" class="form-control" id="company_logo" name="company_logo" required>
+                    <input type="file" accept=".jpg, .jpeg, .png" class="row mx-0 mb-4" id="company_logo" name="company_logo" required>
                 </div>
 
                 <div class="mb-3 ml-4 mr-4">
@@ -154,7 +154,7 @@ if(isset($_POST['submit'])) {
                 </div>
 
                 <div class="mb-3 ml-4 mr-4">
-                    <label  class="form-label">Job Discription</label>
+                    <label  class="form-label">Job Description</label>
                     <input type="text" class="form-control" id="discription" name="discription" required>
                 </div>
 
@@ -166,7 +166,7 @@ if(isset($_POST['submit'])) {
                 <div class="mb-1 ml-4 mr-4">
                 <label  class="form-label">Categories</label>
                     <select class="form-select mb-4" name="categories" id="categories" >
-                        <option selected>Open this select menu</option>
+                        <option selected>Select Job Category</option>
                         <option value="Design & Creative">Design & Creative</option>
                         <option value="Design & Development">Design & Development</option>
                         <option value="Sales & Marketing">Sales & Marketing</option>
@@ -200,14 +200,14 @@ if(isset($_POST['submit'])) {
                 </div>
 
                 <div class="mb-3 ml-4 mr-4">
-                    <label  class="form-label">Salery</label>
+                    <label  class="form-label">Salary</label>
                     <input type="number" class="form-control" id="salary" name="salary" required>
                 </div>
 
                 <div class="mb-4 ml-4 mr-4">
-                    <label  class="form-label">Timming</label>
+                    <label  class="form-label">Job Timing</label>
                     <select class="form-select mb-4" name="timing" id="timing" >
-                        <option selected>Open this select menu</option>
+                        <option selected>Select Job Time</option>
                         <option value="Full Time">Full Time</option>
                         <option value="Part Time">Part Time</option>
                         <option value="Remote">Remote</option>
