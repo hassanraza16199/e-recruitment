@@ -5,8 +5,9 @@ include "connection.php";
 $resume_upload = 0;
 
 if(isset($_POST['submit'])) {
-    if (isset($_GET['id'])) {
-        $job_id = $_GET['id'];
+    if (isset($_GET['job_id'])) {
+        $job_id = $_GET['job_id'];
+        $recruiter_id = $_GET['recruiter_id'];
     } else {
         echo "No job ID specified.";
         exit;
@@ -42,8 +43,8 @@ if(isset($_POST['submit'])) {
         }
     }
     if($resume_upload == 1){
-        $sql = "INSERT INTO applications (candidate_id, job_id, firstname, lastname, cnic, email_address, contact_number, date_birth, country, candidate_education, candidate_skill, candidate_experience, resume, date)
-                VALUES ('$candidate_id', '$job_id', '$firstname', '$lastname', '$cnic', '$email_address', '$contact_number', '$date_birth', '$country', '$candidate_education', '$candidate_skill', '$candidate_experience', '$resumefile', '$date')";
+        $sql = "INSERT INTO applications (candidate_id, job_id, recruiter_id, firstname, lastname, cnic, email_address, contact_number, date_birth, country, candidate_education, candidate_skill, candidate_experience, resume, date)
+                VALUES ('$candidate_id', '$job_id', '$recruiter_id', '$firstname', '$lastname', '$cnic', '$email_address', '$contact_number', '$date_birth', '$country', '$candidate_education', '$candidate_skill', '$candidate_experience', '$resumefile', '$date')";
         
         $count_sql = "SELECT COUNT(*) AS total FROM applications";
         $count_result = $conn->query($count_sql);
@@ -162,7 +163,7 @@ if(isset($_POST['submit'])) {
         
         <div class="form-container">
     <h2>Application Form</h2>
-    <form action="apply_job.php?id=<?php echo $_GET['id']; ?>" method="POST" enctype="multipart/form-data" >
+    <form action="apply_job.php?job_id=<?php echo $_GET['job_id']; ?>&recruiter_id=<?php echo $_GET['recruiter_id']; ?>" method="POST" enctype="multipart/form-data" >
 
         <div class="row mb-2">
             <div class="col-md-6">

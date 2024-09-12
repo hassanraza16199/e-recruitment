@@ -17,6 +17,7 @@ include "connection.php";
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="manifest" href="site.webmanifest">
         <link rel="shortcut icon" type="image/x-icon" href="assets/img/fav.png">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 		<!-- CSS here -->
             <link rel="stylesheet" href="assets/css/bootstrap.min.css">
             <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
@@ -31,12 +32,25 @@ include "connection.php";
             <link rel="stylesheet" href="assets/css/nice-select.css">
             <link rel="stylesheet" href="assets/css/style.css">
             <style>
+                /* Add this to your style section */
+.modal-content embed {
+    width: 100%;
+    height: 100%;
+    border: none;
+    overflow: hidden; /* Disable scroll */
+}
+
                 .d-flex{
                     justify-content:center;
                 }
-                .select-input{
+                .icon-btn{
+                    color:black;
+                    background:white;
+                    border:0;
                     border-top-left-radius: 25px;
                     border-bottom-left-radius: 25px;
+                }
+                .select-input{
                     width: 34%;
                     border:none;
                     
@@ -54,7 +68,6 @@ include "connection.php";
 	                border: 1px solid #fb246a;
 	                letter-spacing: 3px;
 	                text-align: center;
-	                
 	                text-transform: uppercase;
 	                cursor: pointer
                 }
@@ -88,6 +101,7 @@ include "connection.php";
                             <div class="hero-cap text-center">
                                 <h2>Resumes</h2>
                                 <form class="d-flex mt-4" method="GET" action="resumes.php">
+                                <button class="icon-btn" type="button" disabled><i class="fa-solid fa-magnifying-glass"></i></button>
                                     <input class="select-input" type="search" name="search" placeholder="     Search Resumes" aria-label="Search">
                                     <button class="search-btn" type="submit">Search</button>
                                 </form>
@@ -103,49 +117,55 @@ include "connection.php";
             <div class="form-container ml-5 mr-5">
                 <h3>Users Resumes</h3>
                 <div class="row">
-                    <?php
-                    include "connection.php";
-$sql = "SELECT * FROM applications";
-// Check if the search keyword is set
-$searchKeyword = 'search';
+                <?php
+include "connection.php";
+$recruiter_id = $_SESSION['id'];
+
+// Base query
+$sql = "SELECT * FROM applications WHERE recruiter_id = '$recruiter_id'";
+
+// Check if the search keyword is set and not empty
 if (isset($_GET['search']) && !empty($_GET['search'])) {
     $searchKeyword = mysqli_real_escape_string($conn, $_GET['search']);
+    // Add an additional condition for searching by firstname
+    $sql .= " AND firstname LIKE '%$searchKeyword%'";
 }
 
-// Modify the SQL query to search by first name
+// Execute the query
+$result = mysqli_query($conn, $sql);
 
-if (!empty($searchKeyword)) {
-    $sql .= " WHERE firstname LIKE '%$searchKeyword%'";
-}
-$sql = "SELECT * FROM applications";
-                        $result = mysqli_query($conn, $sql);
-
-                        if (mysqli_num_rows($result)>0) {
-                            while($row = mysqli_fetch_assoc($result)){
-                    ?>
-                <div class="mt-3 ml-3 mr-3 mb-3" style="border-radius:5px;">
-                    <div class="card" style="width: 12rem; height:15rem;">
-                    <embed src="/e-recruitment/cv/<?php echo $row['resume'] ?>" type="application/pdf" width="100%" height="200px" />
-                        <div class="card-body" style="border-top:1px solid rgba(0, 0, 0, .125); height: 70px;">
-                            <span class="row">
-                                <p style="font-size: 12px;"> <?php echo $row['firstname'] ?></p> 
-                                <span class=" ml-4">
-                                    <img src="assets/img/go-to.png" style="width: 15px; margin-top:-7px; cursor:pointer;" alt="">
-                                </span> 
-                                <span class=" ml-3">
-                                    <i class="fa-solid fa-paperclip open-pdf" data-pdf="/e-recruitment/cv/<?php echo $row['resume'] ?>" style="cursor:pointer;"></i>
-                                </span>  
-                                <span class=" ml-3">
-                                    <i class="fa-solid fa-download" style="cursor:pointer;" onclick="openPdfPopup('/e-recruitment/cv/<?php echo $row['resume'] ?>')"></i>
-                                </span>
+// Check if results are found
+if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+?>
+        <div class="mt-3 ml-3 mr-3 mb-3" style="border-radius:5px;">
+            <div class="card" style="width: 11rem; height:15rem;">
+                <embed src="/e-recruitment/cv/<?php echo $row['resume']; ?>" type="application/pdf" width="100%" height="200px" />
+                <div class="card-body" style="border-top:1px solid rgba(0, 0, 0, .125); height: 70px;">
+                    <span class="row">
+                        <p style="font-size: 12px; width:80px;"> <?php echo $row['firstname']; ?></p>
+                        <span>
+                            <span class="ml-2">
+                                <img src="assets/img/go-to.png" style="width: 15px; margin-top:-7px; cursor:pointer;" alt="">
+                            </span> 
+                            <span class="ml-2">
+                                <i class="fa-solid fa-paperclip open-pdf" data-pdf="/e-recruitment/cv/<?php echo $row['resume']; ?>" style="cursor:pointer;"></i>
+                            </span>  
+                            <span class="ml-2">
+                                <i class="fa-solid fa-download" style="cursor:pointer;" onclick="openPdfPopup('/e-recruitment/cv/<?php echo $row['resume']; ?>')"></i>
                             </span>
-                        </div>
-                    </div>
+                        </span>
+                    </span>
                 </div>
-                <?php
-                            }
-                        }
-                    ?>
+            </div>
+        </div>
+<?php
+    }
+} else {
+    echo "<p>No resumes found.</p>";
+}
+?>
+
                 
             </div>
             </div>

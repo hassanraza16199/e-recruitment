@@ -1,10 +1,7 @@
 <?php
 session_start();
 
-
 include "connection.php";
-
-
 
 ?>
 
@@ -70,7 +67,9 @@ include "connection.php";
         <div class="job-post-company pt-120 pb-120">
 
         <?php
-        $job_id = $_GET['id'];
+    include "connection.php";
+        $job_id = $_GET['job_id'];
+        $recruiter_id = $_GET['recruiter_id'];
                     
                     $sql = "SELECT * FROM job_post WHERE job_id = '$job_id' ";
                     $result = mysqli_query($conn, $sql);
@@ -154,7 +153,7 @@ include "connection.php";
                                             if ($_SESSION['user_type'] == 'Recruiter') {
                                                 echo "<a href='app_job.php?id=" . $job_id . "' class='btn'>Applied Application</a>";
                                             }else if ($_SESSION['user_type'] == 'Candidate') {
-                                                echo "<a href='apply_job.php?id=" . $job_id . "' class='btn'>Apply Now</a>";
+                                                echo "<a href='apply_job.php?job_id=" . $job_id . "&recruiter_id=" . $recruiter_id . "' class='btn'>Apply Now</a>";
                                             }
                                             ?>
                             

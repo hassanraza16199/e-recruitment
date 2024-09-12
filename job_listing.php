@@ -276,40 +276,42 @@ include 'connection.php';
                                 <!-- Count of Job list End -->
                                 <!-- single-job-content -->
                                 <?php
-                                include "connection.php";
-                                    $sql = "SELECT * FROM job_post WHERE status = 'active'";
-                                    $result = $conn->query($sql);
+include "connection.php";
+$sql = "SELECT * FROM job_post WHERE status = 'active'";
+$result = $conn->query($sql);
 
-                                    if ($result->num_rows > 0) {
-                                        while($row = $result->fetch_assoc()) {
-                                        echo "<div class='single-job-items mb-30'>";
-                                        echo "<div class='job-items'>";
-                                        echo "<div class='company-img'>";
-                                        echo "<a href='job_details.php?id=" . $row['job_id'] . "'><img style='width:120px; height:120px;' src='/e-recruitment/upload/" . $row['company_logo'] . "'></a>";
-                                        echo "</div>";
-                                        echo "<div class='job-tittle job-tittle2'>";
-                                        echo "<a href='job_details.php?id=" . $row['job_id'] . "'>";
-                                        echo "<h4>" . $row['categories'] . "</h4>";
-                                        echo "</a>";
-                                        echo "<ul>";
-                                        echo "<li>" . $row['company_name'] . "</li>";
-                                        echo "<li>     </li>";
-                                        echo "<li> Salary: " . $row['salary'] . "</li> <br>";
-                                        $requirementsPreview = substr($row['requirements'], 0, 15) . (strlen($row['requirements']) > 15 ? '...' : '');
-                                        echo "<li>" . $requirementsPreview . "</li>";
-                                        echo "</ul>";
-                                        echo "</div>";
-                                        echo "</div>";
-                                        echo "<div class='items-link items-link2 f-right'>";
-                                        echo "<a href='job_details.html'>" . $row['timing'] . "</a> <br>";
-                                        echo "<span> <i class='fas fa-map-marker-alt'></i> " . $row['company_location'] . "</span>";
-                                        echo "</div>";
-                                        echo "</div>";
-                                        }
-                                    } else {
-                                        echo "No job posts found.";
-                                    }
-                                ?>
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        echo "<div class='single-job-items mb-30'>";
+        echo "<div class='job-items'>";
+        echo "<div class='company-img'>";
+        // Including both job_id and recruiter_id in the URL
+        echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'><img style='width:120px; height:120px;' src='/e-recruitment/upload/" . $row['company_logo'] . "'></a>";
+        echo "</div>";
+        echo "<div class='job-tittle job-tittle2'>";
+        echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'>";
+        echo "<h4>" . $row['categories'] . "</h4>";
+        echo "</a>";
+        echo "<ul>";
+        echo "<li>" . $row['company_name'] . "</li>";
+        echo "<li>     </li>";
+        echo "<li> Salary: " . $row['salary'] . "</li> <br>";
+        $requirementsPreview = substr($row['requirements'], 0, 15) . (strlen($row['requirements']) > 15 ? '...' : '');
+        echo "<li>" . $requirementsPreview . "</li>";
+        echo "</ul>";
+        echo "</div>";
+        echo "</div>";
+        echo "<div class='items-link items-link2 f-right'>";
+        echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'>" . $row['timing'] . "</a> <br>";
+        echo "<span><i class='fas fa-map-marker-alt'></i> " . $row['company_location'] . "</span>";
+        echo "</div>";
+        echo "</div>";
+    }
+} else {
+    echo "No job posts found.";
+}
+?>
+
 
                                
                     
