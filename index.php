@@ -78,9 +78,9 @@ include "connection.php";
 .footer-area .footer-tittle-bottom span {
 	display: inline-block;
 	color: #fff;
-	font-weight: 600;
+	font-weight: 550;
 	font-size: 24px;
-	margin-right: 11px
+	margin-right: 6px
 }
 
 @media (max-width: 767px) {
@@ -195,14 +195,16 @@ include "connection.php";
 }
 
 .footer-wejed {
-	padding-top: 120px;
-	padding-bottom: 40px
+	padding-top: 3px;
+        padding-bottom: 23px;
+        padding-right:-10px;
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
 	.footer-wejed {
-		padding-top: 50px;
-		padding-bottom: 40px
+		padding-top: 3px;
+        padding-bottom: 23px;
+        
 	}
 }
 
@@ -812,15 +814,10 @@ form.search-box .select-form .nice-select::after {
                     </div>
                 </div>
                <!--  -->
-               <div class="row footer-wejed justify-content-between">
-                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <!-- logo -->
-                        <div class="footer-logo mb-20">
-                        
-                        </div>
-                    </div>
+               <div class="row footer-wejed justify-content-between w-100">
+                    
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
-                    <div class="footer-tittle-bottom">
+                    <div class="footer-tittle-bottom ml-5">
                     <?php
                                             include 'connection.php';
                                             $count_sql = "SELECT COUNT(*) AS total FROM user";
@@ -833,7 +830,7 @@ form.search-box .select-form .nice-select::after {
                         <p>Talented Hunter</p>
                     </div>
                     </div>
-                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-4">
                     <?php
                                             include 'connection.php';
                                             $count_sql = "SELECT COUNT(*) AS total FROM job_post";
@@ -847,7 +844,7 @@ form.search-box .select-form .nice-select::after {
                             <p>Jobs</p>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-4">
                     <?php
                                             include 'connection.php';
                                             $count_sql = "SELECT COUNT(*) AS total FROM applications";

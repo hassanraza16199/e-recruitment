@@ -35,9 +35,28 @@ include "connection.php";
                     justify-content:center;
                 }
                 .select-input{
-                    width: 25%;
+                    border-top-left-radius: 25px;
+                    border-bottom-left-radius: 25px;
+                    width: 34%;
                     border:none;
-                    border-radius:0;
+                    
+                }
+                .search-btn{
+                    border-top-right-radius: 25px;
+                    border-bottom-right-radius: 25px;
+                    background: #fb246a;
+	                color:white;
+	                display: inline-block;
+	                padding: 18px 44px;
+	                font-family: "Muli", sans-serif;
+	                font-size: 14px;
+	                font-weight: 400;
+	                border: 1px solid #fb246a;
+	                letter-spacing: 3px;
+	                text-align: center;
+	                
+	                text-transform: uppercase;
+	                cursor: pointer
                 }
             </style>
    </head>
@@ -69,8 +88,8 @@ include "connection.php";
                             <div class="hero-cap text-center">
                                 <h2>Resumes</h2>
                                 <form class="d-flex mt-4" method="GET" action="resumes.php">
-                                    <input class="select-input" type="search" name="search" placeholder="Enter resume keyword" aria-label="Search">
-                                    <button class="btn btn-outline" type="submit">Search</button>
+                                    <input class="select-input" type="search" name="search" placeholder="     Search Resumes" aria-label="Search">
+                                    <button class="search-btn" type="submit">Search</button>
                                 </form>
                             </div>
                         </div>
@@ -86,7 +105,7 @@ include "connection.php";
                 <div class="row">
                     <?php
                     include "connection.php";
-
+$sql = "SELECT * FROM applications";
 // Check if the search keyword is set
 $searchKeyword = 'search';
 if (isset($_GET['search']) && !empty($_GET['search'])) {
@@ -94,30 +113,30 @@ if (isset($_GET['search']) && !empty($_GET['search'])) {
 }
 
 // Modify the SQL query to search by first name
-$sql = "SELECT * FROM applications";
+
 if (!empty($searchKeyword)) {
     $sql .= " WHERE firstname LIKE '%$searchKeyword%'";
 }
-
+$sql = "SELECT * FROM applications";
                         $result = mysqli_query($conn, $sql);
 
                         if (mysqli_num_rows($result)>0) {
                             while($row = mysqli_fetch_assoc($result)){
                     ?>
                 <div class="mt-3 ml-3 mr-3 mb-3" style="border-radius:5px;">
-                    <div class="card" style="width: 17rem;">
+                    <div class="card" style="width: 12rem; height:15rem;">
                     <embed src="/e-recruitment/cv/<?php echo $row['resume'] ?>" type="application/pdf" width="100%" height="200px" />
-                        <div class="card-body" style="border-top:1px solid rgba(0, 0, 0, .125); height: 100px;">
-                            <span>
-                                <p>Name : <?php echo $row['firstname'] ?></p> 
-                                <span class="ml-4 mr-5">
-                                    <img src="assets/img/go-to.png" style="width:20px; margin-top:-7px; cursor:pointer;" alt="">
+                        <div class="card-body" style="border-top:1px solid rgba(0, 0, 0, .125); height: 70px;">
+                            <span class="row">
+                                <p style="font-size: 12px;"> <?php echo $row['firstname'] ?></p> 
+                                <span class=" ml-4">
+                                    <img src="assets/img/go-to.png" style="width: 15px; margin-top:-7px; cursor:pointer;" alt="">
                                 </span> 
-                                <span>
-                                    <i class="fa-solid fa-paperclip fa-lg open-pdf" data-pdf="/e-recruitment/cv/<?php echo $row['resume'] ?>" style="cursor:pointer;"></i>
+                                <span class=" ml-3">
+                                    <i class="fa-solid fa-paperclip open-pdf" data-pdf="/e-recruitment/cv/<?php echo $row['resume'] ?>" style="cursor:pointer;"></i>
                                 </span>  
-                                <span class="ml-5 mr-4">
-                                    <i class="fa-solid fa-download fa-lg" style="cursor:pointer;" onclick="openPdfPopup('/e-recruitment/cv/<?php echo $row['resume'] ?>')"></i>
+                                <span class=" ml-3">
+                                    <i class="fa-solid fa-download" style="cursor:pointer;" onclick="openPdfPopup('/e-recruitment/cv/<?php echo $row['resume'] ?>')"></i>
                                 </span>
                             </span>
                         </div>

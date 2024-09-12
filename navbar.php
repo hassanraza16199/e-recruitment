@@ -54,8 +54,8 @@
                                             
                                                 <ul class="submenu">
                                                     <li><a href="single-blog.php">Manage account</a></li>
-                                                    <li><a href="post_job.php">Post Job</a></li>
-                                                    <li><a href="message.php">Messages</a></li>
+                                                    <li><a href="#">/</a></li>
+                                                    <li><a href="#">/</a></li>
                                                 </ul>
                                             </li>
                                             <li><a href="contact_us.php">Contact us</a></li>
@@ -64,14 +64,14 @@
                                                 }elseif($_SESSION['user_type'] === 'Recruiter'){
                                             ?>
                                             <li><a href="dashboard.php">Home</a></li>
-                                            <li><a href="job_listing.php">Find a Jobs </a></li>
+                                            <li><a href="posted_jobs.php">Posted Jobs</a></li>
                                             <li><a href="resumes.php">Resumes</a></li>
-                                            <li><a href="#">Page</a>
+                                            <li><a href="#">Pages</a>
                                             
                                                 <ul class="submenu">
-                                                    <li><a href="single-blog.php">Manage account</a></li>
+                                                    <li><a href="candidates_requests.php">Candidates Requests</a></li>
                                                     <li><a href="post_job.php">Post Job</a></li>
-                                                    <li><a href="message.php">Messages</a></li>
+                                                    <li><a href="#">/</a></li>
                                                 </ul>
                                             </li>
                                             <li><a href="contact_us.php">Contacts</a></li>
