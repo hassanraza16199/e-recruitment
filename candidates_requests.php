@@ -71,6 +71,7 @@ include "connection.php";
 	                text-transform: uppercase;
 	                cursor: pointer
                 }
+                
             </style>
    </head>
 
@@ -124,24 +125,42 @@ include "connection.php";
       <th scope="col">Education</th>
       <th scope="col">Skills</th>
       <th scope="col">Experience</th>
-      <th scope="col">Action</th>
+      <th scope="col">Resume</th>
 
     </tr>
   </thead>
   <tbody>
+  <?php
+include "connection.php";
+$recruiter_id = $_SESSION['id'];
+
+// Base query
+$sql = "SELECT * FROM applications WHERE recruiter_id = '$recruiter_id'";
+
+// Execute the query
+$result = mysqli_query($conn, $sql);
+
+// Check if results are found
+if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+?>
     <tr>
-      <th scope="row">1</th>
-      <td>Ali</td>
-      <td>ali@gmail.com</td>
-      <td>0000000000000</td>
-      <td>00000000000</td>
-      <td>12/12/2001</td>
-      <td>Pakistan</td>
-      <td>BSCS</td>
-      <td>Front End</td>
-      <td>Fresher</td>
+      <th scope="row"><?php echo $row['application_id']; ?></th>
+      <td><?php echo $row['firstname'] . ' ' . $row['lastname']; ?></td>
+      <td><?php echo $row['email_address']; ?></td>
+      <td><?php echo $row['cnic']; ?></td>
+      <td><?php echo $row['contact_number']; ?></td>
+      <td><?php echo $row['date_birth']; ?></td>
+      <td><?php echo $row['country']; ?></td>
+      <td><?php echo $row['candidate_education']; ?></td>
+      <td><?php echo $row['candidate_skill']; ?></td>
+      <td><?php echo $row['candidate_experience']; ?></td>
       <td><i class="fa-solid fa-arrow-up-right-from-square"></i></td>
     </tr>
+    <?php
+    }
+}
+?>
   </tbody>
 </table>
             </div>

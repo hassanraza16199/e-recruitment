@@ -2,11 +2,7 @@
 session_start();
 
 include "connection.php";
-
-
 ?>
-
-
 
 
 <!doctype html>
@@ -75,10 +71,10 @@ include "connection.php";
                                         echo "<div class='single-job-items mb-30 ml-5 mr-5'>";
                                         echo "<div class='job-items'>";
                                         echo "<div class='company-img'>";
-                                        echo "<a href='job_details.php?id=" . $row['job_id'] . "'><img style='width:120px; height:120px;' src='/E-Recruitment system/upload/" . $row['company_logo'] . "'></a>";
+                                        echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'><img style='width:120px; height:120px;' src='/E-Recruitment system/upload/" . $row['company_logo'] . "'></a>";
                                         echo "</div>";
                                         echo "<div class='job-tittle job-tittle2'>";
-                                        echo "<a href='job_details.php?id=" . $row['job_id'] . "'>";
+                                        echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'>";
                                         echo "<h4>" . $row['categories'] . "</h4>";
                                         echo "</a>";
                                         echo "<ul>";
