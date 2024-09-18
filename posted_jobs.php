@@ -47,13 +47,32 @@ include "connection.php";
 
 
     <main>
-
+<!-- Hero Area Start-->
+<div class="slider-area ">
+            <div class="single-slider section-overly slider-height2 d-flex align-items-center" data-background="assets/img/hero/about.jpg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="hero-cap text-center">
+                                <h2>Posted Jobs</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Hero Area End -->
         
         <!-- Job List Area Start -->
         <div class="job-listing-area pt-120 pb-120">
             
             <div class='ml-5 mr-5'>
-                <h2 class="ml-5 mb-2">Posted Jobs</h2>
+                <div class="row">
+                    <h2 class="ml-5 mb-2">Posted Jobs</h2>
+                    <div style="margin-left:70%;"><a href="post_job.php"  class="btn head-btn1">Post New Job</a></div>
+                    
+                </div>
+                
                 <hr>
         <?php
                                     if($_SESSION['user_type'] === 'Recruiter'){

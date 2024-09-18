@@ -13,6 +13,7 @@ if(isset($_POST['submit'])) {
     $recruiter_id = $_SESSION['id'];
     $recruiter_name = $_SESSION['name'];
     $date = date('Y-m-d');
+    $job_title = $_POST['job_title'];
     $company_name = $_POST['company_name'];
     $requirements = $_POST['requirements'];
     $company_email = $_POST['company_email'];
@@ -45,8 +46,8 @@ if(isset($_POST['submit'])) {
     
     if($pic_upload = 1){
 
-    $sql = "INSERT INTO job_post (recruiter_id, recruiter_name, company_logo, company_name, discription, company_email, categories, company_web, requirements, experience, company_location, salary, timing, due_date, vacancy, date) 
-    VALUES ('$recruiter_id', '$recruiter_name', '$photo', '$company_name', '$discription', '$company_email', '$categories', '$company_web', '$requirements', '$experience', '$company_location', '$salary', '$timing', '$due_date', '$vacancy', '$date')";
+    $sql = "INSERT INTO job_post (recruiter_id, recruiter_name, company_logo, job_title, company_name, discription, company_email, categories, company_web, requirements, experience, company_location, salary, timing, due_date, vacancy, date) 
+    VALUES ('$recruiter_id', '$recruiter_name', '$photo', '$job_title', '$company_name', '$discription', '$company_email', '$categories', '$company_web', '$requirements', '$experience', '$company_location', '$salary', '$timing', '$due_date', '$vacancy', '$date')";
     
     $result = $conn->query($sql);
     if ($result === TRUE) {
@@ -55,8 +56,8 @@ if(isset($_POST['submit'])) {
         $count_row = $count_result->fetch_assoc();
         $total_user_entries = $count_row['total'];
 
+        $_SESSION['post_success'] = true;
         header("Location: feedback.php");
-        $_SESSION['post_message'] = "Job post is successfully.";
     exit;
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
@@ -68,8 +69,6 @@ if(isset($_POST['submit'])) {
 }
 
 ?>
-
-
 
 
 <!doctype html>
@@ -95,6 +94,88 @@ if(isset($_POST['submit'])) {
             <link rel="stylesheet" href="assets/css/slick.css">
             <link rel="stylesheet" href="assets/css/nice-select.css">
             <link rel="stylesheet" href="assets/css/style.css">
+            <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+            <style>
+.modal-confirm {
+color: #fb246a;
+width: 325px;
+}
+.modal-confirm .modal-content {
+padding: 20px;
+border-radius: 5px;
+margin-top:40%;
+border: none;
+}
+.modal-confirm .modal-header {
+border-bottom: none;
+position: relative;
+}
+.modal-confirm h4 {
+text-align: center;
+font-size: 26px;
+margin: 30px 0 -15px;
+}
+.modal-confirm .form-control, .modal-confirm .btn {
+min-height: 40px;
+border-radius: 3px;
+}
+.modal-confirm .close {
+position: absolute;
+top: -5px;
+right: -5px;
+}
+.modal-confirm .modal-footer {
+border: none;
+text-align: center;
+border-radius: 5px;
+font-size: 13px;
+}
+.modal-confirm .icon-box {
+color: #fff;
+position: absolute;
+margin: 0 auto;
+left: 0;
+right: 0;
+top: -70px;
+width: 95px;
+height: 95px;
+border-radius: 50%;
+z-index: 9;
+background: #fb246a;
+padding: 15px;
+text-align: center;
+box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+}
+.modal-confirm .icon-box i {
+font-size: 58px;
+position: relative;
+top: 3px;
+}
+.modal-confirm.modal-dialog {
+margin-top: 80px;
+}
+.modal-confirm .btn {
+color: #fff;
+border-radius: 4px;
+background: #fb246a;
+text-decoration: none;
+transition: all 0.4s;
+line-height: normal;
+border: none;
+}
+.modal-confirm .btn:hover, .modal-confirm .btn:focus {
+background: #fb246a;
+outline: none;
+}
+.trigger-btn {
+display: inline-block;
+margin: 100px auto;
+}
+            </style>
    </head>
 
    <body>
@@ -116,36 +197,34 @@ if(isset($_POST['submit'])) {
     <main>
 
         <!-- Hero Area Start-->
-        <!-- <div class="slider-area ">
+        <div class="slider-area ">
             <div class="single-slider section-overly slider-height2 d-flex align-items-center" data-background="assets/img/hero/about.jpg">
                 <div class="container">
                     <div class="row">
                         <div class="col-xl-12">
                             <div class="hero-cap text-center">
-                                <h2>To Post Job</h2>
+                                <h2>Post Job</h2>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div> 3644
-        </div> -->
+            </div>
+        </div>
         <!-- Hero Area End -->
         <!-- Job List Area Start -->
         <div class="job-listing-area pt-120 pb-120">
             <div class="ml-5 mr-5">
             <form action="post_job.php" method="POST" enctype="multipart/form-data" class="ml-5 mr-5">
             <h2 class="mb-4 ml-4">Post Job</h2>
-
-            <?php
-    if (isset($_SESSION['post_message'])) {
-        echo "<p style='color:Green; border: 1px solid #ededed; border-radius: 7px; padding: 5px'>" . $_SESSION['post_message'] . "</p>";
-        unset($_SESSION['post_message']);
-    }
-    ?>
                     
                 <div class="mb-3 ml-4 mr-4">
                     <label  class="form-label">Company Logo</label>
                     <input type="file" accept=".jpg, .jpeg, .png" class="row mx-0 mb-4" id="company_logo" name="company_logo" required>
+                </div>
+
+                <div class="mb-3 ml-4 mr-4">
+                    <label  class="form-label">Job Title</label>
+                    <input type="text" class="form-control" id="job_title" name="job_title" required>
                 </div>
 
                 <div class="mb-3 ml-4 mr-4">
@@ -235,12 +314,45 @@ if(isset($_POST['submit'])) {
         <!-- Job List Area End -->
     </main>
 
+    <div id="myModal" class="modal fade">
+        <div class="modal-dialog modal-confirm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="icon-box">
+                        <i class="material-icons">&#xE876;</i>
+                    </div>
+                    <h4 class="modal-title">Awesome!</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center">Your Job has been post successfully!</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success btn-block" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <?php include "footer.php"; ?>
     
     <script src="https://kit.fontawesome.com/3acead0521.js" crossorigin="anonymous"></script>
 
+<!-- JS to check for session flag and display modal -->
+<script>
+    $(document).ready(function() {
+    <?php if(isset($_SESSION['post_success'])): ?>
+        $('#myModal').modal('show'); // Show the success modal
 
+        // Set a timeout of 3 seconds, then reload or redirect to remove the session flag
+        setTimeout(function(){
+            window.location.href = 'job_listing.php';
+        }, 3000);
+
+        <?php unset($_SESSION['post_success']); // Clear session flag after the modal is shown ?>
+    <?php endif; ?>
+});
+
+</script>
 	<!-- JS here -->
         <script src="https://kit.fontawesome.com/3acead0521.js" crossorigin="anonymous"></script>
 		<!-- All JS Custom Plugins Link Here here -->

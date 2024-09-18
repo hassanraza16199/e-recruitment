@@ -117,6 +117,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php include "navbar.php"; ?>
     
     <main class="ml-5 mr-5 mt-5 mb-5">
+        <!-- Hero Area Start-->
+        <div class="slider-area ">
+            <div class="single-slider section-overly slider-height2 d-flex align-items-center" data-background="assets/img/hero/about.jpg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="hero-cap text-center">
+                                <h2>Users Contact</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Hero Area End -->
         <h2 class="mt-3 mb-3">Users Contact</h2>
         <hr>
         <table class="table">

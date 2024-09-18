@@ -52,7 +52,8 @@ if(isset($_POST['submit'])) {
         $total_application_entries = $count_row['total'];
         if ($conn->query($sql) === TRUE) {
             
-            header("Location: feedback.php");
+            $_SESSION['apply_success'] = true;
+            header("Location: feedback.php?job_id=$job_id&recruiter_id=$recruiter_id");
             exit;
         } else {
             echo "Error: " . $sql . "<br>" . $conn->error;
@@ -91,6 +92,11 @@ if(isset($_POST['submit'])) {
             <link rel="stylesheet" href="assets/css/slick.css">
             <link rel="stylesheet" href="assets/css/nice-select.css">
             <link rel="stylesheet" href="assets/css/style.css">
+            <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
             
             <style>
     /* Add some basic styling to make the form look better */
@@ -122,6 +128,81 @@ if(isset($_POST['submit'])) {
         }
         
     }
+    .modal-confirm {
+color: #fb246a;
+width: 325px;
+}
+.modal-confirm .modal-content {
+padding: 20px;
+border-radius: 5px;
+margin-top:35%;
+border: none;
+}
+.modal-confirm .modal-header {
+border-bottom: none;
+position: relative;
+}
+.modal-confirm h4 {
+text-align: center;
+font-size: 26px;
+margin: 30px 0 -15px;
+}
+.modal-confirm .form-control, .modal-confirm .btn {
+min-height: 40px;
+border-radius: 3px;
+}
+.modal-confirm .close {
+position: absolute;
+top: -5px;
+right: -5px;
+}
+.modal-confirm .modal-footer {
+border: none;
+text-align: center;
+border-radius: 5px;
+font-size: 13px;
+}
+.modal-confirm .icon-box {
+color: #fff;
+position: absolute;
+margin: 0 auto;
+left: 0;
+right: 0;
+top: -70px;
+width: 95px;
+height: 95px;
+border-radius: 50%;
+z-index: 9;
+background: #fb246a;
+padding: 15px;
+text-align: center;
+box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+}
+.modal-confirm .icon-box i {
+font-size: 58px;
+position: relative;
+top: 3px;
+}
+.modal-confirm.modal-dialog {
+margin-top: 80px;
+}
+.modal-confirm .btn {
+color: #fff;
+border-radius: 4px;
+background: #fb246a;
+text-decoration: none;
+transition: all 0.4s;
+line-height: normal;
+border: none;
+}
+.modal-confirm .btn:hover, .modal-confirm .btn:focus {
+background: #fb246a;
+outline: none;
+}
+.trigger-btn {
+display: inline-block;
+margin: 100px auto;
+}
 </style>
    </head>
 
@@ -150,7 +231,7 @@ if(isset($_POST['submit'])) {
                     <div class="row">
                         <div class="col-xl-12">
                             <div class="hero-cap text-center">
-                                <h2>Apply Job</h2>
+                                <h2>Apply for Job</h2>
                             </div>
                         </div>
                     </div>
@@ -202,17 +283,17 @@ if(isset($_POST['submit'])) {
         </div>
 
         <div class="form-group">
-            <label for="country">Education</label>
+            <label for="candidate_education">Education</label>
             <textarea type="text" class="form-control" rows="4" id="candidate_education" name="candidate_education"></textarea>
         </div>
 
         <div class="form-group">
-            <label for="country">Skills</label>
+            <label for="candidate_skill">Skills</label>
             <textarea type="text" class="form-control" rows="4" id="candidate_skill" name="candidate_skill"></textarea>
         </div>
 
         <div class="form-group">
-            <label for="country">Experience</label>
+            <label for="candidate_experience">Experience</label>
             <textarea type="text" class="form-control" rows="4" id="candidate_experience" name="candidate_experience"></textarea>
         </div>
 
@@ -236,10 +317,42 @@ if(isset($_POST['submit'])) {
         <!-- Job List Area End -->
     </main>
 
+    <div id="myModal" class="modal fade">
+        <div class="modal-dialog modal-confirm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="icon-box">
+                        <i class="material-icons">&#xE876;</i>
+                    </div>
+                    <h4 class="modal-title">Awesome!</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center">Your Job has been apply successfully!</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success btn-block" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <?php include "footer.php"; ?>
     
     <script>
+        $(document).ready(function() {
+    <?php if(isset($_SESSION['apply_success']) && $_SESSION['apply_success'] === true): ?>
+        $('#myModal').modal('show'); // Show the success modal
+
+        // Redirect after showing the modal
+        setTimeout(function(){
+            window.location.href = 'job_listing.php'; // Ensure the URL is correct
+        }, 3000);
+
+        <?php unset($_SESSION['apply_success']); // Clear session flag after the modal is shown ?>
+    <?php endif; ?>
+});
+
         const uploadArea = document.querySelector('.upload-area');
         const fileInput = document.querySelector('input[type="file"]');
 
@@ -255,6 +368,8 @@ if(isset($_POST['submit'])) {
                 uploadArea.textContent = 'Choose file or drop here';
             }
         });
+        
+        
     </script>
 	<!-- JS here -->
         <script src="https://kit.fontawesome.com/3acead0521.js" crossorigin="anonymous"></script>

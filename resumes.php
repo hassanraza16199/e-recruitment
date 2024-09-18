@@ -47,11 +47,13 @@ include "connection.php";
                     color:black;
                     background:white;
                     border:0;
+                    height: 50px;
                     border-top-left-radius: 25px;
                     border-bottom-left-radius: 25px;
                 }
                 .select-input{
                     width: 34%;
+                    height: 50px;
                     border:none;
                     
                 }
@@ -60,8 +62,9 @@ include "connection.php";
                     border-bottom-right-radius: 25px;
                     background: #fb246a;
 	                color:white;
+                    height: 50px;
 	                display: inline-block;
-	                padding: 18px 44px;
+	                padding: 13px 35px;
 	                font-family: "Muli", sans-serif;
 	                font-size: 14px;
 	                font-weight: 400;
@@ -101,7 +104,7 @@ include "connection.php";
                             <div class="hero-cap text-center">
                                 <h2>Resumes</h2>
                                 <form class="d-flex mt-4" method="GET" action="resumes.php">
-                                <button class="icon-btn" type="button" disabled><i class="fa-solid fa-magnifying-glass"></i></button>
+                                <button class="icon-btn" type="button" disabled><i class="fa-solid fa-magnifying-glass ml-2 mr-1"></i></button>
                                     <input class="select-input" type="search" name="search" placeholder="     Search Resumes" aria-label="Search">
                                     <button class="search-btn" type="submit">Search</button>
                                 </form>

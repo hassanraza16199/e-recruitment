@@ -33,6 +33,43 @@ include 'connection.php';
             <link rel="stylesheet" href="assets/css/slick.css">
             <link rel="stylesheet" href="assets/css/nice-select.css">
             <link rel="stylesheet" href="assets/css/style.css">
+
+            <style>
+                .d-flex{
+                    justify-content:center;
+                }
+                .icon-btn{
+                    color:black;
+                    background:white;
+                    border:0;
+                    height: 50px;
+                    border-top-left-radius: 25px;
+                    border-bottom-left-radius: 25px;
+                }
+                .select-input{
+                    width: 35%;
+                    height: 50px;
+                    border:none;
+                    
+                }
+                .search-btn{
+                    border-top-right-radius: 25px;
+                    border-bottom-right-radius: 25px;
+                    background: #fb246a;
+	                color:white;
+                    height: 50px;
+	                display: inline-block;
+	                padding: 13px 35px;
+	                font-family: "Muli", sans-serif;
+	                font-size: 14px;
+	                font-weight: 400;
+	                border: 1px solid #fb246a;
+	                letter-spacing: 3px;
+	                text-align: center;
+	                text-transform: uppercase;
+	                cursor: pointer
+                }
+            </style>
    </head>
 
    <body>
@@ -61,6 +98,11 @@ include 'connection.php';
                         <div class="col-xl-12">
                             <div class="hero-cap text-center">
                                 <h2>Get your job</h2>
+                                <form class="d-flex mt-4" method="GET" action="resumes.php">
+                                <button class="icon-btn" type="button" disabled><i class="fa-solid fa-magnifying-glass ml-2 mr-1"></i></button>
+                                    <input class="select-input" type="search" name="search" placeholder="     Search Keyword" aria-label="Search">
+                                    <button class="search-btn" type="submit">Search</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -97,8 +139,9 @@ include 'connection.php';
                                      <h4>Job Category</h4>
                                </div>
                                 <!-- Select job items start -->
+                                <form method="GET" action="job_listing.php">
                                 <div class="select-job-items2">
-                                    <select name="select">
+                                    <select name="categories" required>
                                         <option selected>Select Job Category</option>
                                         <option value="">All Category</option>
                                         <option value="Design & Creative">Design & Creative</option>
@@ -119,19 +162,19 @@ include 'connection.php';
                                         <h4>Job Type</h4>
                                     </div>
                                     <label class="container">Full Time
-                                        <input type="checkbox" >
+                                        <input type="checkbox" name="timing[]" value="Full Time">
                                         <span class="checkmark"></span>
                                     </label>
                                     <label class="container">Part Time
-                                        <input type="checkbox" checked="checked active">
+                                        <input type="checkbox" name="timing[]" value="Part Time">
                                         <span class="checkmark"></span>
                                     </label>
                                     <label class="container">Remote
-                                        <input type="checkbox">
+                                        <input type="checkbox" name="timing[]" value="Remote">
                                         <span class="checkmark"></span>
                                     </label>
                                     <label class="container">Freelance
-                                        <input type="checkbox">
+                                        <input type="checkbox" name="timing[]" value="Freelance">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
@@ -144,38 +187,15 @@ include 'connection.php';
                                </div>
                                 <!-- Select job items start -->
                                 <div class="select-job-items2">
-                                    <select name="select">
-                                        <option value="">Anywhere</option>
-                                        <option value="">Category 1</option>
-                                        <option value="">Category 2</option>
-                                        <option value="">Category 3</option>
-                                        <option value="">Category 4</option>
+                                    <select name="company_location">
+                                        <!-- <option value="">Anywhere</option> -->
+                                        <option value="Lahore">Lahore</option>
+                                        <option value="Islamabad">Islamabad</option>
+                                        <option value="Karachi">Karachi</option>
+                                        <option value="Sialkot">Sialkot</option>
                                     </select>
                                 </div>
                                 <!--  Select job items End-->
-                                <!-- select-Categories start -->
-                                <div class="select-Categories pt-80 pb-50">
-                                    <div class="small-section-tittle2">
-                                        <h4>Experience</h4>
-                                    </div>
-                                    <label class="container">1-2 Years
-                                        <input type="checkbox" >
-                                        <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container">2-3 Years
-                                        <input type="checkbox" checked="checked active">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container">3-6 Years
-                                        <input type="checkbox">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container">6-more..
-                                        <input type="checkbox">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <!-- select-Categories End -->
                             </div>
                             <!-- single three -->
                             <div class="single-listing">
@@ -234,7 +254,9 @@ include 'connection.php';
                                             </div>
                                         </div>
                                     </div>
+                                    <button type="submit" class='btn mt-5'>Filter Jobs</button>
                                 </aside>
+            </form>
                               <!-- Range Slider End -->
                             </div>
                         </div>
@@ -277,9 +299,78 @@ include 'connection.php';
                                 <!-- single-job-content -->
                                 <?php
 include "connection.php";
+$jobs_per_page = 10;
+
+// Find out the total number of jobs in the database
+$total_jobs_sql = "SELECT COUNT(*) AS total FROM job_post WHERE status = 'active'";
+$total_jobs_result = $conn->query($total_jobs_sql);
+$total_jobs_row = $total_jobs_result->fetch_assoc();
+$total_jobs = $total_jobs_row['total'];
+
+// Calculate the total number of pages
+$total_pages = ceil($total_jobs / $jobs_per_page);
+
+// Get the current page number from the query string, default to 1 if not set
+$current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+
+// Make sure the current page is within the valid range
+if ($current_page < 1) {
+    $current_page = 1;
+} elseif ($current_page > $total_pages) {
+    $current_page = $total_pages;
+}
+
+// Calculate the offset for the SQL query
+$offset = ($current_page - 1) * $jobs_per_page;
+
+// Fetch the job posts for the current page
 $sql = "SELECT * FROM job_post WHERE status = 'active'";
+
+// Add conditions based on filter inputs
+$conditions = [];
+
+// Check if category is selected
+if (!empty($_GET['categories'])) {
+    $categories = $conn->real_escape_string($_GET['categories']);
+    $conditions[] = "categories = '$categories'";
+}
+
+// Check if job types are selected
+if (!empty($_GET['timing'])) {
+    $timing = implode("','", array_map([$conn, 'real_escape_string'], $_GET['timing']));
+    $conditions[] = "timing IN ('$timing')";
+}
+
+// Check if location is selected
+if (!empty($_GET['company_location'])) {
+    $company_location = $conn->real_escape_string($_GET['company_location']);
+    $conditions[] = "company_location = '$company_location'";
+}
+
+// Check if experience is selected
+if (!empty($_GET['experience'])) {
+    $experience = implode("','", array_map([$conn, 'real_escape_string'], $_GET['experience']));
+    $conditions[] = "experience IN ('$experience')";
+}
+
+// Add conditions to the SQL query
+if (count($conditions) > 0) {
+    $sql .= " AND " . implode(" AND ", $conditions);
+}
+
+// Add sorting or pagination if needed
+$sql .= " ORDER BY created_at DESC LIMIT $offset, $jobs_per_page";
+
+// Execute the query and fetch the results
 $result = $conn->query($sql);
 
+
+
+// Check if the query was successful
+if ($result === false) {
+    // Output the SQL error message
+    echo "Error: " . $conn->error;
+} else {
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         echo "<div class='single-job-items mb-30'>";
@@ -290,30 +381,31 @@ if ($result->num_rows > 0) {
         echo "</div>";
         echo "<div class='job-tittle job-tittle2'>";
         echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'>";
-        echo "<h4>" . $row['categories'] . "</h4>";
+        echo "<h4>" . $row['job_title'] . "</h4>";
         echo "</a>";
         echo "<ul>";
         echo "<li>" . $row['company_name'] . "</li>";
         echo "<li>     </li>";
-        echo "<li> Salary: " . $row['salary'] . "</li> <br>";
-        $requirementsPreview = substr($row['requirements'], 0, 15) . (strlen($row['requirements']) > 15 ? '...' : '');
-        echo "<li>" . $requirementsPreview . "</li>";
+        echo "<li> Categories: " . $row['categories'] . "</li> <br>";
+        
+        $discriptionPreview = substr($row['discription'], 0, 65) . (strlen($row['discription']) > 15 ? '...' : '');
+        echo "<li >" . $discriptionPreview . "</li> <br>";
+        $requirementsPreview = substr($row['requirements'], 0, 65) . (strlen($row['requirements']) > 15 ? '...' : '');
+        echo "<li class='mt-2'>" . $requirementsPreview . "</li>";
         echo "</ul>";
         echo "</div>";
         echo "</div>";
         echo "<div class='items-link items-link2 f-right'>";
         echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'>" . $row['timing'] . "</a> <br>";
         echo "<span><i class='fas fa-map-marker-alt'></i> " . $row['company_location'] . "</span>";
+        echo "<span class='mt-2'>Salary:  " . $row['salary'] . "</span>";
         echo "</div>";
         echo "</div>";
     }
 } else {
     echo "No job posts found.";
-}
-?>
-
-
-                               
+}}
+?>                
                     
                         </section>
                         <!-- Featured_job_end -->
@@ -322,26 +414,43 @@ if ($result->num_rows > 0) {
             </div>
         </div>
         <!-- Job List Area End -->
-        <!--Pagination Start  -->
-        <div class="pagination-area pb-115 text-center">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="single-wrap d-flex justify-content-center">
-                            <nav aria-label="Page navigation example">
-                                <ul class="pagination justify-content-start">
-                                    <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">02</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">03</a></li>
-                                <li class="page-item"><a class="page-link" href="#"><span class="ti-angle-right"></span></a></li>
-                                </ul>
-                            </nav>
-                        </div>
-                    </div>
+        <!-- Pagination -->
+<div class="pagination-area pb-115 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="single-wrap d-flex justify-content-center">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-start">
+                            <?php if ($current_page > 1): ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<?php echo $current_page - 1; ?>" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+
+                            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                <li class="page-item <?php echo $i == $current_page ? 'active' : ''; ?>">
+                                    <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                </li>
+                            <?php endfor; ?>
+
+                            <?php if ($current_page < $total_pages): ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<?php echo $current_page + 1; ?>" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
-        <!--Pagination End  -->
+    </div>
+</div>
+<!-- Pagination End -->
         
     </main>
 

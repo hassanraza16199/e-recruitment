@@ -48,7 +48,7 @@
                                                 if($_SESSION['user_type'] === 'Candidate'){
                                             ?>
                                             <li><a href="dashboard.php">Home</a></li>
-                                            <li><a href="job_listing.php">Find a Jobs </a></li>
+                                            <li><a href="job_listing.php">Jobs </a></li>
                                             <li><a href="about_us.php">About</a></li>
                                             <li><a href="#">Page</a>
                                             
@@ -69,8 +69,7 @@
                                             <li><a href="#">Pages</a>
                                             
                                                 <ul class="submenu">
-                                                    <li><a href="candidates_requests.php">Candidates Requests</a></li>
-                                                    <li><a href="post_job.php">Post Job</a></li>
+                                                    <li><a href="applications.php">Applications</a></li>
                                                     <li><a href="#">/</a></li>
                                                 </ul>
                                             </li>
@@ -81,7 +80,14 @@
                                             ?>
                                             <li><a href="users.php">User</a></li>
                                             <li><a href="posted_jobs.php">Posted Jobs </a></li>
-                                            <li><a href="about_us.php">Interview scheduler</a></li>
+                                            <li><a href="#">Pages</a>
+                                                <ul class="submenu">
+                                                    <li><a href="applications.php">Applications</a></li>
+                                                    <li><a href="about_us.php">Interview scheduler</a></li>
+                                                    <li><a href="#">/</a></li>
+                                                </ul>
+                                            </li>
+                                            
                                             <li><a href="users_feedback.php">Feedbacks</a></li>
                                             <li><a href="users_contact.php">Users Contacts</a></li>
                                             <?php
@@ -101,7 +107,6 @@
                                         ?>
                                     <div class="dropdown-menu" style="width: 100%" aria-labelledby="dropdownMenu2">
                                         <a href='profile.php' class="dropdown-item" type="button">Profile</a>
-                                        <a href="status.php" class="dropdown-item" type="button">Status</a>
                                         <a class="dropdown-item" href="logout.php" type="button">Logout</a>
                                     </div>
                                     <?php
@@ -109,7 +114,6 @@
                                     ?>
                                     <div class="dropdown-menu" style="width: 100%" aria-labelledby="dropdownMenu2">
                                         <a href='profile.php' class="dropdown-item" type="button">Profile</a>
-                                        <a href="posted_jobs.php" class="dropdown-item" type="button">posted jobs</a>
                                         <a class="dropdown-item" href="logout.php" type="button">Logout</a>
                                     </div>
                                     <?php

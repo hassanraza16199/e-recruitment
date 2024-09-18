@@ -93,7 +93,7 @@ if (isset($_GET['id'])) {
     margin: auto; /* Center horizontally */
     box-sizing: border-box;
     border-radius: 8px;
-    margin-top:3%;
+    
 }
 
 /* Responsive adjustments */
@@ -112,17 +112,19 @@ if (isset($_GET['id'])) {
 
 /* The Close Button */
 .close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
     color: #aaa;
-    float: right;
     font-size: 28px;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .close:hover,
 .close:focus {
     color: black;
     text-decoration: none;
-    cursor: pointer;
 }
 .tooltip-container {
     position: relative;
@@ -233,7 +235,7 @@ if ($result->num_rows > 0) {
       <td>
         
         <div class="tooltip-container">
-                <span class="tooltip-icon"><i  style="color:blue" class="fa-regular fa-pen-to-square fa-lg" ></i></span>
+                <span class="tooltip-icon"><i  style="color:blue" class="fa-regular fa-pen-to-square" ></i></span>
                 <div class="tooltip-text">
                     <!-- Replace the SVG with your text -->
                     Edit 
@@ -242,7 +244,7 @@ if ($result->num_rows > 0) {
         </td>
             <td>
         <div class="tooltip-container">
-                <span class="tooltip-icon"><i id="delete-<?php echo $row['id']; ?>" class="fa-solid fa-trash ml-3 fa-lg" style="color:#FF0000; cursor: pointer;"></i></span>
+                <span class="tooltip-icon"><i id="delete-<?php echo $row['id']; ?>" class="fa-solid fa-trash ml-3" style="color:#FF0000; cursor: pointer;"></i></span>
                 <div class="tooltip-text">
                     <!-- Replace the SVG with your text -->
                     Delete 
@@ -263,6 +265,7 @@ if ($result->num_rows > 0) {
 </table>
 
     </main>
+    
 <!-- Edit Form Modal -->
 <div id="editModal" class="modal">
     <div class="modal-content">

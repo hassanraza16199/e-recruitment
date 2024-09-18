@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['birthdate'] = $birthdate;
 
         // Redirect or display success message
+        $_SESSION['post_success'] = true;
         header("Location: profile.php?success=1");
     } else {
         echo "Error updating record: " . $conn->error;
@@ -61,6 +62,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <link rel="stylesheet" href="assets/css/nice-select.css">
         <link rel="stylesheet" href="assets/css/style.css">
         <link rel="stylesheet" href="assets/css/responsive.css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         
 
         <style>
@@ -320,17 +326,108 @@ ul.summary-list > li:last-child  {
     margin-right: 0px;
 }
 
-    .input-field {
-            position: relative;
-        }
+.input-field {
+    position: relative;
+}
 
-        .toggle-password {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(10%);
-            cursor: pointer;
-        }
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(10%);
+    cursor: pointer;
+}
+/* The Close Button */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+}
+.modal-confirm {
+color: #fb246a;
+width: 325px;
+}
+.modal-confirm .modal-content {
+padding: 20px;
+border-radius: 5px;
+margin-top:32%;
+border: none;
+}
+.modal-confirm .modal-header {
+border-bottom: none;
+position: relative;
+}
+.modal-confirm h4 {
+text-align: center;
+font-size: 26px;
+margin: 30px 0 -15px;
+}
+.modal-confirm .form-control, .modal-confirm .btn {
+min-height: 40px;
+border-radius: 3px;
+}
+.modal-confirm .close {
+position: absolute;
+top: -5px;
+right: -5px;
+}
+.modal-confirm .modal-footer {
+border: none;
+text-align: center;
+border-radius: 5px;
+font-size: 13px;
+}
+.modal-confirm .icon-box {
+color: #fff;
+position: absolute;
+margin: 0 auto;
+left: 0;
+right: 0;
+top: -70px;
+width: 95px;
+height: 95px;
+border-radius: 50%;
+z-index: 9;
+background: #fb246a;
+padding: 15px;
+text-align: center;
+box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+}
+.modal-confirm .icon-box i {
+font-size: 58px;
+position: relative;
+top: 3px;
+}
+.modal-confirm.modal-dialog {
+margin-top: 80px;
+}
+.modal-confirm .btn {
+color: #fff;
+border-radius: 4px;
+background: #fb246a;
+text-decoration: none;
+transition: all 0.4s;
+line-height: normal;
+border: none;
+}
+.modal-confirm .btn:hover, .modal-confirm .btn:focus {
+background: #fb246a;
+outline: none;
+}
+.trigger-btn {
+display: inline-block;
+margin: 100px auto;
+}
   
         </style>
 </head>
@@ -391,76 +488,6 @@ ul.summary-list > li:last-child  {
               </div>
           </div>
       </div>
-      <div class="mt-5">
-          <div class="row">
-              <div class="col-md-6">
-                  <div class="panel">
-                      <div class="panel-body">
-                        <?php
-                            if($_SESSION['user_type'] === 'Candidate'){
-                                $candidate_id = $_SESSION['id'];
-                                $count_sql = "SELECT COUNT(*) AS total FROM applications WHERE candidate_id	 ='$candidate_id'";
-                                $count_result = $conn->query($count_sql);
-                                $count_row = $count_result->fetch_assoc();
-                                $total_entries = $count_row['total'];
-                                $conn->close();
-                        ?>
-                          <div class="bio-chart">
-                              <div style="display:inline;width:100px;height:100px;"><canvas width="100" height="100px"></canvas><input class="knob" data-width="100" data-height="100" data-displayprevious="true" data-thickness=".2" value="<?php echo $total_entries; ?>" data-fgcolor="#e06b7d" data-bgcolor="#e8e8e8" style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(224, 107, 125); padding: 0px; -webkit-appearance: none; background: none;"></div>
-                          </div>
-                          <div class="bio-desk">
-                              <h4 class="red">Apllied Applications</h4>
-                              <p></p>
-                              <p><?php echo $total_entries; ?></p>
-                          </div>
-                          <div class="col-md-6">
-                  <div class="panel">
-                      <div class="panel-body">
-                          <div class="bio-chart">
-                              <div style="display:inline;width:100px;height:100px;"><canvas width="100" height="100px"></canvas><input class="knob" data-width="100" data-height="100" data-displayprevious="true" data-thickness=".2" value="" data-fgcolor="#4CC5CD" data-bgcolor="#e8e8e8" style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(76, 197, 205); padding: 0px; -webkit-appearance: none; background: none;"></div>
-                          </div>
-                          <div class="bio-desk">
-                          <a href="status.php" class="btn head-btn2">Status</a>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-
-                          <?php
-                            }elseif($_SESSION['user_type'] === 'Recruiter'){
-                                $recruiter_id = $_SESSION['id'];
-                                $count_sql = "SELECT COUNT(*) AS total FROM job_post WHERE recruiter_id ='$recruiter_id'";
-                                $count_result = $conn->query($count_sql);
-                                $count_row = $count_result->fetch_assoc();
-                                $total_entries = $count_row['total'];
-                                $conn->close();
-                            ?>
-                            <div class="bio-chart">
-                              <div style="display:inline;width:100px;height:100px;"><canvas width="100" height="100px"></canvas><input class="knob" data-width="100" data-height="100" data-displayprevious="true" data-thickness=".2" value="<?php echo $total_entries; ?>" data-fgcolor="#e06b7d" data-bgcolor="#e8e8e8" style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(224, 107, 125); padding: 0px; -webkit-appearance: none; background: none;"></div>
-                          </div>
-                          <div class="bio-desk">
-                            
-                              <h4 class="red">Posted Jobs</h4>
-                              <p></p>
-                              <p><?php echo $total_entries; ?></p>
-                          </div>
-                          <div class="panel">
-                      <div class="panel-body">
-                          <div class="bio-chart">
-                              <div style="display:inline;width:100px;height:100px;"><canvas width="100" height="100px"></canvas><input class="knob" data-width="100" data-height="100" data-displayprevious="true" data-thickness=".2" value="" data-fgcolor="#4CC5CD" data-bgcolor="#e8e8e8" style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(76, 197, 205); padding: 0px; -webkit-appearance: none; background: none;"></div>
-                          </div>
-                          <div class="bio-desk">
-                          <a href="status.php" class="btn head-btn2">Status</a>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-                          <?php
-                          }
-                          ?>
-                          </div>
-                  </div>
-              </div>
               
                 <div class="mt-5">
                     <button class="btn head-btn1">Update</button>
@@ -478,7 +505,7 @@ ul.summary-list > li:last-child  {
 <!-- Edit Profile Modal -->
 <div id="editProfileModal" class="modal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; overflow:auto; background-color: rgba(0,0,0,0.4);">
     <div class="modal-content " style="background-color:#fefefe; margin:auto; padding:20px; border:1px solid #888; width:50%;">
-        <span class="close" style="color:#aaa; float:right; font-size:28px; font-weight:bold;">&times;</span>
+        <span class="close" >&times;</span>
         <h2>Edit Profile</h2>
         <form action="profile.php" method="post">
         <input type="hidden" name="id" id="id" class="form-control" value="<?php echo $_SESSION['id']; ?>">
@@ -512,18 +539,41 @@ ul.summary-list > li:last-child  {
     </div>
 </div>
 
+<!-- Success Modal HTML -->
+<div id="myModal" class="modal fade">
+        <div class="modal-dialog modal-confirm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="icon-box">
+                        <i class="material-icons">&#xE876;</i>
+                    </div>
+                    <h4 class="modal-title">Success!</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center">Your profile has been updated successfully!</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success btn-block" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
     <?php include "footer.php"; ?>
 
 <!-- JS here -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    var modal = document.getElementById("editProfileModal");
-    var btn = document.querySelector(".btn.head-btn1");
-    var span = document.getElementsByClassName("close")[0];
+document.addEventListener('DOMContentLoaded', function() {
+    var modal = document.getElementById("editProfileModal");  // Profile Edit Modal
+    var btn = document.querySelector(".btn.head-btn1");       // Update Button
+    var span = document.getElementsByClassName("close")[0];   // Close Button for Edit Modal
 
-    // Open the modal when the Edit button is clicked
+    var successModal = $('#myModal');                         // Success Modal using jQuery
+    var form = document.querySelector("form");                // Profile Edit Form
+
+    // Open the modal when the Update button is clicked
     btn.onclick = function() {
         modal.style.display = "block";
     }
@@ -539,10 +589,48 @@ ul.summary-list > li:last-child  {
             modal.style.display = "none";
         }
     }
+
+    // Handle form submission
+    form.onsubmit = function(event) {
+        event.preventDefault(); // Prevent the default form submission for now
+        
+        // Assuming the form is validated and the data is submitted via AJAX
+        $.ajax({
+            url: 'profile.php',  // The backend PHP script to handle the update
+            type: 'POST',
+            data: $(form).serialize(), // Serialize form data
+            success: function(response) {
+                // Check if the response indicates success
+                if (response.includes('success')) {
+                    // Close the profile edit modal
+                    modal.style.display = "none";
+                    
+                    // Show the success modal
+                    successModal.modal('show');
+                    setTimeout(function(){
+                        window.location.href = 'profile.php?success=1';
+                    }, 2000);
+                    
+                    // You can reset the form or update the displayed profile info after successful update
+                } else {
+                    // Handle error (if needed, display some message)
+                    alert("Error updating profile. Please try again.");
+                }
+            },
+            error: function() {
+                alert("An error occurred while submitting the form.");
+            }
+        });
+    }
 });
+
+
 
 </script>
 
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
 <script src="https://kit.fontawesome.com/3acead0521.js" crossorigin="anonymous"></script>
 		<!-- All JS Custom Plugins Link Here here -->

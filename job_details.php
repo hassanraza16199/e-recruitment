@@ -161,8 +161,6 @@ include "connection.php";
                        </div>
 
 
-
-
                        <div class="post-details4  mb-50">
                             <!-- Small Section Tittle -->
                            <div class="small-section-tittle">
@@ -173,7 +171,7 @@ include "connection.php";
                             <ul>
                                 <li>Name: <span><?php echo $row['recruiter_name']; ?> </span></li>
                                 <li>Web : <span> <?php echo $row['company_web'] ?></span></li>
-                                <li>Email: <span><?php echo $row['company_email'] ?></span></li>
+                                <li>Email: <span class="mr-4"><?php echo $row['company_email'] ?></span><span class="ml-5"><i style="color:#fb246a;" class="fa-solid fa-share fa-xl"></i></span></li>
                             </ul>
                        </div>
                     </div>

@@ -1,10 +1,16 @@
 <?php
 session_start();
-
-
 include "connection.php";
 
 if(isset($_POST['submit'])) {
+
+    if (isset($_GET['job_id'])) {
+        $job_id = $_GET['job_id'];
+        $recruiter_id = $_GET['recruiter_id'];
+    } else {
+        echo "No job ID specified.";
+        exit;
+    }
 
     $user_id = $_SESSION['id'];
     $user_name = $_SESSION['name'];
@@ -14,11 +20,13 @@ if(isset($_POST['submit'])) {
     $sql = "INSERT INTO `feedback` (user_id, user_name, rating , comment) VALUES('$user_id', '$user_name', '$rating', '$comment')";
 
     if($conn->query($sql) == TRUE){
+        
         if ($_SESSION['user_type'] == 'Recruiter') {
             header("Location: post_job.php");
             exit;
         }else if ($_SESSION['user_type'] == 'Candidate') {
-            header("Location: job_listing.php");
+
+            header("Location: apply_job.php?job_id=$job_id&recruiter_id=$recruiter_id&success=true");
             exit;
         }
     }else{
@@ -28,11 +36,7 @@ if(isset($_POST['submit'])) {
     $conn->close();
 }
 
-
-
 ?>
-
-
 
 
 <!doctype html>
@@ -58,7 +62,6 @@ if(isset($_POST['submit'])) {
             <link rel="stylesheet" href="assets/css/slick.css">
             <link rel="stylesheet" href="assets/css/nice-select.css">
             <link rel="stylesheet" href="assets/css/style.css">
-
 
             <style>
 
@@ -141,6 +144,7 @@ if(isset($_POST['submit'])) {
             width: 95%;
         }
     }
+    
 </style>
    </head>
 
@@ -182,7 +186,7 @@ if(isset($_POST['submit'])) {
             <div class="ml-5 mr-5">
             <div class="feedback-container">
             <h2 class="mb-4 ml-4">Feedback</h2>
-            <form action="feedback.php" method="POST">
+            <form action="feedback.php?job_id=<?php echo $_GET['job_id']; ?>&recruiter_id=<?php echo $_GET['recruiter_id']; ?>" method="POST">
         <p>What do you think of the experience within E-Recruitment system?</p>
 
         <div class="rating-group mb-4">
@@ -231,9 +235,7 @@ if(isset($_POST['submit'])) {
 
 
     <?php include "footer.php"; ?>
-    
-    <script src="https://kit.fontawesome.com/3acead0521.js" crossorigin="anonymous"></script>
-
+   
 
 	<!-- JS here -->
         <script src="https://kit.fontawesome.com/3acead0521.js" crossorigin="anonymous"></script>
