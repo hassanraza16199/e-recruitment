@@ -33,7 +33,11 @@ include 'connection.php';
             <link rel="stylesheet" href="assets/css/slick.css">
             <link rel="stylesheet" href="assets/css/nice-select.css">
             <link rel="stylesheet" href="assets/css/style.css">
-
+            <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
             <style>
                 .d-flex{
                     justify-content:center;
@@ -69,6 +73,188 @@ include 'connection.php';
 	                text-transform: uppercase;
 	                cursor: pointer
                 }
+                .modal-confirm {
+color: #fb246a;
+width: 325px;
+}
+.modal-confirm .modal-content {
+padding: 20px;
+border-radius: 5px;
+margin-top:30%;
+border: none;
+}
+.modal-confirm .modal-header {
+border-bottom: none;
+position: relative;
+}
+.modal-confirm h4 {
+text-align: center;
+font-size: 26px;
+margin: 30px 0 -15px;
+}
+.modal-confirm .form-control, .modal-confirm .btn {
+min-height: 40px;
+border-radius: 3px;
+}
+.modal-confirm .close {
+position: absolute;
+top: -5px;
+right: -5px;
+}
+.modal-confirm .modal-footer {
+border: none;
+text-align: center;
+border-radius: 5px;
+font-size: 13px;
+}
+.modal-confirm .icon-box {
+color: #fff;
+position: absolute;
+margin: 0 auto;
+left: 0;
+right: 0;
+top: -70px;
+width: 95px;
+height: 95px;
+border-radius: 50%;
+z-index: 9;
+background: #fb246a;
+padding: 15px;
+text-align: center;
+box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+}
+.modal-confirm .icon-box i {
+font-size: 58px;
+position: relative;
+top: 3px;
+}
+.modal-confirm.modal-dialog {
+margin-top: 80px;
+}
+.modal-confirm .btn {
+color: #fff;
+border-radius: 4px;
+background: #fb246a;
+text-decoration: none;
+transition: all 0.4s;
+line-height: normal;
+border: none;
+}
+.modal-confirm .btn:hover, .modal-confirm .btn:focus {
+background: #fb246a;
+outline: none;
+}
+.trigger-btn {
+display: inline-block;
+margin: 100px auto;
+}
+.icons{
+    justify-content:center;
+}
+.icons a{
+  display: flex;
+  align-items: center;
+  margin:7px 18px;
+  border-radius: 50%;
+  justify-content: center;
+  transition: all 0.3s ease-in-out;
+}
+.icons a{
+  height: 50px;
+  width: 50px;
+  font-size: 20px;
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+.icons a i{
+  transition: transform 0.3s ease-in-out;
+}
+.icons a:nth-child(1){
+  color: #1877F2;
+  border-color: #b7d4fb;
+}
+.icons a:nth-child(1):hover{
+  background: #1877F2;
+}
+.icons a:nth-child(2){
+  color: #46C1F6;
+  border-color: #b6e7fc;
+}
+.icons a:nth-child(2):hover{
+  background: #46C1F6;
+}
+.icons a:nth-child(3){
+  color: #e1306c;
+  border-color: #f5bccf;
+}
+.icons a:nth-child(3):hover{
+  background: #e1306c;
+}
+.icons a:nth-child(4){
+  color: #25D366;
+  border-color: #bef4d2;
+}
+.icons a:nth-child(4):hover{
+  background: #25D366;
+}
+.icons a:nth-child(5){
+  color: #0088cc;
+  border-color: #b3e6ff;
+}
+.icons a:nth-child(5):hover{
+  background: #0088cc;
+}
+.icons a:hover{
+  color: #fff;
+  border-color: transparent;
+}
+.icons a:hover i{
+  transform: scale(1.2);
+}
+.field{
+    display:flex;
+  margin: 12px 0 -5px 0;
+  height: 45px;
+  border-radius: 4px;
+  padding: 0 5px;
+  border: 1px solid #757171;
+}
+.field.active{
+  border-color: #7d2ae8;
+}
+.field i{
+  margin:10px 2px;
+  width: 50px;
+  font-size: 18px;
+  text-align: center;
+  color:black;
+}
+.field input{
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  font-size: 15px;
+}
+.input_btn{
+  color: #fff;
+  padding: 5px 18px;
+  border:none;
+  background: #fb246a;
+}
+.input_btn:hover{
+  background: #fb246a;
+}
+.share_btn {
+    color: #8b92dd;
+    display: block;
+    width:100%;
+    border: 1px solid #8b92dd;
+    border-radius: 30px;
+    padding: 4px 33px;
+    text-align: center;
+    margin-bottom: 25px;
+}
             </style>
    </head>
 
@@ -204,28 +390,24 @@ include 'connection.php';
                                     <div class="small-section-tittle2">
                                         <h4>Posted Within</h4>
                                     </div>
-                                    <label class="container">Any
-                                        <input type="checkbox" >
-                                        <span class="checkmark"></span>
-                                    </label>
                                     <label class="container">Today
-                                        <input type="checkbox" checked="checked active">
+                                        <input type="radio" name="posted_within" value="1">
                                         <span class="checkmark"></span>
                                     </label>
                                     <label class="container">Last 2 days
-                                        <input type="checkbox">
+                                        <input type="radio" name="posted_within" value="2">
                                         <span class="checkmark"></span>
                                     </label>
                                     <label class="container">Last 3 days
-                                        <input type="checkbox">
+                                        <input type="radio" name="posted_within" value="3">
                                         <span class="checkmark"></span>
                                     </label>
                                     <label class="container">Last 5 days
-                                        <input type="checkbox">
+                                        <input type="radio" name="posted_within" value="5">
                                         <span class="checkmark"></span>
                                     </label>
                                     <label class="container">Last 10 days
-                                        <input type="checkbox">
+                                        <input type="radio" name="posted_within" value="10">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
@@ -235,24 +417,7 @@ include 'connection.php';
                             <div class="single-listing">
                                 <!-- Range Slider Start -->
                                 <aside class="left_widgets p_filter_widgets price_rangs_aside sidebar_box_shadow">
-                                    <div class="small-section-tittle2">
-                                        <h4>Filter Jobs</h4>
-                                    </div>
-                                    <div class="widgets_inner">
-                                        <div class="range_item">
-                                            <!-- <div id="slider-range"></div> -->
-                                            <input type="text" class="js-range-slider" value="" />
-                                            <div class="d-flex align-items-center">
-                                                <div class="price_text">
-                                                    <p>Price :</p>
-                                                </div>
-                                                <div class="price_value d-flex justify-content-center">
-                                                    
-                                                    <input type="text" class="js-input-to" id="amount" name="salary" readonly />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
                                     <button type="submit" class='btn mt-5'>Filter Jobs</button>
                                 </aside>
             </form>
@@ -350,10 +515,16 @@ if (!empty($_GET['experience'])) {
     $conditions[] = "experience IN ('$experience')";
 }
 
-// Check if location is selected
-if (!empty($_GET['salary'])) {
-    $salary = $conn->real_escape_string($_GET['salary']);
-    $conditions[] = "salary = '$salary'";
+// Check if the 'posted_within' filter is selected
+if (!empty($_GET['posted_within'])) {
+    // Get the number of days from the radio button
+    $posted_within_days = (int)$_GET['posted_within'];
+
+    // Calculate the date to compare against the 'created_at' column
+    $posted_within_date = date('Y-m-d H:i:s', strtotime("-$posted_within_days days"));
+
+    // Add the condition to filter jobs posted within the specified date range
+    $conditions[] = "created_at >= '$posted_within_date'";
 }
 
 // Add conditions to the SQL query
@@ -377,8 +548,8 @@ if ($result === false) {
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $created_at = new DateTime($row['created_at']);
-    $now = new DateTime();
-    $interval = $now->diff($created_at);
+        $now = new DateTime();
+        $interval = $now->diff($created_at);
 
     // Formatting the time difference
     if ($interval->y > 0) {
@@ -418,6 +589,7 @@ if ($result->num_rows > 0) {
         echo "</div>";
         echo "<div class='items-link items-link2 f-right'>";
         echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'>" . $row['timing'] . "</a> <br>";
+        echo "<button class='share_btn' style='margin-top:-25px;cursor: pointer;'>Share</button> <br>";
         echo "<span><i class='fas fa-map-marker-alt'></i> " . $row['company_location'] . "</span>";
         echo "<span class='mt-2'>Salary:  " . $row['salary'] . "</span>";
         echo "<span class='mt-2'>  " . $time_ago . "</span>";
@@ -476,11 +648,62 @@ if ($result->num_rows > 0) {
         
     </main>
 
+<!-- Share Modal Section -->
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="icon-box">
+                    <i class="material-icons">&#xE80D;</i> <!-- Share icon -->
+                </div>
+                <h4 class="modal-title">Share this Job!</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Help others by sharing this job with your network!</p>
+                <ul class="icons row">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#"><i class="fab fa-telegram-plane"></i></a>
+                </ul>
+                <p>Or copy link</p>
+                <div class="field">
+                    <i class="fa-solid fa-link"></i>
+                    <input type="text" class="field_input" readonly value="Link">
+                    <button class="input_btn">Copy</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success btn-block" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
     <?php include "footer.php"; ?>
     
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Attach a click event listener to the Share button
+        document.querySelectorAll('.share_btn').forEach(function(button) {
+            button.addEventListener('click', function() {
+                // Show the modal when the Share button is clicked
+                $('#myModal').modal('show');
+            });
+        });
+    });
+    document.querySelector('.input_btn').addEventListener('click', function() {
+    var copyText = document.querySelector('.field_input');
+    copyText.select();
+    document.execCommand('copy');
+    alert("Copied the link: " + copyText.value);
+})
+</script>
 
 	<!-- JS here -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
         <script src="https://kit.fontawesome.com/3acead0521.js" crossorigin="anonymous"></script>
 		<!-- All JS Custom Plugins Link Here here -->
         <script src="./assets/js/vendor/modernizr-3.5.0.min.js"></script>
