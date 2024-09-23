@@ -247,9 +247,8 @@ include 'connection.php';
                                                     <p>Price :</p>
                                                 </div>
                                                 <div class="price_value d-flex justify-content-center">
-                                                    <input type="text" class="js-input-from" id="amount" readonly />
-                                                    <span>to</span>
-                                                    <input type="text" class="js-input-to" id="amount" readonly />
+                                                    
+                                                    <input type="text" class="js-input-to" id="amount" name="salary" readonly />
                                                 </div>
                                             </div>
                                         </div>
@@ -281,14 +280,12 @@ include 'connection.php';
                                             <span> Jobs found <?php echo $total_entries; ?></span>
                                             <!-- Select job items start -->
                                             <div class="select-job-items">
-                                                <span>Sort by</span>
-                                                <select name="select">
-                                                    <option value="">None</option>
-                                                    <option value="">job list</option>
-                                                    <option value="">job list</option>
-                                                    <option value="">job list</option>
-                                                </select>
-
+                                                <?php
+                                                if($_SESSION['user_type'] === 'Recruiter'){
+                                                    ?>
+                                            <div ><a href="post_job.php"  class="btn head-btn1">Post New Job</a></div>
+                                                <?php
+                                                } ?>
                                                 
                                             </div>
                                             <!--  Select job items End-->
@@ -353,6 +350,12 @@ if (!empty($_GET['experience'])) {
     $conditions[] = "experience IN ('$experience')";
 }
 
+// Check if location is selected
+if (!empty($_GET['salary'])) {
+    $salary = $conn->real_escape_string($_GET['salary']);
+    $conditions[] = "salary = '$salary'";
+}
+
 // Add conditions to the SQL query
 if (count($conditions) > 0) {
     $sql .= " AND " . implode(" AND ", $conditions);
@@ -373,6 +376,24 @@ if ($result === false) {
 } else {
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
+        $created_at = new DateTime($row['created_at']);
+    $now = new DateTime();
+    $interval = $now->diff($created_at);
+
+    // Formatting the time difference
+    if ($interval->y > 0) {
+        $time_ago = $interval->y . " year" . ($interval->y > 1 ? "s" : "") . " ago";
+    } elseif ($interval->m > 0) {
+        $time_ago = $interval->m . " month" . ($interval->m > 1 ? "s" : "") . " ago";
+    } elseif ($interval->d > 0) {
+        $time_ago = $interval->d . " day" . ($interval->d > 1 ? "s" : "") . " ago";
+    } elseif ($interval->h > 0) {
+        $time_ago = $interval->h . " hour" . ($interval->h > 1 ? "s" : "") . " ago";
+    } elseif ($interval->i > 0) {
+        $time_ago = $interval->i . " minute" . ($interval->i > 1 ? "s" : "") . " ago";
+    } else {
+        $time_ago = "Just now";
+    }
         echo "<div class='single-job-items mb-30'>";
         echo "<div class='job-items'>";
         echo "<div class='company-img'>";
@@ -386,11 +407,11 @@ if ($result->num_rows > 0) {
         echo "<ul>";
         echo "<li>" . $row['company_name'] . "</li>";
         echo "<li>     </li>";
-        echo "<li> Categories: " . $row['categories'] . "</li> <br>";
+        echo "<li> Category:" . $row['categories'] . "</li> <br>";
         
-        $discriptionPreview = substr($row['discription'], 0, 65) . (strlen($row['discription']) > 15 ? '...' : '');
+        $discriptionPreview = substr($row['discription'], 0, 50) . (strlen($row['discription']) > 15 ? '...' : '');
         echo "<li >" . $discriptionPreview . "</li> <br>";
-        $requirementsPreview = substr($row['requirements'], 0, 65) . (strlen($row['requirements']) > 15 ? '...' : '');
+        $requirementsPreview = substr($row['requirements'], 0, 50) . (strlen($row['requirements']) > 15 ? '...' : '');
         echo "<li class='mt-2'>" . $requirementsPreview . "</li>";
         echo "</ul>";
         echo "</div>";
@@ -399,6 +420,7 @@ if ($result->num_rows > 0) {
         echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'>" . $row['timing'] . "</a> <br>";
         echo "<span><i class='fas fa-map-marker-alt'></i> " . $row['company_location'] . "</span>";
         echo "<span class='mt-2'>Salary:  " . $row['salary'] . "</span>";
+        echo "<span class='mt-2'>  " . $time_ago . "</span>";
         echo "</div>";
         echo "</div>";
     }
@@ -456,8 +478,6 @@ if ($result->num_rows > 0) {
 
 
     <?php include "footer.php"; ?>
-    
-
     
 
 	<!-- JS here -->

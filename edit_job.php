@@ -1,14 +1,12 @@
 <?php
 session_start();
+include "connection.php"; // Ensure that $conn is available here.
 
 if ($_SESSION['user_type'] != 'Recruiter') {
     echo "Access denied.";
     exit;
 }
-
 ?>
-
-
 
 
 <!doctype html>
@@ -77,6 +75,7 @@ if ($_SESSION['user_type'] != 'Recruiter') {
             <div class="ml-5 mr-5">
                 <?php
                 include "connection.php";
+
                     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         $recruiter_id = $_SESSION['id'];
@@ -92,13 +91,13 @@ if ($_SESSION['user_type'] != 'Recruiter') {
                         $sql = "UPDATE job_post SET  company_name = '$company_name', requirements = '$requirements', company_location='$company_location', salary='$salary', timing='$timing', Categories='$Categories' WHERE job_id='$job_id' AND recruiter_id=$recruiter_id";
                         if ($conn->query($sql) === TRUE) {
                             echo "<script> alert('Update record successfully')</script>";
-                            header('location:edit_job.php');
+                            header('location:posted_jobs.php');
                         } else {
                             echo "Error: " . $sql . "<br>" . $conn->error;
                         }
                     }else {
                     
-                    $job_id = $_GET['id'];
+                    $job_id = $_GET['job_id'];
                     
                     $sql = "SELECT * FROM job_post WHERE job_id = '$job_id' ";
                     $result = mysqli_query($conn, $sql);
@@ -120,16 +119,16 @@ if ($_SESSION['user_type'] != 'Recruiter') {
                 </div>
                 <div class="mb-1 ml-4 mr-4">
                 <label  class="form-label">Categories</label><br>
-                <select name="Categories" required>
-                    <option value="Design & Creative" <?php if ($row['Categories'] == 'Design & Creative') echo 'selected'; ?>>Design & Creative</option>
-                    <option value="Design & Development" <?php if ($row['Categories'] == 'Design & Development') echo 'selected'; ?>>Design & Development</option>
-                    <option value="Sales & Marketing" <?php if ($row['Categories'] == 'Sales & Marketing') echo 'selected'; ?>>Sales & Marketing</option>
-                    <option value="Mobile Application" <?php if ($row['Categories'] == 'Mobile Application') echo 'selected'; ?>>Mobile Application</option>
-                    <option value="Construction" <?php if ($row['Categories'] == 'Construction') echo 'selected'; ?>>Construction</option>
-                    <option value="Information Technology" <?php if ($row['Categories'] == 'Information Technology') echo 'selected'; ?>>Information Technology</option>
-                    <option value="Real Estate" <?php if ($row['Categories'] == 'Real Estate') echo 'selected'; ?>>Real Estate</option>
-                    <option value="Content Writer" <?php if ($row['Categories'] == 'Content Writer') echo 'selected'; ?>>Content Writer</option>
-                    <option value="Other" <?php if ($row['Categories'] == 'Other') echo 'selected'; ?>>Other</option>
+                <select name="categories" required>
+                    <option value="Design & Creative" <?php if ($row['categories'] == 'Design & Creative') echo 'selected'; ?>>Design & Creative</option>
+                    <option value="Design & Development" <?php if ($row['categories'] == 'Design & Development') echo 'selected'; ?>>Design & Development</option>
+                    <option value="Sales & Marketing" <?php if ($row['categories'] == 'Sales & Marketing') echo 'selected'; ?>>Sales & Marketing</option>
+                    <option value="Mobile Application" <?php if ($row['categories'] == 'Mobile Application') echo 'selected'; ?>>Mobile Application</option>
+                    <option value="Construction" <?php if ($row['categories'] == 'Construction') echo 'selected'; ?>>Construction</option>
+                    <option value="Information Technology" <?php if ($row['categories'] == 'Information Technology') echo 'selected'; ?>>Information Technology</option>
+                    <option value="Real Estate" <?php if ($row['categories'] == 'Real Estate') echo 'selected'; ?>>Real Estate</option>
+                    <option value="Content Writer" <?php if ($row['categories'] == 'Content Writer') echo 'selected'; ?>>Content Writer</option>
+                    <option value="Other" <?php if ($row['categories'] == 'Other') echo 'selected'; ?>>Other</option>
                 </select><br>
                 </div><br>
                 <div class="mb-3 ml-4 mr-4">
@@ -164,7 +163,6 @@ if ($_SESSION['user_type'] != 'Recruiter') {
                     echo "<script> alert('Job not found or you don\'t have permission to edit this job.')</script>";
                     exit();
                 }
-                $stmt->close();
             }
             $conn->close();
             ?>

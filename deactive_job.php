@@ -2,8 +2,8 @@
 session_start();
 require 'connection.php'; // Ensure you include your database connection file
 
-if (isset($_GET['id'])) {
-    $job_id = $_GET['id'];
+if (isset($_GET['job_id'])) {
+    $job_id = $_GET['job_id'];
 
     // Fetch current status of the job
     $sql = "SELECT status FROM job_post WHERE job_id = '$job_id'";

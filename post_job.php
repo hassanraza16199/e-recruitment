@@ -245,7 +245,7 @@ margin: 100px auto;
                 <div class="mb-1 ml-4 mr-4">
                 <label  class="form-label">Categories</label>
                     <select class="form-select mb-4" name="categories" id="categories" >
-                        <option selected>Select Job Category</option>
+                        <option selected disabled>Select Job Category</option>
                         <option value="Design & Creative">Design & Creative</option>
                         <option value="Design & Development">Design & Development</option>
                         <option value="Sales & Marketing">Sales & Marketing</option>
@@ -286,7 +286,7 @@ margin: 100px auto;
                 <div class="mb-4 ml-4 mr-4">
                     <label  class="form-label">Job Timing</label>
                     <select class="form-select mb-4" name="timing" id="timing" >
-                        <option selected>Select Job Time</option>
+                        <option selected disabled>Select Job Time</option>
                         <option value="Full Time">Full Time</option>
                         <option value="Part Time">Part Time</option>
                         <option value="Remote">Remote</option>

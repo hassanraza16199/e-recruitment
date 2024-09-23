@@ -2,6 +2,19 @@
 session_start();
 
 include "connection.php";
+
+if (isset($_GET['job_id'])) {
+    $job_id = intval($_GET['job_id']);
+
+    $sql = "DELETE FROM job_post WHERE job_id = $job_id";
+
+    if ($conn->query($sql) === TRUE) {
+        header("Location: posted_jobs.php");
+        exit();
+    } else {
+        echo "Error deleting jobs: " . $conn->error;
+    }
+}
 ?>
 
 
@@ -69,7 +82,6 @@ include "connection.php";
             <div class='ml-5 mr-5'>
                 <div class="row">
                     <h2 class="ml-5 mb-2">Posted Jobs</h2>
-                    <div style="margin-left:70%;"><a href="post_job.php"  class="btn head-btn1">Post New Job</a></div>
                     
                 </div>
                 
@@ -90,7 +102,7 @@ include "connection.php";
                                         echo "<div class='single-job-items mb-30 ml-5 mr-5'>";
                                         echo "<div class='job-items'>";
                                         echo "<div class='company-img'>";
-                                        echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'><img style='width:120px; height:120px;' src='/E-Recruitment system/upload/" . $row['company_logo'] . "'></a>";
+                                        echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'><img style='width:120px; height:120px;' src='/e-recruitment/upload/" . $row['company_logo'] . "'></a>";
                                         echo "</div>";
                                         echo "<div class='job-tittle job-tittle2'>";
                                         echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'>";
@@ -106,12 +118,12 @@ include "connection.php";
                                         echo "</div>";
                                         echo "<div class='items-link items-link2 f-right'>";
                                         
-                                        echo "<a href='edit_job.php?id=" . $row['job_id'] . "'>Edit</a>";
+                                        echo "<a href='edit_job.php?job_id=" . $row['job_id'] . "'>Edit</a>";
 
-                                        echo "<a href='deactive_job.php?id=" . $row['job_id'] . "' onclick='toggleJobStatus(" . $row['job_id'] . ")'>" . ($row['status'] === 'active' ? 'Deactivate' : 'Activate') . "</a>";
+                                        echo "<a href='deactive_job.php?job_id=" . $row['job_id'] . "' onclick='toggleJobStatus(" . $row['job_id'] . ")'>" . ($row['status'] === 'active' ? 'Deactivate' : 'Activate') . "</a>";
 
 
-                                        echo "<a href='delete_job.php?id=" . $row['job_id'] . "'>Delete</a>";
+                                        echo "<a href='posted_jobs.php?job_id=" . $row['job_id'] . "'>Delete</a>";
 
                                         echo "<span> Post date: " . $row['date'] ."</span>";
                                         echo "</div>";

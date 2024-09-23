@@ -64,13 +64,13 @@
                                                 }elseif($_SESSION['user_type'] === 'Recruiter'){
                                             ?>
                                             <li><a href="dashboard.php">Home</a></li>
-                                            <li><a href="posted_jobs.php">Posted Jobs</a></li>
+                                            <li><a href="job_listing.php">Jobs </a></li>
                                             <li><a href="resumes.php">Resumes</a></li>
                                             <li><a href="#">Pages</a>
                                             
                                                 <ul class="submenu">
                                                     <li><a href="applications.php">Applications</a></li>
-                                                    <li><a href="#">/</a></li>
+                                                    <li><a href="posted_jobs.php">Posted Jobs</a></li>
                                                 </ul>
                                             </li>
                                             <li><a href="contact_us.php">Contacts</a></li>

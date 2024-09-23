@@ -2377,17 +2377,16 @@ var $range = $(".js-range-slider"),
     $inputFrom = $(".js-input-from"),
     $inputTo = $(".js-input-to"),
     instance,
-    min = 0,
-    max = 1000,
-    from = 10,
-    to = 100;
+    max = 100000,
+    from = 100,
+    to = 10000;
 
 $range.ionRangeSlider({
     type: "double",
     min: min,
     max: max,
     from: 0,
-    to: 500,
+    to: 50000,
   prefix: 'tk. ',
     onStart: updateInputs,
     onChange: updateInputs,

@@ -3,7 +3,7 @@ session_start();
 include "connection.php";
 
 if(isset($_POST['submit'])) {
-
+    if ($_SESSION['user_type'] == 'Candidate') {
     if (isset($_GET['job_id'])) {
         $job_id = $_GET['job_id'];
         $recruiter_id = $_GET['recruiter_id'];
@@ -11,6 +11,7 @@ if(isset($_POST['submit'])) {
         echo "No job ID specified.";
         exit;
     }
+}
 
     $user_id = $_SESSION['id'];
     $user_name = $_SESSION['name'];
@@ -186,7 +187,15 @@ if(isset($_POST['submit'])) {
             <div class="ml-5 mr-5">
             <div class="feedback-container">
             <h2 class="mb-4 ml-4">Feedback</h2>
+            <?php
+            if ($_SESSION['user_type'] == 'Recruiter') {
+            ?>
+            <form action="feedback.php" method="POST">
+            <?php
+            }else if ($_SESSION['user_type'] == 'Candidate') {
+            ?>
             <form action="feedback.php?job_id=<?php echo $_GET['job_id']; ?>&recruiter_id=<?php echo $_GET['recruiter_id']; ?>" method="POST">
+            <?php }?>
         <p>What do you think of the experience within E-Recruitment system?</p>
 
         <div class="rating-group mb-4">
