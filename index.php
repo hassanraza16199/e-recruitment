@@ -1,5 +1,21 @@
 <?php
 include "connection.php";
+if(isset($_POST['submit'])){
+    $user_name = $_POST['user_name'];
+    $sender_email = $_POST['sender_email'];
+    $subject = $_POST['subject'];
+    $message = $_POST['message'];
+
+    $sql = "INSERT INTO `contact_us`(`message`, `user_name`, `sender_email`, `subject`) VALUES ('$message','$user_name','$sender_email','$subject')";
+
+    if($conn->query($sql) ===True){
+        header("Location: index.php");
+        exit;
+    }else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+    
+}
 ?>
 
 <!doctype html>
@@ -358,25 +374,6 @@ form.search-box .select-form .nice-select::after {
                                 </div>
                             </div>
                         </div>
-                        <!-- Search Box -->
-                        <!-- <div class="row">
-                            <div class="col-xl-8">
-                                
-                                <form action="#" class="search-box">
-                                    <div class="input-form">
-                                        <input type="text" placeholder="Job Tittle or keyword">
-                                    </div>
-                                    <div class="select-form">
-                                        <div class="select-itms">
-                                        <input type="text" class="nice-select" name="company_location" placeholder="Location or keyword">
-                                        </div>
-                                    </div>
-                                    <div class="search-form">
-                                        <button >Find job</button>
-                                    </div>	
-                                </form>	
-                            </div>
-                        </div> -->
                     </div>
                 </div>
             </div>
@@ -590,7 +587,6 @@ form.search-box .select-form .nice-select::after {
                     <div class="col-xl-10">
                         <!-- single-job-content -->
                          <?php
-                        include "connection.php";
                         $sql = "SELECT * FROM job_post LIMIT 5";
                         $result = $conn->query($sql);
                         if ($result->num_rows > 0) {
@@ -713,14 +709,7 @@ form.search-box .select-form .nice-select::after {
                     </div>
                     <div class="col-xl-6 col-lg-6">
                         <div class="support-location-img">
-                        <form class="form-contact contact_form mt-2 mb-2" action="contact_us.php" method="POST" >
-                            <?php
-                        if (isset($_SESSION['post_message'])) {
-                            echo "<p style='color:Green; border: 1px solid #ededed; border-radius: 7px; padding: 5px'>" . $_SESSION['post_message'] . "</p>";
-                            unset($_SESSION['post_message']);
-                         }
-                    ?>
-                    <div>
+                        <form class="form-contact contact_form mt-2 mb-2" action="index.php" method="POST" >
                     <h3>Contact Us</h3>
                             <div class="row">
                             
@@ -762,6 +751,7 @@ form.search-box .select-form .nice-select::after {
 
     </main>
 
+    </div>
 
     <footer>
         <!-- Footer Start-->
@@ -819,12 +809,12 @@ form.search-box .select-form .nice-select::after {
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
                     <div class="footer-tittle-bottom ml-5">
                     <?php
-                                            include 'connection.php';
+                                            
                                             $count_sql = "SELECT COUNT(*) AS total FROM user";
                                             $count_result = $conn->query($count_sql);
                                             $count_row = $count_result->fetch_assoc();
                                             $total_user_entries = $count_row['total'];
-                                            $conn->close();
+                                            
                                             ?>
                         <span><?php echo $total_user_entries; ?> +</span>
                         <p>Talented Hunter</p>
@@ -832,12 +822,12 @@ form.search-box .select-form .nice-select::after {
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-4">
                     <?php
-                                            include 'connection.php';
+                                            
                                             $count_sql = "SELECT COUNT(*) AS total FROM job_post";
                                             $count_result = $conn->query($count_sql);
                                             $count_row = $count_result->fetch_assoc();
                                             $total_entries = $count_row['total'];
-                                            $conn->close();
+                                            
                                             ?>
                         <div class="footer-tittle-bottom">
                             <span><?php echo $total_entries; ?> +</span>
@@ -846,7 +836,7 @@ form.search-box .select-form .nice-select::after {
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-4">
                     <?php
-                                            include 'connection.php';
+                                            
                                             $count_sql = "SELECT COUNT(*) AS total FROM applications";
                                             $count_result = $conn->query($count_sql);
                                             $count_row = $count_result->fetch_assoc();

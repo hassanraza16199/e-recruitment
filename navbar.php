@@ -58,7 +58,7 @@
                                                     <li><a href="#">/</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a href="contact_us.php">Contact us</a></li>
+                                            <li><a href="#">Calender Integration</a></li>
 
                                             <?php
                                                 }elseif($_SESSION['user_type'] === 'Recruiter'){
