@@ -64,7 +64,7 @@
                                                 }elseif($_SESSION['user_type'] === 'Recruiter'){
                                             ?>
                                             <li><a href="dashboard.php">Home</a></li>
-                                            <li><a href="job_listing.php">Jobs </a></li>
+                                            <li><a href="posted_jobs.php">Jobs </a></li>
                                             <li><a href="resumes.php">Resumes</a></li>
                                             <li><a href="#">Pages</a>
                                             

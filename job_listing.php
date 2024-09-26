@@ -1,11 +1,11 @@
 <?php
 session_start();
-
+include 'connection.php';
 if(!isset($_SESSION['name'])){
     header("Location: login.php");
 }
-include 'connection.php';
 
+$recruiter_id = $_SESSION['id'];
 
 ?>
 
@@ -255,6 +255,31 @@ margin: 100px auto;
     text-align: center;
     margin-bottom: 25px;
 }
+.share_btn1 {
+    color: black;
+    background-color:#fff;
+    display: block;
+    width:100%;
+    border: none;
+    border-radius: 30px;
+    padding: 0px 50px;
+    margin-bottom: 25px;
+}
+.share_btn1 i{
+    padding-left:50px;
+    padding-bottom: 20px;
+    cursor: pointer;
+}
+.left-dropdown {
+    right: 100%; /* Move the menu to the left side of the button */
+    left: auto; /* Ensure it's not positioned based on the left */
+    top: 0; /* Align it with the top of the button */
+    transform: translateX(-10px); /* Optional: Adjust the exact position to your liking */
+    min-width: 160px; /* Optional: Set a minimum width for the dropdown */
+}
+.share_btn1.dropdown-toggle::after {
+    display: none; /* This hides the default caret */
+}
             </style>
    </head>
 
@@ -436,7 +461,11 @@ margin: 100px auto;
                                     <div class="col-lg-12">
                                         <div class="count-job mb-35">
                                             <?php
-                                            $count_sql = "SELECT COUNT(*) AS total FROM job_post";
+                                            if($_SESSION['user_type'] === 'Recruiter') {
+                                                $count_sql = "SELECT COUNT(*) AS total FROM job_post WHERE recruiter_id = '$recruiter_id'";
+                                            } else {
+                                                $count_sql = "SELECT COUNT(*) AS total FROM job_post";
+                                            }
                                             $count_result = $conn->query($count_sql);
                                             $count_row = $count_result->fetch_assoc();
                                             $total_entries = $count_row['total'];
@@ -445,12 +474,6 @@ margin: 100px auto;
                                             <span> Jobs found <?php echo $total_entries; ?></span>
                                             <!-- Select job items start -->
                                             <div class="select-job-items">
-                                                <?php
-                                                if($_SESSION['user_type'] === 'Recruiter'){
-                                                    ?>
-                                            <div ><a href="post_job.php"  class="btn head-btn1">Post New Job</a></div>
-                                                <?php
-                                                } ?>
                                                 
                                             </div>
                                             <!--  Select job items End-->
@@ -475,18 +498,21 @@ $total_pages = ceil($total_jobs / $jobs_per_page);
 // Get the current page number from the query string, default to 1 if not set
 $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 
-// Make sure the current page is within the valid range
 if ($current_page < 1) {
     $current_page = 1;
-} elseif ($current_page > $total_pages) {
-    $current_page = $total_pages;
 }
 
 // Calculate the offset for the SQL query
 $offset = ($current_page - 1) * $jobs_per_page;
 
+// Ensure the offset is non-negative
+if ($offset < 0) {
+    $offset = 0;
+}
+
 // Fetch the job posts for the current page
 $sql = "SELECT * FROM job_post WHERE status = 'active'";
+
 
 // Add conditions based on filter inputs
 $conditions = [];
@@ -588,8 +614,9 @@ if ($result->num_rows > 0) {
         echo "</div>";
         echo "</div>";
         echo "<div class='items-link items-link2 f-right'>";
-        echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'>" . $row['timing'] . "</a> <br>";
         echo "<button class='share_btn' style='margin-top:-25px;cursor: pointer;'>Share</button> <br>";
+        echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'>" . $row['timing'] . "</a> <br>";
+        
         echo "<span><i class='fas fa-map-marker-alt'></i> " . $row['company_location'] . "</span>";
         echo "<span class='mt-2'>Salary:  " . $row['salary'] . "</span>";
         echo "<span class='mt-2'>  " . $time_ago . "</span>";
@@ -698,7 +725,7 @@ if ($result->num_rows > 0) {
     copyText.select();
     document.execCommand('copy');
     alert("Copied the link: " + copyText.value);
-})
+});
 </script>
 
 	<!-- JS here -->
