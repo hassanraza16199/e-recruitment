@@ -309,11 +309,12 @@ margin: 100px auto;
                         <div class="col-xl-12">
                             <div class="hero-cap text-center">
                                 <h2>Get your job</h2>
-                                <form class="d-flex mt-4" method="GET" action="resumes.php">
-                                <button class="icon-btn" type="button" disabled><i class="fa-solid fa-magnifying-glass ml-2 mr-1"></i></button>
-                                    <input class="select-input" type="search" name="search" placeholder="     Search Keyword" aria-label="Search">
+                                <form class="d-flex mt-4" method="GET" action="job_listing.php">
+                                    <button class="icon-btn" type="button" disabled><i class="fa-solid fa-magnifying-glass ml-2 mr-1"></i></button>
+                                    <input class="select-input" type="search" name="search" placeholder="Search by keyword or location" aria-label="Search">
                                     <button class="search-btn" type="submit">Search</button>
                                 </form>
+
                             </div>
                         </div>
                     </div>
@@ -517,6 +518,11 @@ $sql = "SELECT * FROM job_post WHERE status = 'active'";
 // Add conditions based on filter inputs
 $conditions = [];
 
+if (!empty($_GET['search'])) {
+    $search = $conn->real_escape_string($_GET['search']);
+    $conditions[] = "(job_title LIKE '%$search%' OR discription LIKE '%$search%' OR company_location LIKE '%$search%' OR requirements LIKE '%$search%')";
+}
+
 // Check if category is selected
 if (!empty($_GET['categories'])) {
     $categories = $conn->real_escape_string($_GET['categories']);
@@ -533,12 +539,6 @@ if (!empty($_GET['timing'])) {
 if (!empty($_GET['company_location'])) {
     $company_location = $conn->real_escape_string($_GET['company_location']);
     $conditions[] = "company_location = '$company_location'";
-}
-
-// Check if experience is selected
-if (!empty($_GET['experience'])) {
-    $experience = implode("','", array_map([$conn, 'real_escape_string'], $_GET['experience']));
-    $conditions[] = "experience IN ('$experience')";
 }
 
 // Check if the 'posted_within' filter is selected

@@ -6,8 +6,6 @@ include "connection.php";
 ?>
 
 
-
-
 <!doctype html>
 <html class="no-js" lang="zxx">
     <head>
@@ -31,6 +29,37 @@ include "connection.php";
             <link rel="stylesheet" href="assets/css/slick.css">
             <link rel="stylesheet" href="assets/css/nice-select.css">
             <link rel="stylesheet" href="assets/css/style.css">
+            <style>
+    .post_btn {
+        padding-left: 60%; /* Default for larger screens */
+    }
+
+    @media screen and (max-width: 992px) { /* For tablet screens and smaller */
+        .post_btn {
+            padding-left: 40%;
+        }
+    }
+
+    @media screen and (max-width: 768px) { /* For mobile screens */
+        .post_btn {
+            padding-left: 20%;
+        }
+    }
+
+    @media screen and (max-width: 576px) { /* For very small screens */
+        .post_btn {
+            padding-left: 10%;
+        }
+    }
+
+    @media screen and (max-width: 480px) { /* For extra small mobile screens */
+        .post_btn {
+            padding-left: 0;
+            text-align: center; /* Centers the button on small screens */
+        }
+    }
+</style>
+
    </head>
 
    <body>
@@ -48,7 +77,21 @@ include "connection.php";
     <!-- Preloader Start -->
     <?php include "navbar.php"; ?>
 
-
+<!-- Hero Area Start-->
+<div class="slider-area ">
+            <div class="single-slider section-overly slider-height2 d-flex align-items-center" data-background="assets/img/hero/about.jpg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="hero-cap text-center">
+                                <h2>Post Job</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Hero Area End -->
     <main>
 
         
@@ -56,7 +99,12 @@ include "connection.php";
         <div class="job-listing-area pt-120 pb-120">
             
             <div class='ml-5 mr-5'>
+                <div class="row">
                 <h2 class="ml-5 mb-2">Posted Jobs</h2>
+                <div class="post_btn">
+                    <a class="btn" href="post_job.php">Post New Jobs</a>
+                </div>
+            </div>
                 <hr>
         <?php
                                     if($_SESSION['user_type'] === 'Recruiter'){
