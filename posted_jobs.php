@@ -167,10 +167,10 @@ include "connection.php";
                                         echo "<div class='single-job-items mb-30 ml-5 mr-5'>";
                                         echo "<div class='job-items'>";
                                         echo "<div class='company-img'>";
-                                        echo "<a href='job_details.php?id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'><img style='width:120px; height:120px;' src='/e-recruitment/upload/" . $row['company_logo'] . "'></a>";
+                                        echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'><img style='width:120px; height:120px;' src='/e-recruitment/upload/" . $row['company_logo'] . "'></a>";
                                         echo "</div>";
                                         echo "<div class='job-tittle job-tittle2'>";
-                                        echo "<a href='job_details.php?id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'>";
+                                        echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'>";
                                         echo "<h4>" . $row['categories'] . "</h4>";
                                         echo "</a>";
                                         echo "<ul>";
@@ -188,7 +188,7 @@ include "connection.php";
                                         echo "<a href='deactive_job.php?job_id=" . $row['job_id'] . "' onclick='toggleJobStatus(" . $row['job_id'] . ")'>" . ($row['status'] === 'active' ? 'Deactivate' : 'Activate') . "</a>";
 
 
-                                        echo "<a href='delete_job.php?id=" . $row['job_id'] . "'>Delete</a>";
+                                        echo "<a href='delete_job.php?job_id=" . $row['job_id'] . "'>Delete</a>";
 
                                         echo "<span> Post date: " . $row['date'] ."</span>";
                                         echo "</div>";

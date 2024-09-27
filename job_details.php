@@ -47,26 +47,7 @@ include "connection.php";
     <?php include "navbar.php"; ?>
 
     <main>
-
-        <!-- Hero Area Start-->
-        <div class="slider-area ">
-        <div class="single-slider section-overly slider-height2 d-flex align-items-center" data-background="assets/img/hero/about.jpg">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="hero-cap text-center">
-                            <h2>UI/UX Designer</h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>
-        <!-- Hero Area End -->
-        <!-- job post company Start -->
-        <div class="job-post-company pt-120 pb-120">
-
-        <?php
+    <?php
     include "connection.php";
         $job_id = $_GET['job_id'];
         $recruiter_id = $_GET['recruiter_id'];
@@ -80,6 +61,24 @@ include "connection.php";
                             $requirements = $row['requirements'];
                             $experience = $row['experience'];
                         ?>
+        <!-- Hero Area Start-->
+        <div class="slider-area ">
+        <div class="single-slider section-overly slider-height2 d-flex align-items-center" data-background="assets/img/hero/about.jpg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="hero-cap text-center">
+                            <h2><?php echo $row['categories'] ?></h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <!-- Hero Area End -->
+        <!-- job post company Start -->
+        <div class="job-post-company pt-120 pb-120">
+        
             <div class="container">
                 <div class="row justify-content-between">
                     <!-- Left Content -->
@@ -92,7 +91,7 @@ include "connection.php";
                                 </div>
                                 <div class="job-tittle">
                                     <a href="#">
-                                        <h4><?php echo $row['categories'] ?></h4>
+                                        <h4><?php echo $row['job_title'] ?></h4>
                                     </a>
                                     <ul>
                                         <li><?php echo $row['company_name'] ?></li>
