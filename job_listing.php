@@ -255,31 +255,7 @@ margin: 100px auto;
     text-align: center;
     margin-bottom: 25px;
 }
-.share_btn1 {
-    color: black;
-    background-color:#fff;
-    display: block;
-    width:100%;
-    border: none;
-    border-radius: 30px;
-    padding: 0px 50px;
-    margin-bottom: 25px;
-}
-.share_btn1 i{
-    padding-left:50px;
-    padding-bottom: 20px;
-    cursor: pointer;
-}
-.left-dropdown {
-    right: 100%; /* Move the menu to the left side of the button */
-    left: auto; /* Ensure it's not positioned based on the left */
-    top: 0; /* Align it with the top of the button */
-    transform: translateX(-10px); /* Optional: Adjust the exact position to your liking */
-    min-width: 160px; /* Optional: Set a minimum width for the dropdown */
-}
-.share_btn1.dropdown-toggle::after {
-    display: none; /* This hides the default caret */
-}
+
             </style>
    </head>
 
@@ -614,9 +590,8 @@ if ($result->num_rows > 0) {
         echo "</div>";
         echo "</div>";
         echo "<div class='items-link items-link2 f-right'>";
-        echo "<button class='share_btn' style='margin-top:-25px;cursor: pointer;'>Share</button> <br>";
         echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'>" . $row['timing'] . "</a> <br>";
-        
+         echo "<button class='share_btn' style='margin-top:-25px;cursor: pointer;'>Share</button> <br>";
         echo "<span><i class='fas fa-map-marker-alt'></i> " . $row['company_location'] . "</span>";
         echo "<span class='mt-2'>Salary:  " . $row['salary'] . "</span>";
         echo "<span class='mt-2'>  " . $time_ago . "</span>";

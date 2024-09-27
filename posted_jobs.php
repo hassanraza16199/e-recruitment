@@ -59,39 +59,63 @@ include "connection.php";
         }
     }
     .d-flex{
-                    justify-content:center;
-                }
-                .icon-btn{
-                    color:black;
-                    background:white;
-                    border:0;
-                    height: 50px;
-                    border-top-left-radius: 25px;
-                    border-bottom-left-radius: 25px;
-                }
-                .select-input{
-                    width: 35%;
-                    height: 50px;
-                    border:none;
-                    
-                }
-                .search-btn{
-                    border-top-right-radius: 25px;
-                    border-bottom-right-radius: 25px;
-                    background: #fb246a;
-	                color:white;
-                    height: 50px;
-	                display: inline-block;
-	                padding: 13px 35px;
-	                font-family: "Muli", sans-serif;
-	                font-size: 14px;
-	                font-weight: 400;
-	                border: 1px solid #fb246a;
-	                letter-spacing: 3px;
-	                text-align: center;
-	                text-transform: uppercase;
-	                cursor: pointer
-                }
+        justify-content:center;
+    }
+    .icon-btn{
+        color:black;
+        background:white;
+        border:0;
+        height: 50px;
+        border-top-left-radius: 25px;
+        border-bottom-left-radius: 25px;
+    }
+    .select-input{
+        width: 35%;
+        height: 50px;
+        border:none;    
+    }
+    .search-btn{
+        border-top-right-radius: 25px;
+        border-bottom-right-radius: 25px;
+        background: #fb246a;
+	    color:white;
+        height: 50px;
+	    display: inline-block;
+	    padding: 13px 35px;
+	    font-family: "Muli", sans-serif;
+	    font-size: 14px;
+	    font-weight: 400;
+	    border: 1px solid #fb246a;
+	    letter-spacing: 3px;
+	    text-align: center;
+	    text-transform: uppercase;
+	    cursor: pointer
+    }
+    .share_btn1 {
+    color: black;
+    background-color:#fff;
+    display: block;
+    width:100%;
+    border: none;
+    border-radius: 30px;
+    padding: 0px 50px;
+    margin-bottom: 25px;
+}
+.share_btn1 i{
+    padding-left:50px;
+    padding-bottom: 20px;
+    cursor: pointer;
+}
+.left-dropdown {
+    right: 100%; /* Move the menu to the left side of the button */
+    left: auto; /* Ensure it's not positioned based on the left */
+    top: 0; /* Align it with the top of the button */
+    transform: translateX(-10px); /* Optional: Adjust the exact position to your liking */
+    min-width: 160px; /* Optional: Set a minimum width for the dropdown */
+}
+.share_btn1.dropdown-toggle::after {
+    display: none; /* This hides the default caret */
+}
 </style>
 
    </head>
@@ -137,7 +161,7 @@ include "connection.php";
         <!-- Job List Area Start -->
         <div class="job-listing-area pt-120 pb-120">
             
-            <div class='ml-5 mr-5'>
+            <div  style='margin-left:7%; margin-right:7%;'>
                 <div class="row">
                 <h2 class="ml-5 mb-2">Posted Jobs</h2>
                 <div class="post_btn">
@@ -164,23 +188,28 @@ include "connection.php";
                                     if ($result->num_rows > 0) {
                                         while($row = $result->fetch_assoc()) {
                                         
-                                        echo "<div class='single-job-items mb-30 ml-5 mr-5'>";
-                                        echo "<div class='job-items'>";
-                                        echo "<div class='company-img'>";
-                                        echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'><img style='width:120px; height:120px;' src='/e-recruitment/upload/" . $row['company_logo'] . "'></a>";
-                                        echo "</div>";
-                                        echo "<div class='job-tittle job-tittle2'>";
-                                        echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'>";
-                                        echo "<h4>" . $row['categories'] . "</h4>";
-                                        echo "</a>";
-                                        echo "<ul>";
-                                        echo "<li>" . $row['company_name'] . "</li>";
-                                        echo "<li><i class='fas fa-map-marker-alt'></i>" . $row['company_location'] .  "</li>";
-                                        echo "<li>" . $row['salary'] . "</li> <br>";
-                                        echo "<li>" . $row['requirements'] . "</li>";
-                                        echo "</ul>";
-                                        echo "</div>";
-                                        echo "</div>";
+                                            echo "<div class='single-job-items mb-30' style='margin-left:5%; margin-right:5%;'>";
+                                            echo "<div class='job-items'>";
+                                            echo "<div class='company-img'>";
+                                            // Including both job_id and recruiter_id in the URL
+                                            echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'><img style='width:120px; height:120px;' src='/e-recruitment/upload/" . $row['company_logo'] . "'></a>";
+                                            echo "</div>";
+                                            echo "<div class='job-tittle job-tittle2'>";
+                                            echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'>";
+                                            echo "<h4>" . $row['job_title'] . "</h4>";
+                                            echo "</a>";
+                                            echo "<ul>";
+                                            echo "<li>" . $row['company_name'] . "</li>";
+                                            echo "<li>     </li>";
+                                            echo "<li> Category:" . $row['categories'] . "</li> <br>";
+                                            
+                                            $discriptionPreview = substr($row['discription'], 0, 50) . (strlen($row['discription']) > 15 ? '...' : '');
+                                            echo "<li >" . $discriptionPreview . "</li> <br>";
+                                            $requirementsPreview = substr($row['requirements'], 0, 50) . (strlen($row['requirements']) > 15 ? '...' : '');
+                                            echo "<li class='mt-2'>" . $requirementsPreview . "</li>";
+                                            echo "</ul>";
+                                            echo "</div>";
+                                            echo "</div>";
                                         echo "<div class='items-link items-link2 f-right'>";
                                         
                                         echo "<a href='edit_job.php?job_id=" . $row['job_id'] . "'>Edit</a>";
