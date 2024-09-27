@@ -150,7 +150,7 @@ include "connection.php";
                          <div class="apply-btn2">
                          <?php
                                             if ($_SESSION['user_type'] == 'Recruiter') {
-                                                echo "<a href='app_job.php?id=" . $job_id . "' class='btn'>Applied Application</a>";
+                                                echo "<a href='applications.php?id=" . $job_id . "' class='btn'>Applied Application</a>";
                                             }else if ($_SESSION['user_type'] == 'Candidate') {
                                                 echo "<a href='apply_job.php?job_id=" . $job_id . "&recruiter_id=" . $recruiter_id . "' class='btn'>Apply Now</a>";
                                             }
