@@ -58,6 +58,40 @@ include "connection.php";
             text-align: center; /* Centers the button on small screens */
         }
     }
+    .d-flex{
+                    justify-content:center;
+                }
+                .icon-btn{
+                    color:black;
+                    background:white;
+                    border:0;
+                    height: 50px;
+                    border-top-left-radius: 25px;
+                    border-bottom-left-radius: 25px;
+                }
+                .select-input{
+                    width: 35%;
+                    height: 50px;
+                    border:none;
+                    
+                }
+                .search-btn{
+                    border-top-right-radius: 25px;
+                    border-bottom-right-radius: 25px;
+                    background: #fb246a;
+	                color:white;
+                    height: 50px;
+	                display: inline-block;
+	                padding: 13px 35px;
+	                font-family: "Muli", sans-serif;
+	                font-size: 14px;
+	                font-weight: 400;
+	                border: 1px solid #fb246a;
+	                letter-spacing: 3px;
+	                text-align: center;
+	                text-transform: uppercase;
+	                cursor: pointer
+                }
 </style>
 
    </head>
@@ -84,7 +118,12 @@ include "connection.php";
                     <div class="row">
                         <div class="col-xl-12">
                             <div class="hero-cap text-center">
-                                <h2>Post Job</h2>
+                                <h2>Posted Jobs</h2>
+                                <form class="d-flex mt-4" method="GET" action="posted_jobs.php">
+                                    <button class="icon-btn" type="button" disabled><i class="fa-solid fa-magnifying-glass ml-2 mr-1"></i></button>
+                                    <input class="select-input" type="search" name="search" placeholder="Search by keyword or location" aria-label="Search">
+                                    <button class="search-btn" type="submit">Search</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -107,6 +146,12 @@ include "connection.php";
             </div>
                 <hr>
         <?php
+        $conditions = [];
+
+        if (!empty($_GET['search'])) {
+            $search = $conn->real_escape_string($_GET['search']);
+            $conditions[] = "(job_title LIKE '%$search%' OR discription LIKE '%$search%' OR company_location LIKE '%$search%' OR requirements LIKE '%$search%')";
+        }
                                     if($_SESSION['user_type'] === 'Recruiter'){
                                     $recruiter_id = $_SESSION['id'];
                                     $sql = "SELECT * FROM job_post where recruiter_id = '$recruiter_id'";
