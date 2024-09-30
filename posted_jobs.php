@@ -91,31 +91,31 @@ include "connection.php";
 	    text-transform: uppercase;
 	    cursor: pointer
     }
-    .share_btn1 {
-    color: black;
-    background-color:#fff;
-    display: block;
-    width:100%;
-    border: none;
-    border-radius: 30px;
-    padding: 0px 50px;
-    margin-bottom: 25px;
+    .dropdown-toggle {
+    background-image: none !important; /* Remove default arrow */
+    border: none; /* Optional: remove border */
+    box-shadow: none; /* Optional: remove shadow */
+    outline: none; /* Remove focus outline */
+    margin-bottom:5%;
 }
-.share_btn1 i{
-    padding-left:50px;
-    padding-bottom: 20px;
-    cursor: pointer;
+.dropdown{
+    padding: 10px 0px 20px 73px;
 }
-.left-dropdown {
-    right: 100%; /* Move the menu to the left side of the button */
-    left: auto; /* Ensure it's not positioned based on the left */
-    top: 0; /* Align it with the top of the button */
-    transform: translateX(-10px); /* Optional: Adjust the exact position to your liking */
-    min-width: 160px; /* Optional: Set a minimum width for the dropdown */
+.btn-link{
+    margin: 0px 0px 60px 90px;
 }
-.share_btn1.dropdown-toggle::after {
-    display: none; /* This hides the default caret */
+.btn-link i{
+    color:black;
 }
+.dropdown-toggle::after {
+    display: none !important; /* Remove arrow that comes with Bootstrap dropdowns */
+}
+
+.dropdown-menu {
+    margin-top: 0; /* Optional: Adjust margin to ensure proper placement */
+}
+
+    
 </style>
 
    </head>
@@ -210,14 +210,19 @@ include "connection.php";
                                             echo "</ul>";
                                             echo "</div>";
                                             echo "</div>";
-                                        echo "<div class='items-link items-link2 f-right'>";
-                                        
-                                        echo "<a href='edit_job.php?job_id=" . $row['job_id'] . "'>Edit</a>";
-
-                                        echo "<a href='deactive_job.php?job_id=" . $row['job_id'] . "' onclick='toggleJobStatus(" . $row['job_id'] . ")'>" . ($row['status'] === 'active' ? 'Deactivate' : 'Activate') . "</a>";
-
-
-                                        echo "<a href='delete_job.php?job_id=" . $row['job_id'] . "'>Delete</a>";
+                                            echo "<div class='items-link items-link2 f-right'>";
+                                            echo "<div class='dropdown'>
+                                            <button class=' btn-link dropdown-toggle' type='button' id='dropdownMenuButton' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                                            <i class='fas fa-ellipsis-v fa-lg'></i>
+                                            </button>
+                                            <div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenuButton'>
+                                            <a class='dropdown-item ' style='border:none;' href='edit_job.php?job_id=". $row['job_id'] ."'>Edit</a>
+                                            <a class='dropdown-item' style='border:none;' href='delete_job.php?job_id= ". $row['job_id']. "'>Delete</a>
+                                            <a class='dropdown-item' style='border:none;' href='deactive_job.php?job_id=". $row['job_id'] ."' onclick='toggleJobStatus(" .$row['job_id'] .")'>
+                                            ". ($row['status'] === 'active' ? 'Deactivate' : 'Activate') ."
+                                            </a>
+                                            </div>
+                                            </div>";
 
                                         echo "<span> Post date: " . $row['date'] ."</span>";
                                         echo "</div>";

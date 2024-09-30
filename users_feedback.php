@@ -40,13 +40,62 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <link rel="stylesheet" href="assets/css/nice-select.css">
             <link rel="stylesheet" href="assets/css/style.css">
             <style>
-                .message-cell {
+.message-cell {
     max-width: 250px; /* Adjust the width according to your design */
     word-wrap: break-word; /* Break long words */
     white-space: pre-wrap; /* Preserve white spaces and wrap text */
     overflow-wrap: break-word; /* Break long words if necessary */
 }
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
 
+.tooltip-icon {
+    font-size: 24px;
+    padding: 5px;
+    border: none;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 100px;
+    background-color: #fff;
+    color: #000;
+    text-align: center;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    position: absolute;
+    top: 130%; /* Adjusts tooltip to appear below the icon */
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    white-space: nowrap;
+}
+
+.tooltip-text svg {
+    display: block;
+    margin: 0 auto;
+}
+
+.tooltip-arrow {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #ccc;
+    position: absolute;
+    bottom: 100%; /* Places the arrow above the tooltip */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.tooltip-container:hover .tooltip-text {
+    visibility: visible;
+}
             </style>
    </head>
 
@@ -64,52 +113,221 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
     <!-- Preloader Start -->
     <?php include "navbar.php"; ?>
+    <!-- Hero Area Start-->
+        <div class="slider-area ">
+            <div class="single-slider section-overly slider-height2 d-flex align-items-center" data-background="assets/img/hero/about.jpg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="hero-cap text-center">
+                                <h2>User Feedback</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Hero Area End -->
     
-    <main class="ml-5 mr-5 mt-5 mb-5">
-        <h2 class="mt-3 mb-3">Users Feedbacks</h2>
-        <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Sr</th>
-      <th scope="col">Name</th>
-      <th scope="col">Comment</th>
-      <th scope="col">Rating</th>
-      <th scope="col">Action</th>
-    </tr>
-  </thead>
-  <tbody>
-  <?php
-include "connection.php";
-$sql = "SELECT * FROM feedback";
-$result = $conn->query($sql);
+        <main class="ml-5 mr-5 mt-5 mb-5">
+        <!-- Recruiter Feedback -->
+            <?php
+                if($_SESSION['user_type'] === 'admin'){
+            ?>
+            <div class="mb-5">
+                <h2 class="mt-3 mb-3">Recruiter Feedbacks</h2>
+                <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Sr</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Comment</th>
+                        <th scope="col">Rating</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                        $sql = "SELECT * FROM feedback";
 
-if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
-?>
-    <tr>
-      <th scope="row"><?php echo $row['feedback_id']; ?></th>
-      <td><?php echo $row['user_name']; ?></td>
-      <td class="message-cell"><?php echo $row['comment']; ?></td>
-      <td><?php echo $row['rating']; ?></td>
-      <td>
-      <form action="users_feedback.php" method="POST" style="display:inline;">
-            <input type="hidden" name="feedback_id" value="<?php echo $row['feedback_id']; ?>">
-            <button type="submit" style="border:none;background:none;">
-                <i class="fa-solid fa-trash fa-xl" style="color:#FF0000; cursor: pointer;"></i>
-            </button>
-            <i class="fa-solid fa-file-import fa-xl ml-2 " style="color:#000080;"></i>
-        </form>
+                        $result = $conn->query($sql);
+                        if ($result->num_rows > 0) {
+                            while($row = $result->fetch_assoc()) {
+                                $user_type = $row['user_type'];
+                                if($user_type === 'Recruiter'){
+                    ?>
+                    <tr>
+                        <th scope="row"><?php echo $row['feedback_id']; ?></th>
+                        <td><?php echo $row['user_name']; ?></td>
+                        <td class="message-cell"><?php echo $row['comment']; ?></td>
+                        <td><?php echo $row['rating']; ?></td>
+                        <td>
+                        <form action="users_feedback.php" method="POST" style="display:inline;">
+                            <input type="hidden" name="feedback_id" value="<?php echo $row['feedback_id']; ?>">
+                            
+                            <div class="tooltip-container">
+                                <span class="tooltip-icon"><button type="submit" style="border:none;background:none;">
+                                <i class="fa-solid fa-trash" style="color:#FF0000; cursor: pointer;"></i>
+                            </button></span>
+                                <div class="tooltip-text">
+                                <!-- Replace the SVG with your text -->
+                                Delete 
+                                <div class="tooltip-arrow"></div>
+                            </div>
+                        </form>
 
-    </td>
-    </tr>
-<?php
-    }
-}
-?>
+                        </td>
+                    </tr>
+                    <?php
+                                }
+                            }
+                        }
+                    ?>
 
-  </tbody>
-</table>
+                </tbody>
+                </table>
+            </div>
 
+            <!-- Candidate Feedbacks -->
+            <div class='mt-5'>
+                <h2 class="mt-3 mb-3">Candidate Feedbacks</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Sr</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Comment</th>
+                            <th scope="col">Rating</th>
+                            <th scope="col" colspan="2"><span style="margin-left:100px;">Action</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            include "connection.php";
+                                $sql = "SELECT * FROM feedback";
+
+                            $result = $conn->query($sql);
+
+                            if ($result->num_rows > 0) {
+                                while($row = $result->fetch_assoc()) {
+                                    $user_type = $row['user_type'];
+                                    if($user_type === 'Candidate'){
+                        ?>
+                        <tr>
+                            <th scope="row"><?php echo $row['feedback_id']; ?></th>
+                            <td><?php echo $row['user_name']; ?></td>
+                            <td class="message-cell"><?php echo $row['comment']; ?></td>
+                            <td><?php echo $row['rating']; ?></td>
+                            <form action="users_feedback.php" method="POST" style="display:inline;">
+                                    <input type="hidden" name="feedback_id" value="<?php echo $row['feedback_id']; ?>">
+                            <td>
+                                <div class="tooltip-container">
+                                    <span class="tooltip-icon"><button type="submit" style="border:none;background:none;">
+                                    <i class="fa-solid fa-trash" style="color:#FF0000; cursor: pointer;"></i>
+                                    </button></span>
+                                    <div class="tooltip-text">
+                                        <!-- Replace the SVG with your text -->
+                                        Delete 
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                            </td>
+                            <td>
+                               
+                                    <div class="tooltip-container">
+                                    <span class="tooltip-icon"> <a href='job_details.php?job_id=<?php echo $row['job_id']; ?>&recruiter_id=<?php echo $row['recruiter_id']; ?>'>
+                                        <i class="fa-solid fa-file-import  ml-2" style="color:#000080;"></i>
+                                    </a></span>
+                                    <div class="tooltip-text">
+                                        <!-- Replace the SVG with your text -->
+                                        Go to post
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                            </td>
+                        </form>
+                        </tr>
+                        <?php
+                                    }
+                                }
+                            }
+                        ?>
+                    </tbody>
+                </table>
+
+            </div>
+
+
+
+            <?php } elseif($_SESSION['user_type'] === 'Recruiter'){?>
+
+            <!-- Candidate Feedbacks -->
+            <div class='mt-5'>
+                <h2 class="mt-3 mb-3">Candidate Feedbacks</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Sr</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Comment</th>
+                            <th scope="col">Rating</th>
+                            <th scope="col" colspan="2"><span style="margin-left:100px;">Action</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            include "connection.php";
+                            $recruiter_id = $_SESSION['id'];
+                            $sql = "SELECT * FROM feedback WHERE recruiter_id = '$recruiter_id'";
+                            
+                            $result = $conn->query($sql);
+
+                            if ($result->num_rows > 0) {
+                                while($row = $result->fetch_assoc()) {
+                                    $user_type = $row['user_type'];
+                                    if($user_type === 'Candidate'){
+                        ?>
+                        <tr>
+                            <th scope="row"><?php echo $row['feedback_id']; ?></th>
+                            <td><?php echo $row['user_name']; ?></td>
+                            <td class="message-cell"><?php echo $row['comment']; ?></td>
+                            <td><?php echo $row['rating']; ?></td>
+                            <form action="users_feedback.php" method="POST" style="display:inline;">
+                                    <input type="hidden" name="feedback_id" value="<?php echo $row['feedback_id']; ?>">
+                            <td>
+                                <div class="tooltip-container">
+                                    <span class="tooltip-icon"><button type="submit" style="border:none;background:none;">
+                                    <i class="fa-solid fa-trash" style="color:#FF0000; cursor: pointer;"></i>
+                                    </button></span>
+                                    <div class="tooltip-text">
+                                        <!-- Replace the SVG with your text -->
+                                        Delete 
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                            </td>
+                            <td>
+                               
+                                    <div class="tooltip-container">
+                                    <span class="tooltip-icon"> <a href='job_details.php?job_id=<?php echo $row['job_id']; ?>&recruiter_id=<?php echo $row['recruiter_id']; ?>'>
+                                        <i class="fa-solid fa-file-import  ml-2" style="color:#000080;"></i>
+                                    </a></span>
+                                    <div class="tooltip-text">
+                                        <!-- Replace the SVG with your text -->
+                                        Go to post
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                            </td>
+                        </form>
+                        </tr>
+                        <?php
+                                    }
+                                }
+                            }
+                        ?>
+                    </tbody>
+                </table>
+
+            </div>
+
+<?php } ?>
     </main>
 
 <?php include "footer.php"; ?>

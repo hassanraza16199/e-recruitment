@@ -12,13 +12,17 @@ if(isset($_POST['submit'])) {
         exit;
     }
 }
-
+    $user_type = $_SESSION['user_type'];
     $user_id = $_SESSION['id'];
     $user_name = $_SESSION['name'];
     $rating = $_POST['rating'];
     $comment = $_POST['comment'];
 
-    $sql = "INSERT INTO `feedback` (user_id, user_name, rating , comment) VALUES('$user_id', '$user_name', '$rating', '$comment')";
+    if ($_SESSION['user_type'] == 'Recruiter') {
+    $sql = "INSERT INTO `feedback` (user_id, user_name, rating , comment, user_type) VALUES('$user_id', '$user_name', '$rating', '$comment', '$user_type')";
+    }else if ($_SESSION['user_type'] == 'Candidate') {
+        $sql = "INSERT INTO `feedback` (user_id, job_id, recruiter_id, user_name, rating , comment) VALUES('$user_id', '$job_id', '$recruiter_id', '$user_name', '$rating', '$comment')";
+    }
 
     if($conn->query($sql) == TRUE){
         
@@ -26,7 +30,7 @@ if(isset($_POST['submit'])) {
             header("Location: post_job.php");
             exit;
         }else if ($_SESSION['user_type'] == 'Candidate') {
-
+            
             header("Location: apply_job.php?job_id=$job_id&recruiter_id=$recruiter_id&success=true");
             exit;
         }
@@ -164,11 +168,8 @@ if(isset($_POST['submit'])) {
     <!-- Preloader Start -->
     <?php include "navbar.php"; ?>
 
-
-    <main>
-
-        <!-- Hero Area Start-->
-        <div class="slider-area ">
+    <!-- Hero Area Start-->
+<div class="slider-area ">
             <div class="single-slider section-overly slider-height2 d-flex align-items-center" data-background="assets/img/hero/about.jpg">
                 <div class="container">
                     <div class="row">
@@ -182,6 +183,9 @@ if(isset($_POST['submit'])) {
             </div>
         </div>
         <!-- Hero Area End -->
+
+    <main>
+
         <!-- Job List Area Start -->
         <div class="job-listing-area pt-120 pb-120">
             <div class="ml-5 mr-5">

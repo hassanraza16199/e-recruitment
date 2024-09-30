@@ -330,8 +330,7 @@ margin: 100px auto;
                                 <form method="GET" action="job_listing.php">
                                 <div class="select-job-items2">
                                     <select name="categories" required>
-                                        <option selected>Select Job Category</option>
-                                        <option value="">All Category</option>
+                                        <option selected disabled>Select Job Category</option>
                                         <option value="Design & Creative">Design & Creative</option>
                                         <option value="Design & Development">Design & Development</option>
                                         <option value="Sales & Marketing">Sales & Marketing</option>

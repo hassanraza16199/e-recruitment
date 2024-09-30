@@ -1,73 +1,8 @@
 <?php
-
 session_start();
 include "connection.php";
-$resume_upload = 0;
-
-if(isset($_POST['submit'])) {
-    if (isset($_GET['job_id'])) {
-        $job_id = $_GET['job_id'];
-        $recruiter_id = $_GET['recruiter_id'];
-    } else {
-        echo "No job ID specified.";
-        exit;
-    }
-    
-    $candidate_id = $_SESSION['id'];
-    $firstname = $_POST['firstname'];
-    $lastname = $_POST['lastname'];
-    $cnic = $_POST['cnic'];
-    $email_address = $_POST['email_address'];
-    $contact_number = $_POST['contact_number'];
-    $date_birth = $_POST['date_birth'];
-    $country = $_POST['country'];
-    $candidate_education = $_POST['candidate_education'];
-    $candidate_skill = $_POST['candidate_skill'];
-    $candidate_experience = $_POST['candidate_experience'];
-    $date = date('Y-m-d');
-
-    $resume = time().$_FILES['resume']['name'];
-    
-    if(move_uploaded_file($_FILES['resume']['tmp_name'], $_SERVER['DOCUMENT_ROOT']. '/e-recruitment/cv/' . $resume)){
-        $target_file = $_SERVER['DOCUMENT_ROOT']. '/e-recruitment/cv/' . $resume;
-        $resumefiletype = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-        $resumename = basename($_FILES['resume']['name']);
-        $resumefile = time().$resumename;
-
-        if($resumefiletype != "pdf" && $resumefiletype != "doc" && $resumefiletype != "docx"){
-            echo "<script> alert('Check extension.')</script>";
-        }else if($_FILES['resume']['size'] > 50000000){
-            echo "<script> alert('image exceed the size.')</script>";
-        }else{
-            $resume_upload = 1;
-        }
-    }
-    if($resume_upload == 1){
-        $sql = "INSERT INTO applications (candidate_id, job_id, recruiter_id, firstname, lastname, cnic, email_address, contact_number, date_birth, country, candidate_education, candidate_skill, candidate_experience, resume, date)
-                VALUES ('$candidate_id', '$job_id', '$recruiter_id', '$firstname', '$lastname', '$cnic', '$email_address', '$contact_number', '$date_birth', '$country', '$candidate_education', '$candidate_skill', '$candidate_experience', '$resumefile', '$date')";
-        
-        $count_sql = "SELECT COUNT(*) AS total FROM applications";
-        $count_result = $conn->query($count_sql);
-        $count_row = $count_result->fetch_assoc();
-        $total_application_entries = $count_row['total'];
-        if ($conn->query($sql) === TRUE) {
-            
-            $_SESSION['apply_success'] = true;
-            header("Location: feedback.php?job_id=$job_id&recruiter_id=$recruiter_id");
-            exit;
-        } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
-        }    
-    }
-        $conn->close();
-    } 
 
 ?>
-
-
-
-
-
 
 <!doctype html>
 <html class="no-js" lang="zxx">
@@ -231,7 +166,7 @@ margin: 100px auto;
                     <div class="row">
                         <div class="col-xl-12">
                             <div class="hero-cap text-center">
-                                <h2>Apply for Job</h2>
+                                <h2>Application Status</h2>
                             </div>
                         </div>
                     </div>
@@ -243,75 +178,90 @@ margin: 100px auto;
         <div class="job-listing-area pt-120 pb-120">
         
         <div class="form-container">
-        <h2>Application Form</h2>
-        <form action="apply_job.php?job_id=<?php echo $_GET['job_id']; ?>&recruiter_id=<?php echo $_GET['recruiter_id']; ?>" method="POST" enctype="multipart/form-data" >
+    <h2>Application Form</h2>
+    <?php
+    include "connection.php";
+        $application_id = $_GET['application_id'];
+        
+                    
+                    $sql = "SELECT * FROM applications WHERE application_id = '$application_id' ";
+                    $result = mysqli_query($conn, $sql);
+
+                    
+                    if (mysqli_num_rows($result)>0) {
+                        while($row = mysqli_fetch_assoc($result)){
+                        ?>
+    <form action="application_status.php?application_id=<?php echo $_GET['application_id']; ?>" method="POST" enctype="multipart/form-data" >
 
         <div class="row mb-2">
             <div class="col-md-6">
                 <label for="firstName">First Name</label>
-                <input type="text" class="form-control" id="firstname" name="firstname" >
+                <input type="text" class="form-control" id="firstname" name="firstname" value="<?php echo $row['firstname'];?>" disabled>
             </div>
             <div class="col-md-6">
                 <label for="lastName">Last Name</label>
-                <input type="text" class="form-control" id="lastname" name="lastname" >
+                <input type="text" class="form-control" id="lastname" name="lastname" value="<?php echo $row['lastname'];?>" disabled>
             </div>
         </div>
 
         <div class="form-group">
             <label for="email">Email Address</label>
-            <input type="email" class="form-control" id="email_address" name="email_address">
+            <input type="email" class="form-control" id="email_address" name="email_address" value="<?php echo $row['email_address'];?>" disabled>
         </div>
 
         <div class="form-group">
             <label for="cnic">CNIC</label>
-            <input type="number" class="form-control" id="cnic" name="cnic">
+            <input type="number" class="form-control" id="cnic" name="cnic" value="<?php echo $row['cnic'];?>" disabled>
         </div>
 
         <div class="form-group">
             <label for="contactNumber">Contact Number</label>
-            <input type="text" class="form-control" id="contact_number" name="contact_number">
+            <input type="text" class="form-control" id="contact_number" name="contact_number"value="<?php echo $row['contact_number'];?>" disabled>
         </div>
 
         <div class="form-group">
             <label for="dob">Date of Birth</label>
-            <input type="date" class="form-control" id="date_birth" name="date_birth">
+            <input type="date" class="form-control" id="date_birth" name="date_birth" value="<?php echo $row['date_birth'];?>" disabled>
         </div>
 
         <div class="form-group">
             <label for="country">Country of Residence</label>
-            <input type="text" class="form-control" id="country" name="country">
+            <input type="text" class="form-control" id="country" name="country" value="<?php echo $row['country'];?>" disabled>
         </div>
 
         <div class="form-group">
             <label for="candidate_education">Education</label>
-            <textarea type="text" class="form-control" rows="4" id="candidate_education" name="candidate_education"></textarea>
+            <textarea type="text" class="form-control" rows="4" id="candidate_education" name="candidate_education" disabled><?php echo $row['candidate_education'];?></textarea>
         </div>
 
         <div class="form-group">
             <label for="candidate_skill">Skills</label>
-            <textarea type="text" class="form-control" rows="4" id="candidate_skill" name="candidate_skill"></textarea>
+            <textarea type="text" class="form-control" rows="4" id="candidate_skill" name="candidate_skill" disabled><?php echo $row['candidate_skill'];?></textarea>
         </div>
 
         <div class="form-group">
             <label for="candidate_experience">Experience</label>
-            <textarea type="text" class="form-control" rows="4" id="candidate_experience" name="candidate_experience"></textarea>
+            <textarea type="text" class="form-control" rows="1" id="candidate_experience" name="candidate_experience" disabled><?php echo $row['candidate_experience'];?></textarea>
         </div>
 
-        <!-- <div class="form-group">
-            <label>Upload Resume</label>
-            <div class="upload-area mt-2">
-                <p>Choose file or drop here in PDF</p>
-                <input type="file" accept=".pdf, .doc, .docx" id="resume" name="resume"  >
-            </div>
-        </div> -->
-        
-        <div class="mb-3">
-            <label  class="form-label">Upload Resume</label><br>
-            <input type="file" class="form-control" accept=".pdf, .doc, .docx" id="resume" name="resume" >
+        <div class="form-group">
+            <label  class="form-label">Status</label>
+                    <select class="form-select mb-4" name="categories" id="categories" >
+                        <option selected disabled>Select Application Status</option>
+                        <option value="View">View</option>
+                        <option value="Approve">Approve</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Shortlist">Shortlist</option>
+                        <option value="Cancel">Cancel</option>
+                    </select>
         </div>
 
         <button type="submit"  name='submit' class="btn head-btn2 mt-3">Submit</button>
     </form>
+    <?php 
+                        }
+                    }
+                    ?>
 </div>
         </div>
         <!-- Job List Area End -->
@@ -353,21 +303,7 @@ margin: 100px auto;
     <?php endif; ?>
 });
 
-        const uploadArea = document.querySelector('.upload-area');
-        const fileInput = document.querySelector('input[type="file"]');
-
-        uploadArea.addEventListener('click', () => {
-            fileInput.click();
-        });
-
-        fileInput.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                uploadArea.textContent = file.name;
-            } else {
-                uploadArea.textContent = 'Choose file or drop here';
-            }
-        });
+        
         
         
     </script>

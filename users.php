@@ -193,6 +193,21 @@ if (isset($_GET['id'])) {
     </div>
     <!-- Preloader Start -->
     <?php include "navbar.php"; ?>
+    <!-- Hero Area Start-->
+    <div class="slider-area ">
+            <div class="single-slider section-overly slider-height2 d-flex align-items-center" data-background="assets/img/hero/about.jpg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="hero-cap text-center">
+                                <h2>User Information</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Hero Area End -->
     
     <main class="ml-5 mr-5 mt-5 mb-5">
         <h2 class="mt-3 mb-3">Users Information</h2>

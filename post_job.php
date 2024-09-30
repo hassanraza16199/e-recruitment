@@ -175,6 +175,110 @@ outline: none;
 display: inline-block;
 margin: 100px auto;
 }
+ /* Add some basic styling to make the form look better */
+ .form-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Make the form responsive */
+    @media (max-width: 768px) {
+        .form-container {
+            margin: 20px auto;
+        }
+        .inputfirst {
+            padding-left: 0;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .form-container {
+            padding: 10px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        
+    }
+    .modal-confirm {
+color: #fb246a;
+width: 325px;
+}
+.modal-confirm .modal-content {
+padding: 20px;
+border-radius: 5px;
+margin-top:35%;
+border: none;
+}
+.modal-confirm .modal-header {
+border-bottom: none;
+position: relative;
+}
+.modal-confirm h4 {
+text-align: center;
+font-size: 26px;
+margin: 30px 0 -15px;
+}
+.modal-confirm .form-control, .modal-confirm .btn {
+min-height: 40px;
+border-radius: 3px;
+}
+.modal-confirm .close {
+position: absolute;
+top: -5px;
+right: -5px;
+}
+.modal-confirm .modal-footer {
+border: none;
+text-align: center;
+border-radius: 5px;
+font-size: 13px;
+}
+.modal-confirm .icon-box {
+color: #fff;
+position: absolute;
+margin: 0 auto;
+left: 0;
+right: 0;
+top: -70px;
+width: 95px;
+height: 95px;
+border-radius: 50%;
+z-index: 9;
+background: #fb246a;
+padding: 15px;
+text-align: center;
+box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+}
+.modal-confirm .icon-box i {
+font-size: 58px;
+position: relative;
+top: 3px;
+}
+.modal-confirm.modal-dialog {
+margin-top: 80px;
+}
+.modal-confirm .btn {
+color: #fff;
+border-radius: 4px;
+background: #fb246a;
+text-decoration: none;
+transition: all 0.4s;
+line-height: normal;
+border: none;
+}
+.modal-confirm .btn:hover, .modal-confirm .btn:focus {
+background: #fb246a;
+outline: none;
+}
+.trigger-btn {
+display: inline-block;
+margin: 100px auto;
+}
             </style>
    </head>
 
@@ -213,9 +317,12 @@ margin: 100px auto;
         <!-- Hero Area End -->
         <!-- Job List Area Start -->
         <div class="job-listing-area pt-120 pb-120">
-            <div class="ml-5 mr-5">
-            <form action="post_job.php" method="POST" enctype="multipart/form-data" class="ml-5 mr-5">
-            <h2 class="mb-4 ml-4">Post Job</h2>
+            
+
+        <div class="form-container">
+        <h2 class="mb-3 ml-4 mr-4">Post Job</h2>
+        <form action="post_job.php" method="POST" enctype="multipart/form-data">
+
                     
                 <div class="mb-3 ml-4 mr-4">
                     <label  class="form-label">Company Logo</label>
@@ -308,7 +415,7 @@ margin: 100px auto;
                     <button type="submit" name="submit" class="button button-contactForm boxed-btn">Post</button>
                 </div>
             </form>
-            </div>
+</div>
             
         </div>
         <!-- Job List Area End -->
@@ -345,7 +452,7 @@ margin: 100px auto;
 
         // Set a timeout of 3 seconds, then reload or redirect to remove the session flag
         setTimeout(function(){
-            window.location.href = 'job_listing.php';
+            window.location.href = 'posted_jobs.php';
         }, 3000);
 
         <?php unset($_SESSION['post_success']); // Clear session flag after the modal is shown ?>

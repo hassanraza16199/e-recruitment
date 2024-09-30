@@ -84,18 +84,16 @@ if (isset($_GET['application_id'])) {
 	                text-transform: uppercase;
 	                cursor: pointer
                 }
-                .tooltip-container {
+.tooltip-container {
     position: relative;
     display: inline-block;
     cursor: pointer;
 }
-
 .tooltip-icon {
     font-size: 24px;
     padding: 5px;
     border: none;
 }
-
 .tooltip-text {
     visibility: hidden;
     width: 150px;
@@ -113,12 +111,10 @@ if (isset($_GET['application_id'])) {
     z-index: 1;
     white-space: nowrap;
 }
-
 .tooltip-text svg {
     display: block;
     margin: 0 auto;
 }
-
 .tooltip-arrow {
     width: 0;
     height: 0;
@@ -130,7 +126,6 @@ if (isset($_GET['application_id'])) {
     left: 50%;
     transform: translateX(-50%);
 }
-
 .tooltip-container:hover .tooltip-text {
     visibility: visible;
 }
@@ -149,7 +144,6 @@ if (isset($_GET['application_id'])) {
     align-items: center;
     justify-content: center;
 }
-
 .modal-content {
     background-color: #fefefe;
     margin-top:20px;
@@ -163,20 +157,17 @@ if (isset($_GET['application_id'])) {
     box-sizing: border-box;
     border-radius: 8px;
 }
-
 @media (max-width: 768px) {
     .modal-content {
         width: 80%; /* Adjust width for tablets */
     }
 }
-
 @media (max-width: 480px) {
     .modal-content {
         width: 90%; /* Adjust width for mobile devices */
         padding: 15px;
     }
 }
-
 /* The Close Button */
 .close {
     position: absolute;
@@ -187,13 +178,11 @@ if (isset($_GET['application_id'])) {
     font-weight: bold;
     cursor: pointer;
 }
-
 .close:hover,
 .close:focus {
     color: black;
     text-decoration: none;
-}
-                
+}              
             </style>
    </head>
 
@@ -245,7 +234,13 @@ if (isset($_GET['application_id'])) {
       <th scope="col">Date of Birth</th>
       <th scope="col">Country</th>
       <th scope="col">Resume</th>
-      <th scope="col" colspan="2"><center>Action</center></th>
+      <?php
+      if($_SESSION['user_type'] === 'admin'){ ?>
+        <th scope="col" colspan="2"><center>Action</center></th>
+      <?php } else { ?>
+        <th scope="col" >Action</th>
+      <?php }?>
+      
     </tr>
   </thead>
   <tbody>
@@ -292,7 +287,7 @@ if (mysqli_num_rows($result) > 0) {
       </td>
       <td>
         <div class="tooltip-container ml-2">
-                <span class="tooltip-icon"><i class="fa-regular fa-eye "  style="color:#010b1d; cursor: pointer;"></i></span>
+                <span class="tooltip-icon"><a href="application_status.php?application_id=<?php echo $application_id; ?>"><i class="fa-regular fa-eye "  style="color:#010b1d; cursor: pointer;"></i></a></span>
                 <div class="tooltip-text">
                     <!-- Replace the SVG with your text -->
                     View Application 
@@ -324,55 +319,6 @@ if (mysqli_num_rows($result) > 0) {
         <!-- Job List Area End -->
     </main>
 
-    <!-- Edit Form Modal -->
-<div id="editModal" class="modal">
-    <div class="modal-content mt-3">
-        <span class="close">&times;</span>
-        <h2>User Information</h2>
-        <form id="editForm" method="POST" action="applications.php">
-            <input type="hidden" name="application_id" id="application_id" value="<?php echo $application_id; ?>">
-            <div class="form-group">
-                <label for="firstname">Name:</label>
-                <input type="text" name="firstname" id="firstname" class="form-control" disabled>
-            </div>
-            <div class="form-group">
-                <label for="email_address">Email:</label>
-                <input type="email_address" name="email_address" id="email_address" class="form-control" disabled>
-            </div>
-            <div class="form-group">
-                <label for="cnic">Password:</label>
-                <input type="text" name="cnic" id="cnic" class="form-control" disabled>
-            </div>
-            <div class="form-group">
-                <label for="contact_number">Contact:</label>
-                <input type="text" name="contact_number" id="contact_number" class="form-control" disabled>
-            </div>
-            <div class="form-group">
-                <label for="date_birth">Date of Birth:</label>
-                <input type="text" name="date_birth" id="date_birth" class="form-control" disabled>
-            </div>
-            <div class="form-group">
-                <label for="country">Country:</label>
-                <input type="text" name="country" id="country" class="form-control" disabled>
-            </div>
-            <div class="form-group">
-            <label for="candidate_education">Education</label>
-            <textarea type="text" class="form-control" rows="3" id="candidate_education" name="candidate_education" disabled></textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="candidate_skill">Skills</label>
-            <textarea type="text" class="form-control" rows="3" id="candidate_skill" name="candidate_skill" disabled></textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="candidate_experience">Experience</label>
-            <textarea type="text" class="form-control" rows="3" id="candidate_experience" name="candidate_experience" disabled></textarea>
-        </div>
-
-        </form>
-    </div>
-</div>
 
 <!-- Modal for displaying the PDF -->
 <div id="pdfModal" class="modal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background-color:rgba(0, 0, 0, 0.5);">
@@ -385,41 +331,6 @@ if (mysqli_num_rows($result) > 0) {
     <?php include "footer.php"; ?>
     
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    var modal = document.getElementById("editModal");
-    var span = document.getElementsByClassName("close")[0];
-
-    document.querySelectorAll('.fa-eye').forEach(function(editBtn) {
-        editBtn.onclick = function(event) {
-            var tr = event.target.closest('tr');
-            var userApplicationId = tr.querySelector('th').innerText;
-            var userFirstName = tr.querySelector('td:nth-child(2)').innerText;
-            var userEmail = tr.querySelector('td:nth-child(3)').innerText;
-            var userCnic = tr.querySelector('td:nth-child(4)').innerText;
-            var userPhone = tr.querySelector('td:nth-child(5)').innerText;
-            var userBirthdate = tr.querySelector('td:nth-child(6)').innerText;
-            var userCountry = tr.querySelector('td:nth-child(7)').innerText;
-
-            // Fetch candidate education, skill, and experience from data attributes
-            var userEducation = tr.getAttribute('data-education');
-            var userSkills = tr.getAttribute('data-skill');
-            var userExperience = tr.getAttribute('data-experience');
-
-            // Fill the modal fields
-            document.getElementById('application_id').value = userApplicationId;
-            document.getElementById('firstname').value = userFirstName;
-            document.getElementById('email_address').value = userEmail;
-            document.getElementById('cnic').value = userCnic;
-            document.getElementById('contact_number').value = userPhone;
-            document.getElementById('date_birth').value = userBirthdate;
-            document.getElementById('country').value = userCountry;
-            document.getElementById('candidate_education').value = userEducation;
-            document.getElementById('candidate_skill').value = userSkills;
-            document.getElementById('candidate_experience').value = userExperience;
-
-            modal.style.display = "block";
-        };
-    });
     document.querySelectorAll('.fa-trash').forEach(function(deleteBtn) {
         deleteBtn.onclick = function(event) {
             var userApplicationId = event.target.id.split('-')[1];
@@ -429,16 +340,6 @@ if (mysqli_num_rows($result) > 0) {
         };
     });
 
-    span.onclick = function() {
-        modal.style.display = "none";
-    };
-
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    };
-});
 
 
     // Get the modal element and close button
