@@ -1,11 +1,47 @@
 <?php
 session_start();
 include "connection.php"; // Ensure that $conn is available here.
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-if ($_SESSION['user_type'] != 'Recruiter') {
-    echo "Access denied.";
-    exit;
-}
+    $recruiter_id = $_SESSION['id'];
+    $job_id = $_POST['job_id'];
+
+    $job_title = $_POST['job_title'];
+    $company_name = $_POST['company_name'];
+    $requirements = $_POST['requirements'];
+    $company_email = $_POST['company_email'];
+    $company_location = $_POST['company_location'];
+    $company_web = $_POST['company_web'];
+    $salary = $_POST['salary'];
+    $timing = $_POST['timing'];
+    $categories = $_POST['categories'];
+    $discription = $_POST['discription'];
+    $experience = $_POST['experience'];
+    $due_date = $_POST['due_date'];
+    $vacancy = $_POST['vacancy'];
+    
+    $sql = "UPDATE job_post SET 
+        job_title = '$job_title', 
+        company_name = '$company_name', 
+        requirements = '$requirements', 
+        company_email = '$company_email', 
+        company_location = '$company_location', 
+        company_web = '$company_web', 
+        salary = '$salary', 
+        timing = '$timing', 
+        categories = '$categories', 
+        discription = '$discription', 
+        experience = '$experience', 
+        due_date = '$due_date', 
+        vacancy = '$vacancy' 
+        WHERE job_id = '$job_id'";
+
+    if ($conn->query($sql) === TRUE) {
+        header('location:posted_jobs.php');
+        exit();
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
 ?>
 
 
@@ -32,6 +68,112 @@ if ($_SESSION['user_type'] != 'Recruiter') {
             <link rel="stylesheet" href="assets/css/slick.css">
             <link rel="stylesheet" href="assets/css/nice-select.css">
             <link rel="stylesheet" href="assets/css/style.css">
+<style>
+        /* Add some basic styling to make the form look better */
+        .form-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Make the form responsive */
+    @media (max-width: 768px) {
+        .form-container {
+            margin: 20px auto;
+        }
+        .inputfirst {
+            padding-left: 0;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .form-container {
+            padding: 10px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        
+    }
+    .modal-confirm {
+color: #fb246a;
+width: 325px;
+}
+.modal-confirm .modal-content {
+padding: 20px;
+border-radius: 5px;
+margin-top:35%;
+border: none;
+}
+.modal-confirm .modal-header {
+border-bottom: none;
+position: relative;
+}
+.modal-confirm h4 {
+text-align: center;
+font-size: 26px;
+margin: 30px 0 -15px;
+}
+.modal-confirm .form-control, .modal-confirm .btn {
+min-height: 40px;
+border-radius: 3px;
+}
+.modal-confirm .close {
+position: absolute;
+top: -5px;
+right: -5px;
+}
+.modal-confirm .modal-footer {
+border: none;
+text-align: center;
+border-radius: 5px;
+font-size: 13px;
+}
+.modal-confirm .icon-box {
+color: #fff;
+position: absolute;
+margin: 0 auto;
+left: 0;
+right: 0;
+top: -70px;
+width: 95px;
+height: 95px;
+border-radius: 50%;
+z-index: 9;
+background: #fb246a;
+padding: 15px;
+text-align: center;
+box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+}
+.modal-confirm .icon-box i {
+font-size: 58px;
+position: relative;
+top: 3px;
+}
+.modal-confirm.modal-dialog {
+margin-top: 80px;
+}
+.modal-confirm .btn {
+color: #fff;
+border-radius: 4px;
+background: #fb246a;
+text-decoration: none;
+transition: all 0.4s;
+line-height: normal;
+border: none;
+}
+.modal-confirm .btn:hover, .modal-confirm .btn:focus {
+background: #fb246a;
+outline: none;
+}
+.trigger-btn {
+display: inline-block;
+margin: 100px auto;
+}
+</style>
    </head>
 
    <body>
@@ -74,27 +216,8 @@ if ($_SESSION['user_type'] != 'Recruiter') {
         <div class="job-listing-area pt-120 pb-120">
             <div class="ml-5 mr-5">
                 <?php
-                include "connection.php";
 
-                    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-                        $recruiter_id = $_SESSION['id'];
-                        $job_id = $_POST['job_id'];
                     
-                        $company_name = $_POST['company_name'];
-                        $requirements = $_POST['requirements'];
-                        $company_location = $_POST['company_location'];
-                        $salary = $_POST['salary'];
-                        $timing = $_POST['timing'];
-                        $Categories = $_POST['Categories'];
-                        
-                        $sql = "UPDATE job_post SET  company_name = '$company_name', requirements = '$requirements', company_location='$company_location', salary='$salary', timing='$timing', Categories='$Categories' WHERE job_id='$job_id' AND recruiter_id=$recruiter_id";
-                        if ($conn->query($sql) === TRUE) {
-                            echo "<script> alert('Update record successfully')</script>";
-                            header('location:posted_jobs.php');
-                        } else {
-                            echo "Error: " . $sql . "<br>" . $conn->error;
-                        }
                     }else {
                     
                     $job_id = $_GET['job_id'];
@@ -108,15 +231,31 @@ if ($_SESSION['user_type'] != 'Recruiter') {
                         ?>
 
 
-            <form action="edit_job.php" method="POST" class="ml-5 mr-5">
-            <h2 class="mb-4 ml-4">Edit Job</h2>
-                    
-                    <input type="hidden" class="form-control" id="job_id" name="job_id" value="<?php echo $row['job_id']; ?>">
-    
+            <div class="form-container">
+        <h2 class="mb-3 ml-4 mr-4">Edit Form</h2>
+        <form action="edit_job.php" method="POST" class="">
+        <input type="hidden" class="form-control" id="job_id" name="job_id" value="<?php echo $row['job_id']; ?>">
+
+                <div class="mb-3 ml-4 mr-4">
+                    <label  class="form-label">Job Title</label>
+                    <input type="text" class="form-control" id="job_title" name="job_title" value="<?php echo $row['job_title']; ?>" required>
+                </div>
+
                 <div class="mb-3 ml-4 mr-4">
                     <label  class="form-label">Company Name</label>
-                    <input type="text" class="form-control" id="company_name" name="company_name" value="<?php echo  $row['company_name'] ; ?>" required>
+                    <input type="text" class="form-control" id="company_name" name="company_name" value="<?php echo $row['company_name']; ?>" required>
                 </div>
+
+                <div class="mb-3 ml-4 mr-4">
+                    <label  class="form-label">Job Description</label>
+                    <input type="text" class="form-control" id="discription" name="discription" value="<?php echo $row['discription']; ?>" required>
+                </div>
+
+                <div class="mb-3 ml-4 mr-4">
+                    <label  class="form-label">Company Email</label>
+                    <input type="email" class="form-control" id="company_email" name="company_email" value="<?php echo $row['company_email']; ?>" required>
+                </div>
+
                 <div class="mb-1 ml-4 mr-4">
                 <label  class="form-label">Categories</label><br>
                 <select name="categories" required>
@@ -129,34 +268,59 @@ if ($_SESSION['user_type'] != 'Recruiter') {
                     <option value="Real Estate" <?php if ($row['categories'] == 'Real Estate') echo 'selected'; ?>>Real Estate</option>
                     <option value="Content Writer" <?php if ($row['categories'] == 'Content Writer') echo 'selected'; ?>>Content Writer</option>
                     <option value="Other" <?php if ($row['categories'] == 'Other') echo 'selected'; ?>>Other</option>
-                </select><br>
-                </div><br>
+                </select>
+                </div><br><br>
+
                 <div class="mb-3 ml-4 mr-4">
-                    <label  class="form-label">Requirements</label>
-                    <textarea type="text" class="form-control" id="requirements" name="requirements" rows="5" required > <?php echo $row['requirements'] ; ?></textarea>
+                    <label  class="form-label">Company URL</label>
+                    <input type="text" class="form-control" id="company_web" name="company_web" value="<?php echo $row['company_web']; ?>" required>
                 </div>
+
+                <div class="mb-3 ml-4 mr-4">
+                    <label  class="form-label">Required Knowledge, Skills, and Abilities</label>
+                    <textarea type="text" class="form-control" id="requirements" name="requirements" rows="5" required><?php echo $row['requirements']; ?></textarea>
+                </div>
+
+                <div class="mb-3 ml-4 mr-4">
+                    <label  class="form-label">Education + Experience</label>
+                    <textarea type="text" class="form-control" id="experience" name="experience" rows="5" required><?php echo $row['experience']; ?></textarea>
+                </div>
+
                 <div class="mb-3 ml-4 mr-4">
                     <label  class="form-label">Location</label>
-                    <input type="text" class="form-control" id="company_location" name="company_location" value="<?php echo $row['company_location'] ; ?>" required >
+                    <input type="text" class="form-control" id="company_location" name="company_location" value="<?php echo $row['company_location']; ?>" required>
                 </div>
+
                 <div class="mb-3 ml-4 mr-4">
-                    <label  class="form-label">Salery</label>
+                    <label  class="form-label">Salary</label>
                     <input type="number" class="form-control" id="salary" name="salary" value="<?php echo $row['salary']; ?>" required>
                 </div>
+
                 <div class="mb-4 ml-4 mr-4">
-                    <label  class="form-label">Timming</label><br>
+                    <label  class="form-label">Job Timing</label><br>
                     <select name="timing" required>
                         <option value="Full Time" <?php if ($row['timing'] == 'Full Time') echo 'selected'; ?>>Full Time</option>
                         <option value="Part Time" <?php if ($row['timing'] == 'Part Time') echo 'selected'; ?>>Part Time</option>
                         <option value="Remote" <?php if ($row['timing'] == 'Remote') echo 'selected'; ?>>Remote</option>
                         <option value="Freelance" <?php if ($row['timing'] == 'Freelance') echo 'selected'; ?>>Freelance</option>
-                    </select><br><br>
+                    </select>
+                </div><br>
+
+                <div class="mb-3 ml-4 mr-4">
+                    <label  class="form-label">Due Date</label>
+                    <input type="date" class="form-control" id="due_date" name="due_date" value="<?php echo $row['due_date']; ?>" required>
+                </div>
+
+                <div class="mb-3 ml-4 mr-4">
+                    <label  class="form-label">Vacancy</label>
+                    <input type="number" class="form-control" id="vacancy" name="vacancy" value="<?php echo $row['vacancy']; ?>" required>
                 </div>
                     
                 <div class="form-group mt-4 ml-4">
-                    <button type="submit" name="submit" class="button button-contactForm boxed-btn">Update Job</button>
+                    <button type="submit" name="submit" class="button button-contactForm boxed-btn">Post</button>
                 </div>
             </form>
+        </div>
             <?php
                         }
                 } else {
