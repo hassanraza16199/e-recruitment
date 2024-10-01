@@ -42,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
+}
 ?>
 
 
@@ -218,7 +219,7 @@ margin: 100px auto;
                 <?php
 
                     
-                    }else {
+                    if($_GET['job_id']){
                     
                     $job_id = $_GET['job_id'];
                     

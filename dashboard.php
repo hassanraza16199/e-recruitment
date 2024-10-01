@@ -116,25 +116,6 @@ form.search-box .select-form .nice-select::after {
                                 </div>
                             </div>
                         </div>
-                        <!-- Search Box -->
-                        <div class="row">
-                            <div class="col-xl-8">
-                                <!-- form -->
-                                <form action="#" class="search-box">
-                                    <div class="input-form">
-                                        <input type="text" name="keyword" placeholder="Job Tittle or keyword">
-                                    </div>
-                                    <div class="select-form">
-                                        <div class="select-itms">
-                                            <input type="text" class="nice-select" name="company_location" placeholder="Enter location or keyword">
-                                        </div>
-                                    </div>
-                                    <div class="search-form">
-                                        <button type="submit" name="">Find job</button>
-                                    </div>	
-                                </form>	
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

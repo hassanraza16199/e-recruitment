@@ -140,6 +140,7 @@ $result = mysqli_query($conn, $sql);
 // Check if results are found
 if (mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
+        $application_id = $row['application_id'];
 ?>
         <div class="mt-3 ml-3 mr-3 mb-3" style="border-radius:5px;">
             <div class="card" style="width: 11rem; height:15rem;">
@@ -149,7 +150,8 @@ if (mysqli_num_rows($result) > 0) {
                         <p style="font-size: 12px; width:80px;"> <?php echo $row['firstname']; ?></p>
                         <span>
                             <span class="ml-2">
-                                <img src="assets/img/go-to.png" style="width: 15px; margin-top:-7px; cursor:pointer;" alt="">
+                                <a href="application_status.php?application_id=<?php echo $application_id; ?>"><img src="assets/img/go-to.png" style="width: 15px; margin-top:-7px; cursor:pointer;" alt=""></a>
+                                
                             </span> 
                             <span class="ml-2">
                                 <i class="fa-solid fa-paperclip open-pdf" data-pdf="/e-recruitment/cv/<?php echo $row['resume']; ?>" style="cursor:pointer;"></i>
