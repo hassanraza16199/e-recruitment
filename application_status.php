@@ -2,6 +2,29 @@
 session_start();
 include "connection.php";
 
+// if ($_SERVER["REQUEST_METHOD"] == "POST") {
+//     $to_email = $_POST['to_email'];
+//     $subject = $_POST['subject'];
+//     $message = $_POST['message'];
+//     $headers = "From: your-email@example.com";
+
+//     if (mail($to_email, $subject, $message, $headers)) {
+//         echo "Email successfully sent to $to_email";
+//     } else {
+//         echo "Email sending failed!";
+//     }
+// }
+if(isset($_POST['submit'])){
+    if(isset($_GET['application_id'])){
+        $application_id = $_GET['application_id'];
+    }
+    $status = $_POST['status'];
+    $sql = "UPDATE applications SET status = '$status' WHERE application_id = '$application_id'";
+    if($conn->query($sql) === True){
+        header("location: application_status.php?application_id=$application_id");
+    }
+}
+
 ?>
 
 <!doctype html>
@@ -63,81 +86,7 @@ include "connection.php";
         }
         
     }
-    .modal-confirm {
-color: #fb246a;
-width: 325px;
-}
-.modal-confirm .modal-content {
-padding: 20px;
-border-radius: 5px;
-margin-top:35%;
-border: none;
-}
-.modal-confirm .modal-header {
-border-bottom: none;
-position: relative;
-}
-.modal-confirm h4 {
-text-align: center;
-font-size: 26px;
-margin: 30px 0 -15px;
-}
-.modal-confirm .form-control, .modal-confirm .btn {
-min-height: 40px;
-border-radius: 3px;
-}
-.modal-confirm .close {
-position: absolute;
-top: -5px;
-right: -5px;
-}
-.modal-confirm .modal-footer {
-border: none;
-text-align: center;
-border-radius: 5px;
-font-size: 13px;
-}
-.modal-confirm .icon-box {
-color: #fff;
-position: absolute;
-margin: 0 auto;
-left: 0;
-right: 0;
-top: -70px;
-width: 95px;
-height: 95px;
-border-radius: 50%;
-z-index: 9;
-background: #fb246a;
-padding: 15px;
-text-align: center;
-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
-}
-.modal-confirm .icon-box i {
-font-size: 58px;
-position: relative;
-top: 3px;
-}
-.modal-confirm.modal-dialog {
-margin-top: 80px;
-}
-.modal-confirm .btn {
-color: #fff;
-border-radius: 4px;
-background: #fb246a;
-text-decoration: none;
-transition: all 0.4s;
-line-height: normal;
-border: none;
-}
-.modal-confirm .btn:hover, .modal-confirm .btn:focus {
-background: #fb246a;
-outline: none;
-}
-.trigger-btn {
-display: inline-block;
-margin: 100px auto;
-}
+ 
 </style>
    </head>
 
@@ -177,8 +126,15 @@ margin: 100px auto;
         <!-- Job List Area Start -->
         <div class="job-listing-area pt-120 pb-120">
         
-        <div class="form-container">
-    <h2>Application Form</h2>
+    <div class="form-container">
+        <div class="row">
+            <h2>Application Form</h2>
+        <span style="margin-left:49%;" class="mt-3">
+            <button class="btn head-btn1" data-toggle="modal" data-target="#emailModal">Email</button>
+            </span>
+        </div>
+        
+    
     <?php
     include "connection.php";
         $application_id = $_GET['application_id'];
@@ -190,6 +146,9 @@ margin: 100px auto;
                     
                     if (mysqli_num_rows($result)>0) {
                         while($row = mysqli_fetch_assoc($result)){
+                            $email_address = $row['email_address'];
+                            $candidate_id = $row['candidate_id'];
+                            $status = $row['status'];
                         ?>
     <form action="application_status.php?application_id=<?php echo $_GET['application_id']; ?>" method="POST" enctype="multipart/form-data" >
 
@@ -206,7 +165,7 @@ margin: 100px auto;
 
         <div class="form-group">
             <label for="email">Email Address</label>
-            <input type="email" class="form-control" id="email_address" name="email_address" value="<?php echo $row['email_address'];?>" disabled>
+            <input type="email" class="form-control" id="email_address" name="email_address" value="<?php echo $email_address;?>" disabled>
         </div>
 
         <div class="form-group">
@@ -246,17 +205,16 @@ margin: 100px auto;
 
         <div class="form-group">
             <label  class="form-label">Status</label>
-                    <select class="form-select mb-4" name="categories" id="categories" >
+                    <select class="form-select mb-4" name="status" id="status" >
                         <option selected disabled>Select Application Status</option>
-                        <option value="View">View</option>
-                        <option value="Approve">Approve</option>
-                        <option value="Pending">Pending</option>
-                        <option value="Shortlist">Shortlist</option>
-                        <option value="Cancel">Cancel</option>
+                        <option value="View" <?php if($status =='View') echo'selected'; ?>>View</option>
+                        <option value="Approve" <?php if($status =='Approve') echo'selected'; ?>>Approve</option>
+                        <option value="Pending" <?php if($status =='Pending') echo'selected'; ?>>Pending</option>
+                        <option value="Shortlist" <?php if($status =='Shortlist') echo'selected'; ?>>Shortlist</option>
+                        <option value="Cancel" <?php if($status =='Cancel') echo'selected'; ?>>Cancel</option>
                     </select>
         </div>
-
-        <button type="submit"  name='submit' class="btn head-btn2 mt-3">Submit</button>
+            <button style="display:flex;" type="submit"  name='submit' class="btn head-btn2 mt-3">Submit</button>
     </form>
     <?php 
                         }
@@ -267,46 +225,41 @@ margin: 100px auto;
         <!-- Job List Area End -->
     </main>
 
-    <div id="myModal" class="modal fade">
-        <div class="modal-dialog modal-confirm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="icon-box">
-                        <i class="material-icons">&#xE876;</i>
-                    </div>
-                    <h4 class="modal-title">Awesome!</h4>
-                </div>
-                <div class="modal-body">
-                    <p class="text-center">Your Job has been apply successfully!</p>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-success btn-block" data-dismiss="modal">OK</button>
-                </div>
-            </div>
-        </div>
+    <!-- Email Modal -->
+<div id="emailModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog " role="document">
+    <div class="modal-content" style='margin-top:120px;'>
+      <div class="modal-header">
+        <h5 class="modal-title">Send Email</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="application_status.php" method="POST">
+          <div class="form-group">
+            <label for="to_email">To:</label>
+            <input type="email" class="form-control" id="to_email" name="to_email" value="<?php echo $email_address;?>" readonly>
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject:</label>
+            <input type="text" class="form-control" id="subject" name="subject" value="<?php echo $status;?>" required>
+          </div>
+          <div class="form-group">
+            <label for="message">Message:</label>
+            <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Send Email</button>
+        </form>
+      </div>
     </div>
+  </div>
+</div>
 
 
     <?php include "footer.php"; ?>
     
-    <script>
-        $(document).ready(function() {
-    <?php if(isset($_SESSION['apply_success']) && $_SESSION['apply_success'] === true): ?>
-        $('#myModal').modal('show'); // Show the success modal
 
-        // Redirect after showing the modal
-        setTimeout(function(){
-            window.location.href = 'job_listing.php'; // Ensure the URL is correct
-        }, 3000);
-
-        <?php unset($_SESSION['apply_success']); // Clear session flag after the modal is shown ?>
-    <?php endif; ?>
-});
-
-        
-        
-        
-    </script>
 	<!-- JS here -->
         <script src="https://kit.fontawesome.com/3acead0521.js" crossorigin="anonymous"></script>
 		<!-- All JS Custom Plugins Link Here here -->

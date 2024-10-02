@@ -318,7 +318,7 @@ margin: 100px auto;
                 </div>
                     
                 <div class="form-group mt-4 ml-4">
-                    <button type="submit" name="submit" class="button button-contactForm boxed-btn">Post</button>
+                    <button type="submit" name="submit" class="button button-contactForm boxed-btn">Edit Job</button>
                 </div>
             </form>
         </div>
