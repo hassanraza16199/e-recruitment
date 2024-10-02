@@ -236,25 +236,26 @@ if(isset($_POST['submit'])){
         </button>
       </div>
       <div class="modal-body">
-        <form action="application_status.php" method="POST">
+        <form action="application_status.php?application_id=<?php echo $_GET['application_id']; ?>" method="POST">
           <div class="form-group">
             <label for="to_email">To:</label>
-            <input type="email" class="form-control" id="to_email" name="to_email" value="<?php echo $email_address;?>" readonly>
+            <input type="email" class="form-control" id="to_email" name="to_email" value="<?php echo $email_address; ?>" readonly>
           </div>
           <div class="form-group">
             <label for="subject">Subject:</label>
-            <input type="text" class="form-control" id="subject" name="subject" value="<?php echo $status;?>" required>
+            <input type="text" class="form-control" id="subject" name="subject" value="<?php echo $status; ?>" required>
           </div>
           <div class="form-group">
             <label for="message">Message:</label>
             <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
           </div>
-          <button type="submit" class="btn btn-primary">Send Email</button>
+          <button type="submit" name="send_email" class="btn btn-primary">Send Email</button>
         </form>
       </div>
     </div>
   </div>
 </div>
+
 
 
     <?php include "footer.php"; ?>

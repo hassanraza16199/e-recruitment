@@ -65,7 +65,7 @@
                                                     <li><a href="users_feedback.php">Feedbacks</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a href="contact_us.php">Contacts</a></li>
+                                            <li><a href="users_contact.php">Contacts</a></li>
 
                                             <?php
                                                 }else{

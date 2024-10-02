@@ -115,9 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
     <!-- Preloader Start -->
     <?php include "navbar.php"; ?>
-    
-    <main class="ml-5 mr-5 mt-5 mb-5">
-        <!-- Hero Area Start-->
+    <!-- Hero Area Start-->
         <div class="slider-area ">
             <div class="single-slider section-overly slider-height2 d-flex align-items-center" data-background="assets/img/hero/about.jpg">
                 <div class="container">
@@ -132,6 +130,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </div>
         <!-- Hero Area End -->
+    <main class="ml-5 mr-5 mt-5 mb-5">
+        
         <h2 class="mt-3 mb-3">Users Contact</h2>
         <hr>
         <table class="table">
@@ -147,24 +147,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   </thead>
   <tbody>
   <?php
-include "connection.php";
 
 $sql = "SELECT * FROM contact_us";
-$result = $conn->query($sql);
+$result = mysqli_query($conn, $sql);
 
-if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
+if (mysqli_num_rows($result)>0) {
+    while($row = mysqli_fetch_assoc($result)) {
+        $sender_email = $row['sender_email'];
+        $subject = $row['subject'];
 ?>
     <tr>
       <th scope="row"><?php echo $row['contact_id']; ?></th>
       <td><?php echo $row['user_name']; ?></td>
-      <td><?php echo $row['sender_email']; ?></td>
-      <td><?php echo $row['subject']; ?></td>
+      <td><?php echo $sender_email; ?></td>
+      <td><?php echo $subject; ?></td>
       <td class="message-cell"><?php echo $row['message']; ?></td>
       <td>
-      <form action="users_contact.php" method="POST" style="display:inline;">
+      
+            <?php 
+             if($_SESSION['user_type'] === 'Recruiter') { ?>
+             <button 
+    style="border:none; background-color:#fff;" 
+    data-toggle="modal" 
+    data-target="#emailModal"
+    data-email="<?php echo $sender_email; ?>" 
+    data-subject="<?php echo $subject; ?>"
+>
+    <div class="tooltip-container">
+        <span class="tooltip-icon"><i class="fa-solid fa-reply fa-lg" style="color: #35D7FF;"></i></span>
+        <div class="tooltip-text">
+            Reply 
+            <div class="tooltip-arrow"></div>
+        </div>
+    </div>
+</button>
+
+            <?php
+            } else { ?>
+            <form action="users_contact.php" method="POST" style="display:inline;">
             <input type="hidden" name="contact_id" value="<?php echo $row['contact_id']; ?>">
-            <button type="submit" style="border:none; background:none;">
+               <button type="submit" style="border:none; background:none;">
                 
                 <div class="tooltip-container">
                 <span class="tooltip-icon"><i class="fa-solid fa-trash fa-lg" style="color:#FF0000; cursor: pointer;"></i></span>
@@ -174,13 +196,16 @@ if ($result->num_rows > 0) {
                 <div class="tooltip-arrow"></div>
             </div>
             </button>
-            
         </form>
+            <?php
+            } ?>
+        
     </td>
     </tr>
 <?php
     }
 }
+
 ?>
 
   </tbody>
@@ -188,9 +213,53 @@ if ($result->num_rows > 0) {
 
     </main>
 
+<!-- Email Modal -->
+<div id="emailModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content" style='margin-top:120px;'>
+            <div class="modal-header">
+                <h5 class="modal-title">Send Email</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="users_contact.php" method="POST">
+                    <div class="form-group">
+                        <label for="sender_email">To:</label>
+                        <input type="email" class="form-control" id="sender_email" name="sender_email" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject:</label>
+                        <input type="text" class="form-control" id="subject" name="subject" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message:</label>
+                        <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" name="send_email" class="btn btn-primary">Send Email</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <?php include "footer.php"; ?>
   <!-- JS here -->
+<script>
+    $('#emailModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // Button that triggered the modal
+    var email = button.data('email'); // Extract email from data-* attributes
+    var subject = button.data('subject'); // Extract subject from data-* attributes
 
+    // Update the modal's content with the extracted data
+    var modal = $(this);
+    modal.find('#sender_email').val(email);  // Set email
+    modal.find('#subject').val(subject);     // Set subject
+});
+
+</script>
         <script src="https://kit.fontawesome.com/3acead0521.js" crossorigin="anonymous"></script>
 		<!-- All JS Custom Plugins Link Here here -->
         <script src="./assets/js/vendor/modernizr-3.5.0.min.js"></script>
