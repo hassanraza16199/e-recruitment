@@ -155,9 +155,10 @@ if (mysqli_num_rows($result)>0) {
     while($row = mysqli_fetch_assoc($result)) {
         $sender_email = $row['sender_email'];
         $subject = $row['subject'];
+        $contact_id = $row['contact_id'];
 ?>
     <tr>
-      <th scope="row"><?php echo $row['contact_id']; ?></th>
+      <th scope="row"><?php echo $contact_id; ?></th>
       <td><?php echo $row['user_name']; ?></td>
       <td><?php echo $sender_email; ?></td>
       <td><?php echo $subject; ?></td>
@@ -166,21 +167,16 @@ if (mysqli_num_rows($result)>0) {
       
             <?php 
              if($_SESSION['user_type'] === 'Recruiter') { ?>
-             <button 
-    style="border:none; background-color:#fff;" 
-    data-toggle="modal" 
-    data-target="#emailModal"
-    data-email="<?php echo $sender_email; ?>" 
-    data-subject="<?php echo $subject; ?>"
->
+             <button style="border:none; background-color:#fff;" onclick="openModal('<?php echo $contact_id; ?>', '<?php echo $sender_email; ?>', '<?php echo $subject; ?>')">
     <div class="tooltip-container">
         <span class="tooltip-icon"><i class="fa-solid fa-reply fa-lg" style="color: #35D7FF;"></i></span>
         <div class="tooltip-text">
-            Reply 
+           Reply 
             <div class="tooltip-arrow"></div>
         </div>
     </div>
 </button>
+
 
             <?php
             } else { ?>
@@ -213,7 +209,7 @@ if (mysqli_num_rows($result)>0) {
 
     </main>
 
-<!-- Email Modal -->
+<!-- Email Modal (single modal outside loop) -->
 <div id="emailModal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog " role="document">
         <div class="modal-content" style='margin-top:120px;'>
@@ -225,17 +221,18 @@ if (mysqli_num_rows($result)>0) {
             </div>
             <div class="modal-body">
                 <form action="users_contact.php" method="POST">
+                    <input type="hidden" class="form-control" id="modal_contact_id" name="contact_id">
                     <div class="form-group">
-                        <label for="sender_email">To:</label>
-                        <input type="email" class="form-control" id="sender_email" name="sender_email" readonly>
+                        <label for="modal_sender_email">To:</label>
+                        <input type="email" class="form-control" id="modal_sender_email" name="sender_email" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="subject">Subject:</label>
-                        <input type="text" class="form-control" id="subject" name="subject" required>
+                        <label for="modal_subject">Subject:</label>
+                        <input type="text" class="form-control" id="modal_subject" name="subject" required>
                     </div>
                     <div class="form-group">
-                        <label for="message">Message:</label>
-                        <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+                        <label for="modal_message">Message:</label>
+                        <textarea class="form-control" id="modal_message" name="message" rows="4" required></textarea>
                     </div>
                     <button type="submit" name="send_email" class="btn btn-primary">Send Email</button>
                 </form>
@@ -245,21 +242,21 @@ if (mysqli_num_rows($result)>0) {
 </div>
 
 
+
 <?php include "footer.php"; ?>
   <!-- JS here -->
-<script>
-    $('#emailModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget); // Button that triggered the modal
-    var email = button.data('email'); // Extract email from data-* attributes
-    var subject = button.data('subject'); // Extract subject from data-* attributes
+  <script>
+function openModal(contact_id, sender_email, subject) {
+    // Set the modal fields dynamically
+    document.getElementById('modal_contact_id').value = contact_id;
+    document.getElementById('modal_sender_email').value = sender_email;
+    document.getElementById('modal_subject').value = subject;
 
-    // Update the modal's content with the extracted data
-    var modal = $(this);
-    modal.find('#sender_email').val(email);  // Set email
-    modal.find('#subject').val(subject);     // Set subject
-});
-
+    // Show the modal
+    $('#emailModal').modal('show');
+}
 </script>
+
         <script src="https://kit.fontawesome.com/3acead0521.js" crossorigin="anonymous"></script>
 		<!-- All JS Custom Plugins Link Here here -->
         <script src="./assets/js/vendor/modernizr-3.5.0.min.js"></script>
