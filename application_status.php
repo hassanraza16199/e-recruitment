@@ -38,56 +38,55 @@ if(isset($_POST['submit'])){
         <link rel="manifest" href="site.webmanifest">
         <link rel="shortcut icon" type="image/x-icon" href="assets/img/fav.png">
 		<!-- CSS here -->
-            <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-            <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
-            <link rel="stylesheet" href="assets/css/price_rangs.css">
-            <link rel="stylesheet" href="assets/css/flaticon.css">
-            <link rel="stylesheet" href="assets/css/slicknav.css">
-            <link rel="stylesheet" href="assets/css/animate.min.css">
-            <link rel="stylesheet" href="assets/css/magnific-popup.css">
-            <link rel="stylesheet" href="assets/css/fontawesome-all.min.css">
-            <link rel="stylesheet" href="assets/css/themify-icons.css">
-            <link rel="stylesheet" href="assets/css/slick.css">
-            <link rel="stylesheet" href="assets/css/nice-select.css">
-            <link rel="stylesheet" href="assets/css/style.css">
-            <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
-            <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+        <link rel="stylesheet" href="assets/css/price_rangs.css">
+        <link rel="stylesheet" href="assets/css/flaticon.css">
+        <link rel="stylesheet" href="assets/css/slicknav.css">
+        <link rel="stylesheet" href="assets/css/animate.min.css">
+        <link rel="stylesheet" href="assets/css/magnific-popup.css">
+        <link rel="stylesheet" href="assets/css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="assets/css/themify-icons.css">
+        <link rel="stylesheet" href="assets/css/slick.css">
+        <link rel="stylesheet" href="assets/css/nice-select.css">
+        <link rel="stylesheet" href="assets/css/style.css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
             
-            <style>
-    /* Add some basic styling to make the form look better */
-    .form-container {
-        max-width: 800px;
-        margin: 40px auto;
-        padding: 20px;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
+        <style>
+            /* Add some basic styling to make the form look better */
+            .form-container {
+                max-width: 800px;
+                margin: 40px auto;
+                padding: 20px;
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
 
-    /* Make the form responsive */
-    @media (max-width: 768px) {
-        .form-container {
-            margin: 20px auto;
-        }
-        .inputfirst {
-            padding-left: 0;
-        }
-    }
+            /* Make the form responsive */
+            @media (max-width: 768px) {
+                .form-container {
+                    margin: 20px auto;
+                }
+                .inputfirst {
+                    padding-left: 0;
+                }
+            }
 
-    @media (max-width: 480px) {
-        .form-container {
-            padding: 10px;
-        }
-        .form-group {
-            margin-bottom: 10px;
-        }
-        
-    }
- 
-</style>
+            @media (max-width: 480px) {
+                .form-container {
+                    padding: 10px;
+                }
+                .form-group {
+                    margin-bottom: 10px;
+                }
+                
+            }
+        </style>
    </head>
 
    <body>
@@ -104,7 +103,6 @@ if(isset($_POST['submit'])){
     </div>
     <!-- Preloader Start -->
     <?php include "navbar.php"; ?>
-
 
     <main>
 
@@ -126,101 +124,97 @@ if(isset($_POST['submit'])){
         <!-- Job List Area Start -->
         <div class="job-listing-area pt-120 pb-120">
         
-    <div class="form-container">
-        <div class="row">
-            <h2>Application Form</h2>
-        <span style="margin-left:49%;" class="mt-3">
-            <button class="btn head-btn1" data-toggle="modal" data-target="#emailModal">Email</button>
-            </span>
-        </div>
-        
-    
-    <?php
-    include "connection.php";
-        $application_id = $_GET['application_id'];
-        
-                    
-                    $sql = "SELECT * FROM applications WHERE application_id = '$application_id' ";
-                    $result = mysqli_query($conn, $sql);
-
-                    
-                    if (mysqli_num_rows($result)>0) {
-                        while($row = mysqli_fetch_assoc($result)){
-                            $email_address = $row['email_address'];
-                            $candidate_id = $row['candidate_id'];
-                            $status = $row['status'];
-                        ?>
-    <form action="application_status.php?application_id=<?php echo $_GET['application_id']; ?>" method="POST" enctype="multipart/form-data" >
-
-        <div class="row mb-2">
-            <div class="col-md-6">
-                <label for="firstName">First Name</label>
-                <input type="text" class="form-control" id="firstname" name="firstname" value="<?php echo $row['firstname'];?>" disabled>
+        <div class="form-container">
+            <div class="row">
+                <h2 class="ml-3">Application Form</h2>
+                <span style="margin-left:49%;" class="mt-3">
+                    <button class="btn head-btn1" data-toggle="modal" data-target="#emailModal">Email</button>
+                </span>
             </div>
-            <div class="col-md-6">
-                <label for="lastName">Last Name</label>
-                <input type="text" class="form-control" id="lastname" name="lastname" value="<?php echo $row['lastname'];?>" disabled>
+
+            <?php
+            $application_id = $_GET['application_id'];
+                
+            $sql = "SELECT * FROM applications WHERE application_id = '$application_id' ";
+            $result = mysqli_query($conn, $sql);
+
+            if (mysqli_num_rows($result)>0) {
+                while($row = mysqli_fetch_assoc($result)){
+                    $to = $row['email_address'];
+                    $email_address = $row['email_address'];
+                    $candidate_id = $row['candidate_id'];
+                    $status = $row['status'];
+                ?>
+                <form action="application_status.php?application_id=<?php echo $_GET['application_id']; ?>" method="POST" enctype="multipart/form-data" >
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label for="firstName">First Name</label>
+                            <input type="text" class="form-control" id="firstname" name="firstname" value="<?php echo $row['firstname'];?>" disabled>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" class="form-control" id="lastname" name="lastname" value="<?php echo $row['lastname'];?>" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" class="form-control" id="email_address" name="email_address" value="<?php echo $email_address;?>" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cnic">CNIC</label>
+                        <input type="number" class="form-control" id="cnic" name="cnic" value="<?php echo $row['cnic'];?>" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contactNumber">Contact Number</label>
+                        <input type="text" class="form-control" id="contact_number" name="contact_number"value="<?php echo $row['contact_number'];?>" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dob">Date of Birth</label>
+                        <input type="date" class="form-control" id="date_birth" name="date_birth" value="<?php echo $row['date_birth'];?>" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="country">Country of Residence</label>
+                        <input type="text" class="form-control" id="country" name="country" value="<?php echo $row['country'];?>" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="candidate_education">Education</label>
+                        <textarea type="text" class="form-control" rows="4" id="candidate_education" name="candidate_education" disabled><?php echo $row['candidate_education'];?></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="candidate_skill">Skills</label>
+                        <textarea type="text" class="form-control" rows="4" id="candidate_skill" name="candidate_skill" disabled><?php echo $row['candidate_skill'];?></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="candidate_experience">Experience</label>
+                        <textarea type="text" class="form-control" rows="1" id="candidate_experience" name="candidate_experience" disabled><?php echo $row['candidate_experience'];?></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label  class="form-label">Status</label>
+                                <select class="form-select mb-4" name="status" id="status" >
+                                    <option selected disabled>Select Application Status</option>
+                                    <option value="View" <?php if($status =='View') echo'selected'; ?>>View</option>
+                                    <option value="Approve" <?php if($status =='Approve') echo'selected'; ?>>Approve</option>
+                                    <option value="Pending" <?php if($status =='Pending') echo'selected'; ?>>Pending</option>
+                                    <option value="Shortlist" <?php if($status =='Shortlist') echo'selected'; ?>>Shortlist</option>
+                                    <option value="Cancel" <?php if($status =='Cancel') echo'selected'; ?>>Cancel</option>
+                                </select>
+                    </div>
+                    <button style="display:flex;" type="submit"  name='submit' class="btn head-btn2 mt-3">Submit</button>
+                </form>
+            <?php 
+                }
+            }
+            ?>
             </div>
-        </div>
-
-        <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" class="form-control" id="email_address" name="email_address" value="<?php echo $email_address;?>" disabled>
-        </div>
-
-        <div class="form-group">
-            <label for="cnic">CNIC</label>
-            <input type="number" class="form-control" id="cnic" name="cnic" value="<?php echo $row['cnic'];?>" disabled>
-        </div>
-
-        <div class="form-group">
-            <label for="contactNumber">Contact Number</label>
-            <input type="text" class="form-control" id="contact_number" name="contact_number"value="<?php echo $row['contact_number'];?>" disabled>
-        </div>
-
-        <div class="form-group">
-            <label for="dob">Date of Birth</label>
-            <input type="date" class="form-control" id="date_birth" name="date_birth" value="<?php echo $row['date_birth'];?>" disabled>
-        </div>
-
-        <div class="form-group">
-            <label for="country">Country of Residence</label>
-            <input type="text" class="form-control" id="country" name="country" value="<?php echo $row['country'];?>" disabled>
-        </div>
-
-        <div class="form-group">
-            <label for="candidate_education">Education</label>
-            <textarea type="text" class="form-control" rows="4" id="candidate_education" name="candidate_education" disabled><?php echo $row['candidate_education'];?></textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="candidate_skill">Skills</label>
-            <textarea type="text" class="form-control" rows="4" id="candidate_skill" name="candidate_skill" disabled><?php echo $row['candidate_skill'];?></textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="candidate_experience">Experience</label>
-            <textarea type="text" class="form-control" rows="1" id="candidate_experience" name="candidate_experience" disabled><?php echo $row['candidate_experience'];?></textarea>
-        </div>
-
-        <div class="form-group">
-            <label  class="form-label">Status</label>
-                    <select class="form-select mb-4" name="status" id="status" >
-                        <option selected disabled>Select Application Status</option>
-                        <option value="View" <?php if($status =='View') echo'selected'; ?>>View</option>
-                        <option value="Approve" <?php if($status =='Approve') echo'selected'; ?>>Approve</option>
-                        <option value="Pending" <?php if($status =='Pending') echo'selected'; ?>>Pending</option>
-                        <option value="Shortlist" <?php if($status =='Shortlist') echo'selected'; ?>>Shortlist</option>
-                        <option value="Cancel" <?php if($status =='Cancel') echo'selected'; ?>>Cancel</option>
-                    </select>
-        </div>
-            <button style="display:flex;" type="submit"  name='submit' class="btn head-btn2 mt-3">Submit</button>
-    </form>
-    <?php 
-                        }
-                    }
-                    ?>
-</div>
         </div>
         <!-- Job List Area End -->
     </main>
@@ -236,14 +230,15 @@ if(isset($_POST['submit'])){
         </button>
       </div>
       <div class="modal-body">
-        <form action="application_status.php?application_id=<?php echo $_GET['application_id']; ?>" method="POST">
+        <form action="functions.php" method="POST">
+            <input type="hidden" class="form-control" id="application_id" name="application_id" value="<?php echo $application_id; ?>" readonly>
           <div class="form-group">
             <label for="to_email">To:</label>
             <input type="email" class="form-control" id="to_email" name="to_email" value="<?php echo $email_address; ?>" readonly>
           </div>
           <div class="form-group">
             <label for="subject">Subject:</label>
-            <input type="text" class="form-control" id="subject" name="subject" value="<?php echo $status; ?>" required>
+            <input type="text" class="form-control" id="subject" name="subject" required>
           </div>
           <div class="form-group">
             <label for="message">Message:</label>

@@ -8,7 +8,7 @@ require 'vendor/PHPMailer/src/Exception.php';
 require 'vendor/PHPMailer/src/PHPMailer.php';
 require 'vendor/PHPMailer/src/SMTP.php';
 
-function sendMail() {
+function sendMail($to, $subject, $message) {
     $mail = new PHPMailer(true);
     
     try {
@@ -22,20 +22,35 @@ function sendMail() {
     
         //Recipients
         $mail->setFrom('hassan@ashlarglobal.com', 'E-Recruitment System');
-        $mail->addAddress('9hassanraza@gmail.com');
+        $mail->addAddress($to);
         $mail->addReplyTo('hassan@ashlarglobal.com', 'E-Recruitment System');
     
         //Content
         $mail->isHTML(true);
-        $mail->Subject = 'Here is the subject';
-        $mail->Body    = 'This is the HTML message body in bold!';
-        $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+        $mail->Subject = $subject;
+        $mail->Body    = $message;
+        $mail->AltBody = $message;
     
         $mail->send();
+
+        return ['status' => true, 'message' => 'Email Sent Successfully!'];
     } catch (Exception $e) {
-        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        return ['status' => false, 'message' => 'Email could not be sent!', 'error' => $mail->ErrorInfo];
     }
 
+}
+
+if(isset($_POST['send_email'])) {
+    if(($_POST['to_email'] && $_POST['subject'] && $_POST['message']) && ($_POST['to_email'] !== '' && $_POST['subject'] !== '' && $_POST['message'] !== '')) {
+        $send = sendMail($_POST['to_email'], $_POST['subject'], $_POST['message']);
+        if($send['status']) {
+            header("Location: application_status.php?application_id={$_POST['application_id']}");
+        } else {
+            echo $send['message'] . '<br> Error: ' . $send['error'] ?? 'Unable to Send Email!';
+        }
+    } else {
+        echo("All fields are required!");
+    }
 }
 
 ?>
