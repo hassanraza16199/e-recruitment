@@ -87,11 +87,11 @@ if(isset($_POST['submit'])){
                 
             }
         </style>
-   </head>
+    </head>
 
-   <body>
-   <!-- Preloader Start -->
-   <div id="preloader-active">
+    <body>
+    <!-- Preloader Start -->
+    <div id="preloader-active">
         <div class="preloader d-flex align-items-center justify-content-center">
             <div class="preloader-inner position-relative">
                 <div class="preloader-circle"></div>
@@ -121,15 +121,25 @@ if(isset($_POST['submit'])){
             </div>
         </div>
         <!-- Hero Area End -->
+
+        <!-- Alert Area Start -->
+        <?php if(isset($_SESSION['email_status'])) { ?>
+            <div class="alert alert-<?php echo $_SESSION['status']; ?> alert-dismissible fade show mt-2" role="alert">
+                <?= $_SESSION['message'] ?>
+                <?= $_SESSION['error'] ?? '' ?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <?php unset($_SESSION['email_status']); unset($_SESSION['status']); unset($_SESSION['message']); unset($_SESSION['error']); } ?>
+        <!-- Alert Area End -->
+
         <!-- Job List Area Start -->
         <div class="job-listing-area pt-120 pb-120">
         
         <div class="form-container">
             <div class="row">
-                <h2 class="ml-3">Application Form</h2>
-                <span style="margin-left:49%;" class="mt-3">
-                    <button class="btn head-btn1" data-toggle="modal" data-target="#emailModal">Email</button>
-                </span>
+                <h2 class="ml-3 mb-5">Application Form</h2>
             </div>
 
             <?php
@@ -208,7 +218,11 @@ if(isset($_POST['submit'])){
                                     <option value="Cancel" <?php if($status =='Cancel') echo'selected'; ?>>Cancel</option>
                                 </select>
                     </div>
-                    <button style="display:flex;" type="submit"  name='submit' class="btn head-btn2 mt-3">Submit</button>
+
+                    <div class="form-group text-right">
+                        <button type="button" class="btn head-btn1 mt-3" data-toggle="modal" data-target="#emailModal">Email</button>
+                        <button type="submit" name='submit' class="btn head-btn2 mt-3">Submit</button>
+                    </div>
                 </form>
             <?php 
                 }
@@ -220,38 +234,36 @@ if(isset($_POST['submit'])){
     </main>
 
     <!-- Email Modal -->
-<div id="emailModal" class="modal fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog " role="document">
-    <div class="modal-content" style='margin-top:120px;'>
-      <div class="modal-header">
-        <h5 class="modal-title">Send Email</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form action="functions.php" method="POST">
-            <input type="hidden" class="form-control" id="application_id" name="application_id" value="<?php echo $application_id; ?>" readonly>
-          <div class="form-group">
-            <label for="to_email">To:</label>
-            <input type="email" class="form-control" id="to_email" name="to_email" value="<?php echo $email_address; ?>" readonly>
-          </div>
-          <div class="form-group">
-            <label for="subject">Subject:</label>
-            <input type="text" class="form-control" id="subject" name="subject" required>
-          </div>
-          <div class="form-group">
-            <label for="message">Message:</label>
-            <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
-          </div>
-          <button type="submit" name="send_email" class="btn btn-primary">Send Email</button>
-        </form>
-      </div>
+    <div id="emailModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content" style='margin-top:120px;'>
+                <div class="modal-header">
+                    <h5 class="modal-title">Send Email</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="functions.php" method="POST">
+                        <input type="hidden" class="form-control" id="application_id" name="application_id" value="<?php echo $application_id; ?>" readonly>
+                        <div class="form-group">
+                            <label for="to_email">To:</label>
+                            <input type="email" class="form-control" id="to_email" name="to_email" value="<?php echo $email_address; ?>" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject:</label>
+                            <input type="text" class="form-control" id="subject" name="subject" value="My Subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message:</label>
+                            <textarea class="form-control" id="message" name="message" rows="4" required>Message</textarea>
+                        </div>
+                        <button type="submit" name="send_email" class="btn btn-primary">Send Email</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
-
-
 
     <?php include "footer.php"; ?>
     

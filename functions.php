@@ -41,12 +41,23 @@ function sendMail($to, $subject, $message) {
 }
 
 if(isset($_POST['send_email'])) {
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+
     if(($_POST['to_email'] && $_POST['subject'] && $_POST['message']) && ($_POST['to_email'] !== '' && $_POST['subject'] !== '' && $_POST['message'] !== '')) {
         $send = sendMail($_POST['to_email'], $_POST['subject'], $_POST['message']);
+        
+        $_SESSION['email_status'] = $send['status'];
+        $_SESSION['message'] = $send['message'];
+
         if($send['status']) {
+            $_SESSION['status'] = 'success';
             header("Location: application_status.php?application_id={$_POST['application_id']}");
         } else {
-            echo $send['message'] . '<br> Error: ' . $send['error'] ?? 'Unable to Send Email!';
+            $_SESSION['status'] = 'danger';
+            $_SESSION['error'] = $send['error'];
+            header("Location: application_status.php?application_id={$_POST['application_id']}");
         }
     } else {
         echo("All fields are required!");
