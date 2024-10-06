@@ -256,7 +256,7 @@ if(isset($_POST['submit'])){
                         </div>
                         <div class="form-group">
                             <label for="message">Message:</label>
-                            <textarea class="form-control" id="message" name="message" rows="4" required>Message</textarea>
+                            <textarea class="form-control" id="emailBody" name="message" rows="4" required>Message</textarea>
                         </div>
                         <button type="submit" name="send_email" class="btn btn-primary">Send Email</button>
                     </form>
@@ -266,9 +266,15 @@ if(isset($_POST['submit'])){
     </div>
 
     <?php include "footer.php"; ?>
-    
+        <script src="vendor/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+        <script>
+            tinymce.init({
+                selector: '#emailBody',
+                license_key: 'gpl'
+            });
+        </script>
 
-	<!-- JS here -->
+	    <!-- JS here -->
         <script src="https://kit.fontawesome.com/3acead0521.js" crossorigin="anonymous"></script>
 		<!-- All JS Custom Plugins Link Here here -->
         <script src="./assets/js/vendor/modernizr-3.5.0.min.js"></script>
@@ -303,6 +309,5 @@ if(isset($_POST['submit'])){
 		<!-- Jquery Plugins, main Jquery -->	
         <script src="./assets/js/plugins.js"></script>
         <script src="./assets/js/main.js"></script>
-        
     </body>
 </html>
