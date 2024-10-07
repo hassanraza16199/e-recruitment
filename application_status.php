@@ -310,6 +310,7 @@ if(isset($_POST['submit'])){
                     </div>
                     <div class="modal-body">
                         <form action="functions.php" method="POST">
+                            <div id="validationAlert" class="alert alert-danger d-none">All fields are required!</div>
                             <input type="hidden" class="form-control" id="application_id" name="application_id" value="<?php echo $application_id; ?>" readonly>
                             <div class="form-group">
                                 <label for="to_email">To:</label>
@@ -317,13 +318,13 @@ if(isset($_POST['submit'])){
                             </div>
                             <div class="form-group">
                                 <label for="subject">Subject:</label>
-                                <input type="text" class="form-control" id="subject" name="subject" required>
+                                <input type="text" class="form-control" id="subject" name="subject">
                             </div>
                             <div class="form-group">
                                 <label for="message">Message:</label>
-                                <textarea class="form-control" id="emailBody" name="message" rows="4" required></textarea>
+                                <textarea class="form-control" id="emailBody" name="message" rows="4"></textarea>
                             </div>
-                            <button type="submit" name="send_email" class="btn btn-primary">Send Email</button>
+                            <button type="submit" name="send_email" id="send_email" class="btn btn-primary">Send Email</button>
                         </form>
                     </div>
                 </div>
@@ -337,6 +338,20 @@ if(isset($_POST['submit'])){
                 selector: '#emailBody',
                 license_key: 'gpl'
             });
+
+            $(document).ready( function() {
+                $("#send_email").on('click', function(e) {
+                    const editor = tinymce.get('emailBody');
+                    const content = editor.getContent({ format: 'text' }).trim();
+                    if($("#subject").val() == '' || content === '') {
+                        e.preventDefault();
+                        $("#validationAlert").removeClass('d-none');
+                    } else {
+                        $("#validationAlert").addClass('d-none');
+                    }
+                });
+            });           
+            
         </script>
 
 	    <!-- JS here -->
