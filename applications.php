@@ -229,10 +229,10 @@ if (isset($_GET['application_id'])) {
       <th scope="col">#</th>
       <th scope="col">Name</th>
       <th scope="col">Email</th>
-      <th scope="col">CNIC</th>
       <th scope="col">Contact</th>
-      <th scope="col">Date of Birth</th>
-      <th scope="col">Country</th>
+      <th scope="col">City</th>
+      <th scope="col">Job type</th>
+      <th scope="col">Status</th>
       <th scope="col">Resume</th>
       <?php
       if($_SESSION['user_type'] === 'admin'){ ?>
@@ -266,16 +266,14 @@ if (mysqli_num_rows($result) > 0) {
         $candidate_skill = $row['candidate_skill'];
         $candidate_experience = $row['candidate_experience'];
 ?>
-    <tr data-education="<?php echo $candidate_education; ?>" 
-    data-skill="<?php echo $candidate_skill; ?>" 
-    data-experience="<?php echo $candidate_experience; ?>" >
+    <tr>
       <th scope="row"><?php echo $row['application_id']; ?></th>
       <td><?php echo $row['firstname'] . ' ' . $row['lastname']; ?></td>
       <td><?php echo $row['email_address']; ?></td>
-      <td><?php echo $row['cnic']; ?></td>
       <td><?php echo $row['contact_number']; ?></td>
-      <td><?php echo $row['date_birth']; ?></td>
-      <td><?php echo $row['country']; ?></td>
+      <td><?php echo $row['city']; ?></td>
+      <td><?php echo $row['job_title']; ?></td>
+      <td><?php echo $row['status']; ?></td>
       <td>
         <div class="tooltip-container ml-2">
                 <span class="tooltip-icon"><i class="fa-regular fa-file open-pdf" data-pdf="/e-recruitment/cv/<?php echo $row['resume']; ?>" style="color:#010b1d; cursor: pointer;"></i></span>

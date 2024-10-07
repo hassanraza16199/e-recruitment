@@ -21,6 +21,11 @@
             <link rel="stylesheet" href="assets/css/slick.css">
             <link rel="stylesheet" href="assets/css/nice-select.css">
             <link rel="stylesheet" href="assets/css/style.css">
+            <style>
+                .bell-icon{
+                    color:#fb246a;
+                }
+            </style>
    </head>
 
    <body>
@@ -89,7 +94,13 @@
                                     </nav>
                                 </div>          
                                 <!-- Header-btn -->
+                                 <div class="ml-5">
+                                    <a href="notification.php"><i class="fa-solid fa-bell fa-xl bell-icon" ></i></a>
+                                    
+                                 </div>
+                                 
                                 <div class="header-btn d-none f-right d-lg-block">
+                                
                                 <div class="dropdown">
                                     <button class="btn head-btn2 btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fa-regular fa-user fa-xl mr-2"></i> <?php echo $_SESSION['name']?>

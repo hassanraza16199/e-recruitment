@@ -2,29 +2,7 @@
 session_start();
 include "connection.php";
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    
-    $id = $_POST['id'];
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
-    $birthdate = $_POST['birthdate'];
-    $country = $_POST['phone'];
-    $password = $_POST['password'];
-    // Add other fields as necessary
 
-    $sql = "UPDATE user SET name = '$name', email = '$email', password = '$password', phone = '$phone', birthdate = '$birthdate', country = '$country' WHERE id = $id";
-
-    if ($conn->query($sql) === TRUE) {
-        echo "User updated successfully";
-        header("location: users.php");
-    } else {
-        echo "Error updating user: " . $conn->error;
-    }
-
-     // Redirect back to the user list page
-    exit();
-}
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
 
@@ -176,6 +154,37 @@ if (isset($_GET['id'])) {
 .tooltip-container:hover .tooltip-text {
     visibility: visible;
 }
+#report-btn {
+    margin-left: auto;
+    display: block;
+}
+
+/* For larger screens */
+@media (min-width: 768px) {
+    #report-btn {
+        width: 200px; /* Optional: adjust width for large screens */
+    }
+}
+
+/* For tablets */
+@media (max-width: 768px) {
+    #report-btn {
+        margin-left: 0;
+        width: 100%; /* Makes the button full width */
+        text-align: center;
+    }
+}
+
+/* For mobile devices */
+@media (max-width: 480px) {
+    #report-btn {
+        margin-left: 0;
+        width: 100%; /* Full width for mobile */
+        font-size: 14px; /* Adjust font size if needed */
+        padding: 10px;
+    }
+}
+
             </style>
    </head>
 
@@ -210,7 +219,62 @@ if (isset($_GET['id'])) {
         <!-- Hero Area End -->
     
     <main class="ml-5 mr-5 mt-5 mb-5">
-        <h2 class="mt-3 mb-3">Users Information</h2>
+        <div class="row">
+            <h2 class="mt-3 mb-3">Users Information</h2>
+            
+            <?php
+            include "connection.php";
+            
+            
+            if (isset($_POST['export'])) {
+                // Create new Spreadsheet object
+                $spreadsheet = new Spreadsheet();
+                $sheet = $spreadsheet->getActiveSheet();
+            
+                // Set the column headers
+                $sheet->setCellValue('A1', 'ID');
+                $sheet->setCellValue('B1', 'Name');
+                $sheet->setCellValue('C1', 'Email');
+                $sheet->setCellValue('D1', 'Phone');
+                $sheet->setCellValue('E1', 'Date of Birth');
+                $sheet->setCellValue('F1', 'Country');
+                $sheet->setCellValue('G1', 'Role');
+            
+                // Fetch users data from the database
+                $sql = "SELECT * FROM user";
+                $result = $conn->query($sql);
+            
+                if ($result->num_rows > 0) {
+                    $rowNumber = 2; // Start from the second row since the first is for headers
+                    while ($row = $result->fetch_assoc()) {
+                        $sheet->setCellValue('A' . $rowNumber, $row['id']);
+                        $sheet->setCellValue('B' . $rowNumber, $row['name']);
+                        $sheet->setCellValue('C' . $rowNumber, $row['email']);
+                        $sheet->setCellValue('D' . $rowNumber, $row['phone']);
+                        $sheet->setCellValue('E' . $rowNumber, $row['birthdate']);
+                        $sheet->setCellValue('F' . $rowNumber, $row['country']);
+                        $sheet->setCellValue('G' . $rowNumber, $row['user_type']);
+                        $rowNumber++;
+                    }
+                }
+            
+                // Set the header for download
+                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                header('Content-Disposition: attachment;filename="users_report.xlsx"');
+                header('Cache-Control: max-age=0');
+            
+                // Write to output and download
+                $writer = new Xlsx($spreadsheet);
+                $writer->save('php://output');
+                exit(); // Prevent further processing of the script
+            }?>
+            <form action="users.php" method="post" id="report-btn">
+                <button class="btn head-btn1" type="submit" name="export">Report Export</button>
+            </form>
+
+            
+        </div>
+        
         <hr>
         <table class="table">
   <thead>
@@ -228,9 +292,31 @@ if (isset($_GET['id'])) {
   <tbody>
   <?php
 include "connection.php";
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    
+    $id = $_POST['id'];
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $birthdate = $_POST['birthdate'];
+    $country = $_POST['phone'];
+    $password = $_POST['password'];
+    // Add other fields as necessary
+
+    $sql = "UPDATE user SET name = '$name', email = '$email', password = '$password', phone = '$phone', birthdate = '$birthdate', country = '$country' WHERE id = $id";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "User updated successfully";
+        header("location: users.php");
+    } else {
+        echo "Error updating user: " . $conn->error;
+    }
+
+     // Redirect back to the user list page
+    exit();
+}
 $sql = "SELECT * FROM user";
 $result = $conn->query($sql);
-
 if ($result->num_rows > 0) {
     $i = 1;
     while($row = $result->fetch_assoc()) {
@@ -250,7 +336,7 @@ if ($result->num_rows > 0) {
       <td>
         
         <div class="tooltip-container">
-                <span class="tooltip-icon"><i  style="color:blue" class="fa-regular fa-pen-to-square" ></i></span>
+                <span class="tooltip-icon"><i  style="color:blue" class="fa-regular fa-pen-to-square fa-sm" ></i></span>
                 <div class="tooltip-text">
                     <!-- Replace the SVG with your text -->
                     Edit 
@@ -259,7 +345,7 @@ if ($result->num_rows > 0) {
         </td>
             <td>
         <div class="tooltip-container">
-                <span class="tooltip-icon"><i id="delete-<?php echo $row['id']; ?>" class="fa-solid fa-trash ml-3" style="color:#FF0000; cursor: pointer;"></i></span>
+                <span class="tooltip-icon"><i id="delete-<?php echo $row['id']; ?>" class="fa-solid fa-trash fa-sm ml-3" style="color:#FF0000; cursor: pointer;"></i></span>
                 <div class="tooltip-text">
                     <!-- Replace the SVG with your text -->
                     Delete 

@@ -8,6 +8,7 @@ if(isset($_POST['submit'])) {
     if (isset($_GET['job_id'])) {
         $job_id = $_GET['job_id'];
         $recruiter_id = $_GET['recruiter_id'];
+        $job_title = $_GET['job_title'];
     } else {
         echo "No job ID specified.";
         exit;
@@ -43,8 +44,8 @@ if(isset($_POST['submit'])) {
         }
     }
     if($resume_upload == 1){
-        $sql = "INSERT INTO applications (candidate_id, job_id, recruiter_id, firstname, lastname, cnic, email_address, contact_number, date_birth, country, candidate_education, candidate_skill, candidate_experience, resume, date)
-                VALUES ('$candidate_id', '$job_id', '$recruiter_id', '$firstname', '$lastname', '$cnic', '$email_address', '$contact_number', '$date_birth', '$country', '$candidate_education', '$candidate_skill', '$candidate_experience', '$resumefile', '$date')";
+        $sql = "INSERT INTO applications (candidate_id, job_id, recruiter_id, job_title, firstname, lastname, cnic, email_address, contact_number, date_birth, city, candidate_education, candidate_skill, candidate_experience, resume, date)
+                VALUES ('$candidate_id', '$job_id', '$recruiter_id', '$job_title', '$firstname', '$lastname', '$cnic', '$email_address', '$contact_number', '$date_birth', '$city', '$candidate_education', '$candidate_skill', '$candidate_experience', '$resumefile', '$date')";
         
         $count_sql = "SELECT COUNT(*) AS total FROM applications";
         $count_result = $conn->query($count_sql);
@@ -53,7 +54,7 @@ if(isset($_POST['submit'])) {
         if ($conn->query($sql) === TRUE) {
             
             $_SESSION['apply_success'] = true;
-            header("Location: feedback.php?job_id=$job_id&recruiter_id=$recruiter_id");
+            header("Location: feedback.php?job_id=$job_id&recruiter_id=$recruiter_id&job_title=$job_title");
             exit;
         } else {
             echo "Error: " . $sql . "<br>" . $conn->error;
@@ -244,7 +245,7 @@ margin: 100px auto;
         
         <div class="form-container">
         <h2>Application Form</h2>
-        <form action="apply_job.php?job_id=<?php echo $_GET['job_id']; ?>&recruiter_id=<?php echo $_GET['recruiter_id']; ?>" method="POST" enctype="multipart/form-data" >
+        <form action="apply_job.php?job_id=<?php echo $_GET['job_id']; ?>&recruiter_id=<?php echo $_GET['recruiter_id']; ?>&job_title=<?php echo $_GET['job_title'];?>" method="POST" enctype="multipart/form-data" >
 
         <div class="row mb-2">
             <div class="col-md-6">
@@ -268,7 +269,7 @@ margin: 100px auto;
         </div>
 
         <div class="form-group">
-            <label for="contactNumber">Contact Number</label>
+            <label for="contactNumber">Phone No</label>
             <input type="text" class="form-control" id="contact_number" name="contact_number">
         </div>
 
@@ -278,8 +279,8 @@ margin: 100px auto;
         </div>
 
         <div class="form-group">
-            <label for="country">Country of Residence</label>
-            <input type="text" class="form-control" id="country" name="country">
+            <label for="City">City</label>
+            <input type="text" class="form-control" id="city" name="city">
         </div>
 
         <div class="form-group">
@@ -296,14 +297,6 @@ margin: 100px auto;
             <label for="candidate_experience">Experience</label>
             <textarea type="text" class="form-control" rows="4" id="candidate_experience" name="candidate_experience"></textarea>
         </div>
-
-        <!-- <div class="form-group">
-            <label>Upload Resume</label>
-            <div class="upload-area mt-2">
-                <p>Choose file or drop here in PDF</p>
-                <input type="file" accept=".pdf, .doc, .docx" id="resume" name="resume"  >
-            </div>
-        </div> -->
         
         <div class="mb-3">
             <label  class="form-label">Upload Resume</label><br>

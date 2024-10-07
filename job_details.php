@@ -60,6 +60,7 @@ include "connection.php";
                         while($row = mysqli_fetch_assoc($result)){
                             $requirements = $row['requirements'];
                             $experience = $row['experience'];
+                            $job_title = $row['job_title'];
                         ?>
         <!-- Hero Area Start-->
         <div class="slider-area ">
@@ -91,7 +92,7 @@ include "connection.php";
                                 </div>
                                 <div class="job-tittle">
                                     <a href="#">
-                                        <h4><?php echo $row['job_title'] ?></h4>
+                                        <h4><?php echo $job_title; ?></h4>
                                     </a>
                                     <ul>
                                         <li><?php echo $row['company_name'] ?></li>
@@ -152,7 +153,7 @@ include "connection.php";
                                             if ($_SESSION['user_type'] == 'Recruiter') {
                                                 echo "<a href='applications.php?id=" . $job_id . "' class='btn'>Applied Application</a>";
                                             }else if ($_SESSION['user_type'] == 'Candidate') {
-                                                echo "<a href='apply_job.php?job_id=" . $job_id . "&recruiter_id=" . $recruiter_id . "' class='btn'>Apply Now</a>";
+                                                echo "<a href='apply_job.php?job_id=" . $job_id . "&recruiter_id=" . $recruiter_id . "&job_title=" . $job_title . "' class='btn'>Apply Now</a>";
                                             }
                                             ?>
                             

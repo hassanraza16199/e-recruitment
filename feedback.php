@@ -7,6 +7,7 @@ if(isset($_POST['submit'])) {
     if (isset($_GET['job_id'])) {
         $job_id = $_GET['job_id'];
         $recruiter_id = $_GET['recruiter_id'];
+        $job_title=$_GET['job_title'];
     } else {
         echo "No job ID specified.";
         exit;
@@ -30,8 +31,7 @@ if(isset($_POST['submit'])) {
             header("Location: post_job.php");
             exit;
         }else if ($_SESSION['user_type'] == 'Candidate') {
-            
-            header("Location: apply_job.php?job_id=$job_id&recruiter_id=$recruiter_id&success=true");
+            header("Location: apply_job.php?job_id=$job_id&recruiter_id=$recruiter_id&job_title=$job_title&success=true");
             exit;
         }
     }else{

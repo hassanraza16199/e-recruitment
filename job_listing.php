@@ -6,7 +6,86 @@ if(!isset($_SESSION['name'])){
 }
 
 $recruiter_id = $_SESSION['id'];
+$jobs_per_page = 10;
 
+// Find out the total number of jobs in the database
+$total_jobs_sql = "SELECT COUNT(*) AS total FROM job_post WHERE status = 'active'";
+$total_jobs_result = $conn->query($total_jobs_sql);
+$total_jobs_row = $total_jobs_result->fetch_assoc();
+$total_jobs = $total_jobs_row['total'];
+
+// Calculate the total number of pages
+$total_pages = ceil($total_jobs / $jobs_per_page);
+
+// Get the current page number from the query string, default to 1 if not set
+$current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+
+if ($current_page < 1) {
+    $current_page = 1;
+}
+
+// Calculate the offset for the SQL query
+$offset = ($current_page - 1) * $jobs_per_page;
+
+// Ensure the offset is non-negative
+if ($offset < 0) {
+    $offset = 0;
+}
+
+// Fetch the job posts for the current page
+$sql = "SELECT * FROM job_post WHERE status = 'active'";
+
+
+// Add conditions based on filter inputs
+$conditions = [];
+
+if (!empty($_GET['search'])) {
+    $search = $conn->real_escape_string($_GET['search']);
+    $conditions[] = "(job_title LIKE '%$search%' OR discription LIKE '%$search%' OR company_location LIKE '%$search%' OR requirements LIKE '%$search%')";
+}
+
+// Check if category is selected
+if (!empty($_GET['categories'])) {
+    $categories = $conn->real_escape_string($_GET['categories']);
+    $conditions[] = "categories = '$categories'";
+}
+
+// Check if job types are selected
+if (!empty($_GET['timing'])) {
+    $timing = implode("','", array_map([$conn, 'real_escape_string'], $_GET['timing']));
+    $conditions[] = "timing IN ('$timing')";
+}
+
+// Check if location is selected
+if (!empty($_GET['company_location'])) {
+    $company_location = $conn->real_escape_string($_GET['company_location']);
+    $conditions[] = "company_location = '$company_location'";
+}
+
+// Check if the 'posted_within' filter is selected
+if (!empty($_GET['posted_within'])) {
+    // Get the number of days from the radio button
+    $posted_within_days = (int)$_GET['posted_within'];
+
+    // Calculate the date to compare against the 'created_at' column
+    $posted_within_date = date('Y-m-d H:i:s', strtotime("-$posted_within_days days"));
+
+    // Add the condition to filter jobs posted within the specified date range
+    $conditions[] = "created_at >= '$posted_within_date'";
+}
+
+// Count jobs that match the current filter
+$count_sql = "SELECT COUNT(*) AS total FROM job_post WHERE status = 'active'";
+if (count($conditions) > 0) {
+    $count_sql .= " AND " . implode(" AND ", $conditions);
+}
+
+$count_result = $conn->query($count_sql);
+$count_row = $count_result->fetch_assoc();
+$total_entries = $count_row['total'];
+
+// Add sorting or pagination if needed
+$sql .= " ORDER BY created_at DESC LIMIT $offset, $jobs_per_page";
 ?>
 
 
@@ -375,7 +454,7 @@ margin: 100px auto;
                                 <!-- Select job items start -->
                                 <div class="select-job-items2">
                                     <select name="company_location">
-                                        <!-- <option value="">Anywhere</option> -->
+                                        <option selected disabled>Anywhere</option>
                                         <option value="Lahore">Lahore</option>
                                         <option value="Islamabad">Islamabad</option>
                                         <option value="Karachi">Karachi</option>
@@ -436,17 +515,7 @@ margin: 100px auto;
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="count-job mb-35">
-                                            <?php
-                                            if($_SESSION['user_type'] === 'Recruiter') {
-                                                $count_sql = "SELECT COUNT(*) AS total FROM job_post WHERE recruiter_id = '$recruiter_id'";
-                                            } else {
-                                                $count_sql = "SELECT COUNT(*) AS total FROM job_post";
-                                            }
-                                            $count_result = $conn->query($count_sql);
-                                            $count_row = $count_result->fetch_assoc();
-                                            $total_entries = $count_row['total'];
-                                            $conn->close();
-                                            ?>
+                                            
                                             <span> Jobs found <?php echo $total_entries; ?></span>
                                             <!-- Select job items start -->
                                             <div class="select-job-items">
@@ -538,8 +607,6 @@ $sql .= " ORDER BY created_at DESC LIMIT $offset, $jobs_per_page";
 
 // Execute the query and fetch the results
 $result = $conn->query($sql);
-
-
 
 // Check if the query was successful
 if ($result === false) {
