@@ -55,98 +55,7 @@ if(isset($_POST['submit'])){
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-            
-<<<<<<< HEAD
-            <style>
-    .main-div {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        margin: 0 auto;
-        max-width: 1200px;
-        padding: 20px;
-    }
-
-    .detail-div, .status-div {
-        background: #f9f9f9;
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        width: 48%;
-    }
-
-    .detail-div h2, .status-div h2 {
-        font-size: 24px;
-        margin-bottom: 20px;
-        color: #333;
-    }
-
-    .detail-div p, .status-div p {
-        font-size: 16px;
-        margin-bottom: 10px;
-        color: #555;
-    }
-
-    .status-div form select {
-        width: 100%;
-        padding: 10px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        margin-bottom: 15px;
-    }
-
-    /* Modal Styling */
-    .modal-content {
-        background-color: #f9f9f9;
-        border-radius: 10px;
-        padding: 20px;
-    }
-
-    .modal-header {
-        border-bottom: 1px solid #ddd;
-        margin-bottom: 10px;
-    }
-
-    .modal-title {
-        font-size: 20px;
-        color: #333;
-    }
-
-    .modal-body {
-        padding: 20px;
-    }
-
-    .modal-body .form-group label {
-        color: #555;
-        font-size: 14px;
-        margin-bottom: 5px;
-    }
-
-    .email-btn{
-        margin-left:190px;
-    }
-
-    /* Responsive Styling */
-    @media (max-width: 768px) {
-        .main-div {
-            flex-direction: column;
-        }
-
-        .detail-div, .status-div {
-            width: 100%;
-        }
-
-        .status-div button {
-            width: 100%;
-        }
-    }
-</style>
-
-   </head>
-=======
         <style>
-            /* Add some basic styling to make the form look better */
             .form-container {
                 max-width: 800px;
                 margin: 40px auto;
@@ -154,6 +63,90 @@ if(isset($_POST['submit'])){
                 border: 1px solid #ddd;
                 border-radius: 10px;
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .main-div {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                margin: 0 auto;
+                max-width: 1200px;
+                padding: 20px;
+            }
+
+            .detail-div, .status-div {
+                background: #f9f9f9;
+                border-radius: 8px;
+                padding: 20px;
+                margin-bottom: 20px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                width: 48%;
+            }
+
+            .detail-div h2, .status-div h2 {
+                font-size: 24px;
+                margin-bottom: 20px;
+                color: #333;
+            }
+
+            .detail-div p, .status-div p {
+                font-size: 16px;
+                margin-bottom: 10px;
+                color: #555;
+            }
+
+            .status-div form select {
+                width: 100%;
+                padding: 10px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                margin-bottom: 15px;
+            }
+
+            /* Modal Styling */
+            .modal-content {
+                background-color: #f9f9f9;
+                border-radius: 10px;
+                padding: 20px;
+            }
+
+            .modal-header {
+                border-bottom: 1px solid #ddd;
+                margin-bottom: 10px;
+            }
+
+            .modal-title {
+                font-size: 20px;
+                color: #333;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
+
+            .modal-body .form-group label {
+                color: #555;
+                font-size: 14px;
+                margin-bottom: 5px;
+            }
+
+            .email-btn{
+                margin-left:190px;
+            }
+
+            /* Responsive Styling */
+            @media (max-width: 768px) {
+                .main-div {
+                    flex-direction: column;
+                }
+
+                .detail-div, .status-div {
+                    width: 100%;
+                }
+
+                .status-div button {
+                    width: 100%;
+                }
             }
 
             /* Make the form responsive */
@@ -176,65 +169,62 @@ if(isset($_POST['submit'])){
                 
             }
         </style>
-    </head>
->>>>>>> e6d6c48eb78f38513d57616a982324e14a493591
 
     <body>
-    <!-- Preloader Start -->
-    <div id="preloader-active">
-        <div class="preloader d-flex align-items-center justify-content-center">
-            <div class="preloader-inner position-relative">
-                <div class="preloader-circle"></div>
-                <div class="preloader-img pere-text">
-                    <img src="assets/img/logo/logo.png" alt="">
+        <!-- Preloader Start -->
+        <div id="preloader-active">
+            <div class="preloader d-flex align-items-center justify-content-center">
+                <div class="preloader-inner position-relative">
+                    <div class="preloader-circle"></div>
+                    <div class="preloader-img pere-text">
+                        <img src="assets/img/logo/logo.png" alt="">
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Preloader Start -->
-    <?php include "navbar.php"; ?>
+        <!-- Preloader Start -->
+        <?php include "navbar.php"; ?>
 
-    <main>
+        <main>
 
-        <!-- Hero Area Start-->
-        <div class="slider-area ">
-            <div class="single-slider section-overly slider-height2 d-flex align-items-center" data-background="assets/img/hero/about.jpg">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xl-12">
-                            <div class="hero-cap text-center">
-                                <h2>Application Detail</h2>
+            <!-- Hero Area Start-->
+            <div class="slider-area ">
+                <div class="single-slider section-overly slider-height2 d-flex align-items-center" data-background="assets/img/hero/about.jpg">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="hero-cap text-center">
+                                    <h2>Application Detail</h2>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- Hero Area End -->
+            <!-- Hero Area End -->
 
-        <!-- Alert Area Start -->
-        <?php if(isset($_SESSION['email_status'])) { ?>
-            <div class="alert alert-<?php echo $_SESSION['status']; ?> alert-dismissible fade show mt-2" role="alert">
-                <?= $_SESSION['message'] ?>
-                <?= $_SESSION['error'] ?? '' ?>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        <?php unset($_SESSION['email_status']); unset($_SESSION['status']); unset($_SESSION['message']); unset($_SESSION['error']); } ?>
-        <!-- Alert Area End -->
+            <!-- Alert Area Start -->
+            <?php if(isset($_SESSION['email_status'])) { ?>
+                <div class="alert alert-<?php echo $_SESSION['status']; ?> alert-dismissible fade show mt-2" role="alert">
+                    <?= $_SESSION['message'] ?>
+                    <?= $_SESSION['error'] ?? '' ?>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            <?php unset($_SESSION['email_status']); unset($_SESSION['status']); unset($_SESSION['message']); unset($_SESSION['error']); } ?>
+            <!-- Alert Area End -->
 
-        <!-- Job List Area Start -->
-        <div class="job-listing-area pt-120 pb-120">
-<<<<<<< HEAD
-            <div class="main-div">
-                <div class="detail-div">
-                <h2>Application Detail</h2>
-    <?php
-    include "connection.php";
-        $application_id = $_GET['application_id'];
-        
+            <!-- Job List Area Start -->
+            <div class="job-listing-area pt-120 pb-120">
+                <div class="main-div">
+                    <div class="detail-div">
+                        <h2>Application Detail</h2>
+                    <?php
+                    include "connection.php";
+                    $application_id = $_GET['application_id'];
                     
+                                
                     $sql = "SELECT * FROM applications WHERE application_id = '$application_id' ";
                     $result = mysqli_query($conn, $sql);
 
@@ -245,141 +235,52 @@ if(isset($_POST['submit'])){
                             $candidate_id = $row['candidate_id'];
                             $status = $row['status'];
                         ?>
-                    <div class="row">
-                        <div class="ml-3 mr-5">
-                            <p><span style="font-weight:bold;">First Name </span>: <?php echo $row['firstname'];?></p>
+                        <div class="row">
+                            <div class="ml-3 mr-5">
+                                <p><span style="font-weight:bold;">First Name </span>: <?php echo $row['firstname'];?></p>
+                            </div>
+                            <div class="ml-5">
+                                <p><span style="font-weight:bold;">Last Name </span>: <?php echo $row['lastname'];?></p>
+                            </div>
                         </div>
-                        <div class="ml-5">
-                            <p><span style="font-weight:bold;">Last Name </span>: <?php echo $row['lastname'];?></p>
+                        <div>
+                            <p><span style="font-weight:bold;">Email Address </span>: <?php echo $row['email_address'];?></p>
                         </div>
-                    </div>
-                    <div>
-                        <p><span style="font-weight:bold;">Email Address </span>: <?php echo $row['email_address'];?></p>
-                    </div>
-                    <div >
-                        <p><span style="font-weight:bold;">CNIC </span>: <?php echo $row['cnic'];?></p>
-                    </div>
-                    <div >
-                        <p><span style="font-weight:bold;">Phone NO </span>: <?php echo $row['contact_number'];?></p>
-                    </div>
-                    <div >
-                        <p><span style="font-weight:bold;">Date of Birth </span>: <?php echo $row['date_birth'];?></p>
-                    </div>
-                    <div >
-                        <p><span style="font-weight:bold;">Education </span>: <?php echo $row['candidate_education'];?></p>
-                    </div>
-                    <div >
-                        <p><span style="font-weight:bold;">Skill </span>: <?php echo $row['candidate_skill'];?></p>
-                    </div>
-                    <div >
-                        <p><span style="font-weight:bold;">Experience </span>: <?php echo $row['candidate_experience'];?></p>
-                    </div>
-    
-                    <?php 
-                            }
-                        }
-                    ?>
-                </div>
-                <div class="status-div">
-                    <div style="display:flex; margin-bottom:20px;">
-                        <h2>Application Status</h2>
-                        <span  class=" email-btn">
-                            <button class="btn head-btn1" data-toggle="modal" data-target="#emailModal">Email</button>
-                        </span>
-                    </div>
-                    
-                    <form action="application_status.php?application_id=<?php echo $_GET['application_id']; ?>" method="POST" enctype="multipart/form-data" >
-                        <div class="form-group">
-                            <label  class="form-label">Status</label>
-                            <select class="form-select mb-4" name="status" id="status" >
-                                <option selected disabled>Select Application Status</option>
-                                <option value="View" <?php if($status =='View') echo'selected'; ?>>View</option>
-                                <option value="Approve" <?php if($status =='Approve') echo'selected'; ?>>Approve</option>
-                                <option value="Pending" <?php if($status =='Pending') echo'selected'; ?>>Pending</option>
-                                <option value="Shortlist" <?php if($status =='Shortlist') echo'selected'; ?>>Shortlist</option>
-                                <option value="Cancel" <?php if($status =='Cancel') echo'selected'; ?>>Cancel</option>
-                            </select>
+                        <div >
+                            <p><span style="font-weight:bold;">CNIC </span>: <?php echo $row['cnic'];?></p>
                         </div>
-                        <button style="display:flex;" type="submit"  name='submit' class="btn head-btn2 mt-3">Submit</button>
-                    </form>
-                </div>
-            </div>
-
-
-=======
+                        <div >
+                            <p><span style="font-weight:bold;">Phone NO </span>: <?php echo $row['contact_number'];?></p>
+                        </div>
+                        <div >
+                            <p><span style="font-weight:bold;">Date of Birth </span>: <?php echo $row['date_birth'];?></p>
+                        </div>
+                        <div >
+                            <p><span style="font-weight:bold;">Education </span>: <?php echo $row['candidate_education'];?></p>
+                        </div>
+                        <div >
+                            <p><span style="font-weight:bold;">Skill </span>: <?php echo $row['candidate_skill'];?></p>
+                        </div>
+                        <div >
+                            <p><span style="font-weight:bold;">Experience </span>: <?php echo $row['candidate_experience'];?></p>
+                        </div>
         
-        <div class="form-container">
-            <div class="row">
-                <h2 class="ml-3 mb-5">Application Form</h2>
-            </div>
-
-            <?php
-            $application_id = $_GET['application_id'];
-                
-            $sql = "SELECT * FROM applications WHERE application_id = '$application_id' ";
-            $result = mysqli_query($conn, $sql);
-
-            if (mysqli_num_rows($result)>0) {
-                while($row = mysqli_fetch_assoc($result)){
-                    $to = $row['email_address'];
-                    $email_address = $row['email_address'];
-                    $candidate_id = $row['candidate_id'];
-                    $status = $row['status'];
-                ?>
-                <form action="application_status.php?application_id=<?php echo $_GET['application_id']; ?>" method="POST" enctype="multipart/form-data" >
-                    <div class="row mb-2">
-                        <div class="col-md-6">
-                            <label for="firstName">First Name</label>
-                            <input type="text" class="form-control" id="firstname" name="firstname" value="<?php echo $row['firstname'];?>" disabled>
+                        <?php 
+                                }
+                            }
+                        ?>
+                    </div>
+                    <div class="status-div">
+                        <div style="display:flex; margin-bottom:20px;">
+                            <h2>Application Status</h2>
+                            <span  class=" email-btn">
+                                <button class="btn head-btn1" data-toggle="modal" data-target="#emailModal">Email</button>
+                            </span>
                         </div>
-                        <div class="col-md-6">
-                            <label for="lastName">Last Name</label>
-                            <input type="text" class="form-control" id="lastname" name="lastname" value="<?php echo $row['lastname'];?>" disabled>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" class="form-control" id="email_address" name="email_address" value="<?php echo $email_address;?>" disabled>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="cnic">CNIC</label>
-                        <input type="number" class="form-control" id="cnic" name="cnic" value="<?php echo $row['cnic'];?>" disabled>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="contactNumber">Contact Number</label>
-                        <input type="text" class="form-control" id="contact_number" name="contact_number"value="<?php echo $row['contact_number'];?>" disabled>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="dob">Date of Birth</label>
-                        <input type="date" class="form-control" id="date_birth" name="date_birth" value="<?php echo $row['date_birth'];?>" disabled>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="country">Country of Residence</label>
-                        <input type="text" class="form-control" id="country" name="country" value="<?php echo $row['country'];?>" disabled>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="candidate_education">Education</label>
-                        <textarea type="text" class="form-control" rows="4" id="candidate_education" name="candidate_education" disabled><?php echo $row['candidate_education'];?></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="candidate_skill">Skills</label>
-                        <textarea type="text" class="form-control" rows="4" id="candidate_skill" name="candidate_skill" disabled><?php echo $row['candidate_skill'];?></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="candidate_experience">Experience</label>
-                        <textarea type="text" class="form-control" rows="1" id="candidate_experience" name="candidate_experience" disabled><?php echo $row['candidate_experience'];?></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label  class="form-label">Status</label>
+                        
+                        <form action="application_status.php?application_id=<?php echo $_GET['application_id']; ?>" method="POST" enctype="multipart/form-data" >
+                            <div class="form-group">
+                                <label  class="form-label">Status</label>
                                 <select class="form-select mb-4" name="status" id="status" >
                                     <option selected disabled>Select Application Status</option>
                                     <option value="View" <?php if($status =='View') echo'selected'; ?>>View</option>
@@ -388,56 +289,48 @@ if(isset($_POST['submit'])){
                                     <option value="Shortlist" <?php if($status =='Shortlist') echo'selected'; ?>>Shortlist</option>
                                     <option value="Cancel" <?php if($status =='Cancel') echo'selected'; ?>>Cancel</option>
                                 </select>
+                            </div>
+                            <button style="display:flex;" type="submit"  name='submit' class="btn head-btn2 mt-3">Submit</button>
+                        </form>
                     </div>
-
-                    <div class="form-group text-right">
-                        <button type="button" class="btn head-btn1 mt-3" data-toggle="modal" data-target="#emailModal">Email</button>
-                        <button type="submit" name='submit' class="btn head-btn2 mt-3">Submit</button>
-                    </div>
-                </form>
-            <?php 
-                }
-            }
-            ?>
-            </div>
->>>>>>> e6d6c48eb78f38513d57616a982324e14a493591
-        </div>
-        <!-- Job List Area End -->
-    </main>
-
-    <!-- Email Modal -->
-    <div id="emailModal" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog " role="document">
-            <div class="modal-content" style='margin-top:120px;'>
-                <div class="modal-header">
-                    <h5 class="modal-title">Send Email</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
-                <div class="modal-body">
-                    <form action="functions.php" method="POST">
-                        <input type="hidden" class="form-control" id="application_id" name="application_id" value="<?php echo $application_id; ?>" readonly>
-                        <div class="form-group">
-                            <label for="to_email">To:</label>
-                            <input type="email" class="form-control" id="to_email" name="to_email" value="<?php echo $email_address; ?>" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="subject">Subject:</label>
-                            <input type="text" class="form-control" id="subject" name="subject" value="My Subject" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Message:</label>
-                            <textarea class="form-control" id="emailBody" name="message" rows="4" required>Message</textarea>
-                        </div>
-                        <button type="submit" name="send_email" class="btn btn-primary">Send Email</button>
-                    </form>
+            </div>
+            <!-- Job List Area End -->
+        </main>
+
+        <!-- Email Modal -->
+        <div id="emailModal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog " role="document">
+                <div class="modal-content" style='margin-top:120px;'>
+                    <div class="modal-header">
+                        <h5 class="modal-title">Send Email</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="functions.php" method="POST">
+                            <input type="hidden" class="form-control" id="application_id" name="application_id" value="<?php echo $application_id; ?>" readonly>
+                            <div class="form-group">
+                                <label for="to_email">To:</label>
+                                <input type="email" class="form-control" id="to_email" name="to_email" value="<?php echo $email_address; ?>" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Subject:</label>
+                                <input type="text" class="form-control" id="subject" name="subject" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message:</label>
+                                <textarea class="form-control" id="emailBody" name="message" rows="4" required></textarea>
+                            </div>
+                            <button type="submit" name="send_email" class="btn btn-primary">Send Email</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <?php include "footer.php"; ?>
+        <?php include "footer.php"; ?>
         <script src="vendor/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
         <script>
             tinymce.init({
