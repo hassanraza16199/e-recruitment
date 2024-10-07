@@ -17,7 +17,7 @@ if (isset($_POST['submit'])) {
       $_SESSION['name'] = $data['name'];
       $_SESSION['email'] = $data['email'];
       $_SESSION['phone'] = $data['phone'];
-      $_SESSION['country'] = $data['country'];
+      $_SESSION['city'] = $data['city'];
       $_SESSION['gender'] = $data['gender'];
       $_SESSION['birthdate'] = $data['birthdate'];
       

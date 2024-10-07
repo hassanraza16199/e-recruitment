@@ -468,7 +468,7 @@ margin: 100px auto;
                       <p><span style="font-weight:bold;">First Name </span>: <?php echo $_SESSION['name'];?></p>
                   </div>
                   <div class="bio-row">
-                      <p><span style="font-weight:bold;">Country </span>: <?php echo $_SESSION['country'];?></p>
+                      <p><span style="font-weight:bold;">City </span>: <?php echo $_SESSION['city'];?></p>
                   </div>
                   <div class="bio-row">
                       <p><span style="font-weight:bold;">Date of Birth</span>: <?php echo $_SESSION['birthdate'];?></p>
@@ -526,8 +526,8 @@ margin: 100px auto;
                 <input type="date" name="birthdate" id="birthdate" class="form-control" value="<?php echo $_SESSION['birthdate']; ?>">
             </div>
             <div class="form-group">
-                <label for="country">Country</label>
-                <input type="text" name="country" id="country" class="form-control" value="<?php echo $_SESSION['country']; ?>">
+                <label for="country">City</label>
+                <input type="text" name="city" id="city" class="form-control" value="<?php echo $_SESSION['city']; ?>">
             </div>
             <div class="form-group">
                 <label for="phone">Phone</label>

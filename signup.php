@@ -18,7 +18,7 @@ if(isset($_POST['submit'])) {
     } else {
 
         // Insert the new user
-        $sql = "INSERT INTO user (name, email, country, password, birthdate, gender, phone, user_type, time) VALUES ('".$_POST['name']."', '$email', '".$_POST['country']."', '".$_POST['password']."', '".$_POST['birthdate']."', '".$_POST['gender']."', '".$_POST['phone']."', '".$_POST['user_type']."', '".date('Y-m-d h:i:s')."')";
+        $sql = "INSERT INTO user (name, email, city, password, birthdate, gender, phone, user_type, time) VALUES ('".$_POST['name']."', '$email', '".$_POST['city']."', '".$_POST['password']."', '".$_POST['birthdate']."', '".$_POST['gender']."', '".$_POST['phone']."', '".$_POST['user_type']."', '".date('Y-m-d h:i:s')."')";
 
         $result = mysqli_query($conn, $sql);
         $count_sql = "SELECT COUNT(*) AS total FROM user";
@@ -128,8 +128,8 @@ button {
         <label>Enter your email</label>
       </div>
       <div class="input-field">
-        <input type="text" name='country' id='country' required>
-        <label>Enter your Country</label>
+        <input type="text" name='city' id='city' required>
+        <label>Enter your city</label>
       </div>
       <div class="input-field">
         <input type="password" name='password' id='password' required>

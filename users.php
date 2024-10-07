@@ -221,57 +221,9 @@ if (isset($_GET['id'])) {
     <main class="ml-5 mr-5 mt-5 mb-5">
         <div class="row">
             <h2 class="mt-3 mb-3">Users Information</h2>
-            
-            <?php
-            include "connection.php";
-            
-            
-            if (isset($_POST['export'])) {
-                // Create new Spreadsheet object
-                $spreadsheet = new Spreadsheet();
-                $sheet = $spreadsheet->getActiveSheet();
-            
-                // Set the column headers
-                $sheet->setCellValue('A1', 'ID');
-                $sheet->setCellValue('B1', 'Name');
-                $sheet->setCellValue('C1', 'Email');
-                $sheet->setCellValue('D1', 'Phone');
-                $sheet->setCellValue('E1', 'Date of Birth');
-                $sheet->setCellValue('F1', 'Country');
-                $sheet->setCellValue('G1', 'Role');
-            
-                // Fetch users data from the database
-                $sql = "SELECT * FROM user";
-                $result = $conn->query($sql);
-            
-                if ($result->num_rows > 0) {
-                    $rowNumber = 2; // Start from the second row since the first is for headers
-                    while ($row = $result->fetch_assoc()) {
-                        $sheet->setCellValue('A' . $rowNumber, $row['id']);
-                        $sheet->setCellValue('B' . $rowNumber, $row['name']);
-                        $sheet->setCellValue('C' . $rowNumber, $row['email']);
-                        $sheet->setCellValue('D' . $rowNumber, $row['phone']);
-                        $sheet->setCellValue('E' . $rowNumber, $row['birthdate']);
-                        $sheet->setCellValue('F' . $rowNumber, $row['country']);
-                        $sheet->setCellValue('G' . $rowNumber, $row['user_type']);
-                        $rowNumber++;
-                    }
-                }
-            
-                // Set the header for download
-                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="users_report.xlsx"');
-                header('Cache-Control: max-age=0');
-            
-                // Write to output and download
-                $writer = new Xlsx($spreadsheet);
-                $writer->save('php://output');
-                exit(); // Prevent further processing of the script
-            }?>
-            <form action="users.php" method="post" id="report-btn">
-                <button class="btn head-btn1" type="submit" name="export">Report Export</button>
-            </form>
-
+            <a href="export_report.php" id="report-btn">
+                <button class="btn head-btn1"  type="submit" name="export">Report Export</button>
+            </a>
             
         </div>
         
@@ -330,7 +282,7 @@ if ($result->num_rows > 0) {
       <td><?php echo $row['email']; ?></td>
       <td><?php echo $row['phone']; ?></td>
       <td><?php echo $row['birthdate']; ?></td>
-      <td><?php echo $row['country']; ?></td>
+      <td><?php echo $row['city']; ?></td>
       <td><?php echo $row['user_type']; ?></td>
       
       <td>
