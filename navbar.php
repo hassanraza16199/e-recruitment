@@ -1,3 +1,23 @@
+<?php
+include "connection.php";
+
+// Check if the connection is successful
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch notifications
+$sql = "SELECT * FROM job_post WHERE created_at >= NOW() - INTERVAL 1 DAY LIMIT 5"; // Limit to 5 results
+$result = $conn->query($sql);
+
+// Count total notifications
+$count_sql = "SELECT COUNT(*) as total FROM job_post WHERE created_at >= NOW() - INTERVAL 1 DAY";
+$count_result = $conn->query($count_sql);
+$count_row = $count_result->fetch_assoc();
+$total_notifications = $count_row['total'];
+
+?>
+
 <!doctype html>
 <html class="no-js" lang="zxx">
     <head>
@@ -22,35 +42,62 @@
             <link rel="stylesheet" href="assets/css/nice-select.css">
             <link rel="stylesheet" href="assets/css/style.css">
             <style>
-                .bell-icon{
-                    color:#fb246a;
-                }
-                .drop-icon{
-                    background-color:#fff;
-                    border:none;
-                    width:30px;
-                    margin-top:-10px;
-                }
-                #dropdown-menu1 {
-                    position: relative; /* Ensure dropdown menu container is relative */
-                    margin-top: 50px;
-                    margin-left: 30px;
-                    width: 400px;
-                    height: 500px;
-                }
+.bell-icon {
+                position: relative; /* Make the bell icon a positioning context */
+                color: #fb246a;
+            }
 
-                .more-btn {
-                    background-color:#fb246a;
-                    position: absolute;
-                    margin-left:10px;
-                    bottom: 10px;
-                    width: 150px;
-                    height: 60px;
-                    border:none;
-                }
+            .notification-count {
+                position: absolute;
+                top: 25px; /* Adjust as needed to position it properly on top */
+                right: -9px; /* Move the notification bubble slightly to the right */
+                color: #28395a;
+                border-radius: 50%;
+                padding: 2px 6px;
+                font-size: 13px;
+                font-weight: bold;
+                line-height: 1;
+                min-width: 15px;
+                text-align: center;
+                background-color: #ffffff; /* Background for visibility */
+            }
 
-                .dropdown-toggle::after {
+            .drop-icon {
+                background-color: #fff;
+                border: none;
+                width: 30px;
+                margin-top: -10px;
+            }
+
+            #dropdown-menu1 {
+                position: relative; /* Ensure dropdown menu container is relative */
+                margin-top: 50px;
+                margin-left: 30px;
+                width: 450px;
+                height: 300px;
+                max-height: 500px;
+                overflow-y: auto; /* Make it scrollable if too many items */
+            }
+
+            .more-btn {
+                background-color: #fb246a;
+                position: absolute;
+                margin-left: 10px;
+                bottom: 10px;
+                width: 150px;
+                height: 60px;
+                border: none;
+            }
+
+            .dropdown-toggle::after {
                 display: none;
+            }
+
+            @media (max-width: 768px) {
+                #dropdown-menu1 {
+                    width: 100%; /* Full width on mobile */
+                    margin-left: 0; /* Remove left margin */
+                }
             }
             </style>
    </head>
@@ -119,20 +166,59 @@
                                             ?>
                                         </ul>
                                     </nav>
-                                </div>          
+                                </div>  
+                                <?php
+                                include "connection.php";
+                                if($_SESSION['user_type'] === 'Candidate'){ ?>
                                 <!-- Header-btn -->
                                 <div class="btn-group dropleft">
                                     <button type="button" class="drop-icon ml-5 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fa-solid fa-bell fa-xl bell-icon" ></i>
+                                        <p class="notification-count"><?php echo $total_notifications; ?></p>
                                     </button>
                                     <div class="dropdown-menu" id="dropdown-menu1">
-                                        <button class="dropdown-item" type="button">Action</button>
-                                        <button class="dropdown-item" type="button">Another action</button>
-                                        <button class="dropdown-item" type="button">Something else here</button>
+                                        <h3 class="dropdown-item">Notifications</h3>
+                                        <div class="dropdown-item job-notification">
+                                        <?php
+
+
+// Check if the query was successful
+if ($result === false) {
+    // Output the error message
+    echo "Error: " . $conn->error;
+} else {
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            // Display job notifications
+            ?>
+            <div class="single-job-items mb-30">
+                <div class="job-items">
+                    <div class="job-tittle">
+                            <a href="job_details.php?job_id=<?php echo $row['job_id']; ?>&recruiter_id= <?php echo $row['recruiter_id']; ?>"><h6><?php echo htmlspecialchars($row['job_title']); ?></h6></a> 
+                        
+                        <ul>
+                            <li><?php echo htmlspecialchars($row['company_name']); ?></li>
+                            <li><i class="fas fa-map-marker-alt"></i><?php echo htmlspecialchars($row['company_location']); ?></li>
+                            <li><?php echo htmlspecialchars($row['salary']); ?></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="items-link f-right">
+                    <span><?php echo htmlspecialchars($row['date']); ?></span>
+                </div>
+            </div>
+            <?php
+        }
+    }
+}
+
+                        ?>
+                                        </div>
                                         <button class=" more-btn" type="button"><a href="notification.php">More</a></button>
                                         
                                     </div>
-                                </div>
+                                    
+                                </div><?php }?>
                                  
                                 <div class="header-btn d-none f-right d-lg-block">
                                 
@@ -181,7 +267,23 @@
     </header>
 
     
-    
+    <script>
+        function fetchNotifications() {
+    $.ajax({
+        url: "notification.php", // A PHP file to return new job notifications
+        method: "GET",
+        success: function(data) {
+            $(".job-notification").html(data); // Update the job notification area
+        }
+    });
+}
+
+// Call the function to fetch notifications when the page loads
+$(document).ready(function() {
+    fetchNotifications();
+});
+
+    </script>
         
     </body>
 </html>
