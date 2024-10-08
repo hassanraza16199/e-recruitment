@@ -25,6 +25,33 @@
                 .bell-icon{
                     color:#fb246a;
                 }
+                .drop-icon{
+                    background-color:#fff;
+                    border:none;
+                    width:30px;
+                    margin-top:-10px;
+                }
+                #dropdown-menu1 {
+                    position: relative; /* Ensure dropdown menu container is relative */
+                    margin-top: 50px;
+                    margin-left: 30px;
+                    width: 400px;
+                    height: 500px;
+                }
+
+                .more-btn {
+                    background-color:#fb246a;
+                    position: absolute;
+                    margin-left:10px;
+                    bottom: 10px;
+                    width: 150px;
+                    height: 60px;
+                    border:none;
+                }
+
+                .dropdown-toggle::after {
+                display: none;
+            }
             </style>
    </head>
 
@@ -94,10 +121,18 @@
                                     </nav>
                                 </div>          
                                 <!-- Header-btn -->
-                                 <div class="ml-5">
-                                    <a href="notification.php"><i class="fa-solid fa-bell fa-xl bell-icon" ></i></a>
-                                    
-                                 </div>
+                                <div class="btn-group dropleft">
+                                    <button type="button" class="drop-icon ml-5 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa-solid fa-bell fa-xl bell-icon" ></i>
+                                    </button>
+                                    <div class="dropdown-menu" id="dropdown-menu1">
+                                        <button class="dropdown-item" type="button">Action</button>
+                                        <button class="dropdown-item" type="button">Another action</button>
+                                        <button class="dropdown-item" type="button">Something else here</button>
+                                        <button class=" more-btn" type="button"><a href="notification.php">More</a></button>
+                                        
+                                    </div>
+                                </div>
                                  
                                 <div class="header-btn d-none f-right d-lg-block">
                                 
