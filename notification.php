@@ -2,28 +2,20 @@
 session_start();
 include "connection.php";
 
-// if ($_SERVER["REQUEST_METHOD"] == "POST") {
-//     $to_email = $_POST['to_email'];
-//     $subject = $_POST['subject'];
-//     $message = $_POST['message'];
-//     $headers = "From: your-email@example.com";
-
-//     if (mail($to_email, $subject, $message, $headers)) {
-//         echo "Email successfully sent to $to_email";
-//     } else {
-//         echo "Email sending failed!";
-//     }
-// }
-if(isset($_POST['submit'])){
-    if(isset($_GET['application_id'])){
-        $application_id = $_GET['application_id'];
-    }
-    $status = $_POST['status'];
-    $sql = "UPDATE applications SET status = '$status' WHERE application_id = '$application_id'";
-    if($conn->query($sql) === True){
-        header("location: application_status.php?application_id=$application_id");
-    }
+// Check if the connection is successful
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
+
+// Fetch notifications
+$sql = "SELECT * FROM job_post WHERE created_at >= NOW() - INTERVAL 1 DAY"; // Limit to 5 results
+$result = $conn->query($sql);
+
+// Count total notifications
+$count_sql = "SELECT COUNT(*) as total FROM job_post WHERE created_at >= NOW() - INTERVAL 1 DAY";
+$count_result = $conn->query($count_sql);
+$count_row = $count_result->fetch_assoc();
+$total_notifications = $count_row['total'];
 
 ?>
 
@@ -57,6 +49,33 @@ if(isset($_POST['submit'])){
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
             
             <style>
+                .bell-icon {
+                position: relative; /* Make the bell icon a positioning context */
+                color: #fb246a;
+            }
+
+            .notification-count {
+                position: absolute;
+                top: 35px; /* Adjust as needed to position it properly on top */
+                right: 305px; /* Move the notification bubble slightly to the right */
+                color: #28395a;
+                border-radius: 50%;
+                padding: 2px 6px;
+                font-size: 13px;
+                font-weight: bold;
+                line-height: 1;
+                min-width: 15px;
+                text-align: center;
+                background-color: #ffffff; /* Background for visibility */
+            }
+
+            .drop-icon {
+                background-color: #fff;
+                border: none;
+                width: 30px;
+                margin-top: -10px;
+            }
+            
     /* Add some basic styling to make the form look better */
     .form-container {
         max-width: 800px;
@@ -165,6 +184,10 @@ if(isset($_POST['submit'])){
                                         </ul>
                                     </nav>
                                 </div>  
+                                <div class="drop-icon">
+                                    <i class="fa-solid fa-bell fa-xl bell-icon" ></i>
+                                    <p class="notification-count"><?php echo $total_notifications; ?></p>
+                                </div>
                                 
                                  
                                 <div class="header-btn d-none f-right d-lg-block">
@@ -233,9 +256,46 @@ if(isset($_POST['submit'])){
         <!-- Hero Area End -->
         <!-- Job List Area Start -->
         <div class="job-listing-area pt-120 pb-120">
-            <h2>Notification</h2>
+            
+            <div class="ml-5 mr-5">
+                <h2>Notification</h2>
+        <?php
+
+
+// Check if the query was successful
+if ($result === false) {
+    // Output the error message
+    echo "Error: " . $conn->error;
+} else {
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            // Display job notifications
+            ?>
+            <div class="single-job-items mb-30">
+                <div class="job-items">
+                    <div class="job-tittle">
+                            <a href="job_details.php?job_id=<?php echo $row['job_id']; ?>&recruiter_id= <?php echo $row['recruiter_id']; ?>"><h6><?php echo htmlspecialchars($row['job_title']); ?></h6></a> 
+                        
+                        <ul>
+                            <li><?php echo htmlspecialchars($row['company_name']); ?></li>
+                            <li><i class="fas fa-map-marker-alt"></i><?php echo htmlspecialchars($row['company_location']); ?></li>
+                            <li><?php echo htmlspecialchars($row['salary']); ?></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="items-link f-right">
+                    <span><?php echo htmlspecialchars($row['date']); ?></span>
+                </div>
+            </div>
+            <?php
+        }
+    }
+}
+
+                        ?>
         </div>
-        <!-- Job List Area End -->
+        </div>
+        
     </main>
 
 

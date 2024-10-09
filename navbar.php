@@ -1,11 +1,6 @@
 <?php
 include "connection.php";
 
-// Check if the connection is successful
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
 // Fetch notifications
 $sql = "SELECT * FROM job_post WHERE created_at >= NOW() - INTERVAL 1 DAY LIMIT 5"; // Limit to 5 results
 $result = $conn->query($sql);
@@ -128,7 +123,6 @@ $total_notifications = $count_row['total'];
                                             ?>
                                             <li><a href="dashboard.php">Home</a></li>
                                             <li><a href="job_listing.php">Jobs </a></li>
-                                            <li><a href="about_us.php">About</a></li>
                                             <li><a href="#">Calender Integration</a></li>
 
                                             <?php
@@ -181,7 +175,6 @@ $total_notifications = $count_row['total'];
                                         <div class="dropdown-item job-notification">
                                         <?php
 
-
 // Check if the query was successful
 if ($result === false) {
     // Output the error message
@@ -204,14 +197,13 @@ if ($result === false) {
                     </div>
                 </div>
                 <div class="items-link f-right">
-                    <span><?php echo htmlspecialchars($row['date']); ?></span>
+                <span><?php echo date("F j, Y", strtotime($row['date'])); ?></span>
                 </div>
             </div>
             <?php
         }
     }
 }
-
                         ?>
                                         </div>
                                         <button class=" more-btn" type="button"><a href="notification.php">More</a></button>
@@ -268,9 +260,9 @@ if ($result === false) {
 
     
     <script>
-        function fetchNotifications() {
+function fetchNotifications() {
     $.ajax({
-        url: "notification.php", // A PHP file to return new job notifications
+        url: "notification.php", // PHP file to fetch notifications from
         method: "GET",
         success: function(data) {
             $(".job-notification").html(data); // Update the job notification area
@@ -282,8 +274,8 @@ if ($result === false) {
 $(document).ready(function() {
     fetchNotifications();
 });
+</script>
 
-    </script>
         
     </body>
 </html>
