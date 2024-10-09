@@ -2,7 +2,7 @@
 include "connection.php";
 
 // Fetch notifications
-$sql = "SELECT * FROM job_post WHERE created_at >= NOW() - INTERVAL 1 DAY LIMIT 5"; // Limit to 5 results
+$sql = "SELECT * FROM job_post WHERE created_at >= NOW() - INTERVAL 1 DAY LIMIT 8"; // Limit to 5 results
 $result = $conn->query($sql);
 
 // Count total notifications
@@ -37,7 +37,7 @@ $total_notifications = $count_row['total'];
             <link rel="stylesheet" href="assets/css/nice-select.css">
             <link rel="stylesheet" href="assets/css/style.css">
             <style>
-.bell-icon {
+            .bell-icon {
                 position: relative; /* Make the bell icon a positioning context */
                 color: #fb246a;
             }
@@ -60,40 +60,74 @@ $total_notifications = $count_row['total'];
             .drop-icon {
                 background-color: #fff;
                 border: none;
-                width: 30px;
-                margin-top: -10px;
+            }
+            
+            .job-link{
+                width: 20px;
             }
 
-            #dropdown-menu1 {
-                position: relative; /* Ensure dropdown menu container is relative */
-                margin-top: 50px;
-                margin-left: 30px;
-                width: 450px;
-                height: 300px;
-                max-height: 500px;
-                overflow-y: auto; /* Make it scrollable if too many items */
-            }
-
-            .more-btn {
-                background-color: #fb246a;
-                position: absolute;
-                margin-left: 10px;
-                bottom: 10px;
-                width: 150px;
-                height: 60px;
-                border: none;
-            }
-
-            .dropdown-toggle::after {
-                display: none;
-            }
-
-            @media (max-width: 768px) {
-                #dropdown-menu1 {
-                    width: 100%; /* Full width on mobile */
-                    margin-left: 0; /* Remove left margin */
-                }
-            }
+            .notification-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 500px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            right: 0;
+        }
+        .dropdown-content .unread, .dropdown-content .read {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .dropdown-content .unread {
+            background-color: #ffefef;
+        }
+        .dropdown-content .message {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+        }
+        .dropdown-content .message img {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+        .dropdown-content .message a {
+            text-decoration: none;
+            color: #333;
+            flex-grow: 1;
+        }
+        .dropdown-content .message .action-icon {
+            margin-left: auto;
+        }
+        .action-icon a i{
+            color: blue;
+        }
+        .notification-dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .header {
+            padding: 10px;
+            background-color: #f1f1f1;
+            font-weight: bold;
+        }
+        .mark-read {
+            color: #007bff;
+            cursor: pointer;
+            font-size: 12px;
+            text-align: right;
+            margin-top: -10px;
+        }
+        .show-more {
+            text-align: center;
+            color: #007bff;
+            cursor: pointer;
+            font-size: 12px;
+        }
             </style>
    </head>
 
@@ -164,16 +198,15 @@ $total_notifications = $count_row['total'];
                                 <?php
                                 include "connection.php";
                                 if($_SESSION['user_type'] === 'Candidate'){ ?>
-                                <!-- Header-btn -->
-                                <div class="btn-group dropleft">
-                                    <button type="button" class="drop-icon ml-5 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fa-solid fa-bell fa-xl bell-icon" ></i>
-                                        <p class="notification-count"><?php echo $total_notifications; ?></p>
-                                    </button>
-                                    <div class="dropdown-menu" id="dropdown-menu1">
-                                        <h3 class="dropdown-item">Notifications</h3>
-                                        <div class="dropdown-item job-notification">
-                                        <?php
+
+<div class="ml-5">
+<div class="notification-dropdown ml-5">
+    <button class="drop-icon"><i class="fa-solid fa-bell fa-xl bell-icon" ></i></button>
+    <p class="notification-count"><?php echo $total_notifications; ?></p>
+    <div class="dropdown-content">
+        <!-- Unread Messages -->
+        <div class="header">Notifications</div>
+        <?php
 
 // Check if the query was successful
 if ($result === false) {
@@ -184,33 +217,26 @@ if ($result === false) {
         while ($row = $result->fetch_assoc()) {
             // Display job notifications
             ?>
-            <div class="single-job-items mb-30">
-                <div class="job-items">
-                    <div class="job-tittle">
-                            <a href="job_details.php?job_id=<?php echo $row['job_id']; ?>&recruiter_id= <?php echo $row['recruiter_id']; ?>"><h6><?php echo htmlspecialchars($row['job_title']); ?></h6></a> 
-                        
-                        <ul>
-                            <li><?php echo htmlspecialchars($row['company_name']); ?></li>
-                            <li><i class="fas fa-map-marker-alt"></i><?php echo htmlspecialchars($row['company_location']); ?></li>
-                            <li><?php echo htmlspecialchars($row['salary']); ?></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="items-link f-right">
-                <span><?php echo date("F j, Y", strtotime($row['date'])); ?></span>
-                </div>
+        <div class="unread">
+            <div class="message">
+                <i class="fa-solid fa-envelope mr-3 fa-xl"></i>
+                <a href="#">
+                    <?php echo $row['recruiter_name']; ?> give oppertunity as new <a class="job-link" href="job_details.php?job_id=<?php echo $row['job_id']; ?>&recruiter_id= <?php echo $row['recruiter_id']; ?>"><?php echo $row['job_title']; ?></a> jobs.
+                </a>
+                <span class="action-icon ml-3"><a href="job_details.php?job_id=<?php echo $row['job_id']; ?>&recruiter_id= <?php echo $row['recruiter_id']; ?>"> <i class="fa-solid fa-up-right-from-square fa-lg"></i></a></span>
             </div>
             <?php
         }
     }
 }
                         ?>
-                                        </div>
-                                        <button class=" more-btn" type="button"><a href="notification.php">More</a></button>
-                                        
-                                    </div>
-                                    
-                                </div><?php }?>
+            <div class="show-more">Show all unread messages</div>
+        </div>
+        
+    </div>
+</div>
+</div>
+<?php }?>
                                  
                                 <div class="header-btn d-none f-right d-lg-block">
                                 
