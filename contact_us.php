@@ -160,126 +160,46 @@ if(isset($_POST['submit'])){
     <!-- ================ contact section start ================= -->
     <section class="contact-section">
             <div class="container">
-    
-                <!-- <div class="row">
-                    <div class="col-12">
-                        <h2 class="contact-title">Get in Touch</h2>
-                    </div>
-                    
-                    <div class="col-lg-8">
-                        <form class="form-contact contact_form" action="contact_us.php" method="POST" >
-                            <?php
-                        // if (isset($_SESSION['post_message'])) {
-                        //     echo "<p style='color:Green; border: 1px solid #ededed; border-radius: 7px; padding: 5px'>" . $_SESSION['post_message'] . "</p>";
-                        //     unset($_SESSION['post_message']);
-                        //  }
-                    ?>
-                            <div class="row">
-                            <div class="col-12">
-                                    <div class="form-group">
-                                        <h5>To</h5>
-                                        <input class="form-control" name="receiver_email" id="receiver_email" type="email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Receiver email '" placeholder="Enter Receiver email ">
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        
-                                        <textarea class="form-control w-100" name="message" id="message" cols="30" rows="9" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Message'" placeholder=" Enter Message"></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <input class="form-control valid" name="user_name" id="user_name" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter your name'" placeholder="Enter your name">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <input class="form-control valid" name="sender_email" id="sender_email" type="email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter email address'" placeholder="Email">
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <input class="form-control" name="subject" id="subject" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Subject'" placeholder="Enter Subject">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group mt-3">
-                                <button type="submit" name="submit" id="submit" class="button button-contactForm boxed-btn">Send</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-lg-3 offset-lg-1">
-                        <div class="media contact-info">
-                            <span class="contact-info__icon"><i class="ti-home"></i></span>
-                            <div class="media-body">
-                                <h3>Pakistan.</h3>
-                                <p>City, Lahore</p>
-                            </div>
-                        </div>
-                        <div class="media contact-info">
-                            <span class="contact-info__icon"><i class="ti-tablet"></i></span>
-                            <div class="media-body">
-                                <h3>+92 311 111 111</h3>
-                                <p>Mon to Fri 9am to 6pm</p>
-                            </div>
-                        </div>
-                        <div class="media contact-info">
-                            <span class="contact-info__icon"><i class="ti-email"></i></span>
-                            <div class="media-body">
-                                <h3>eRecruitment system@gmail.com</h3>
-                                <p>Send us your query anytime!</p>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-
-
                 <table class="table">
-  <thead>
-    <tr>
-    <th scope="col">Sr</th>
-      <th scope="col">Name</th>
-      <th scope="col">Email</th>
-      <th scope="col">Subject</th>
-      <th scope="col">Message</th>
-      <th scope="col">Action</th>
-    </tr>
-  </thead>
-  <tbody>
-  <?php
-include "connection.php";
+                    <thead>
+                        <tr>
+                            <th scope="col">Sr</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Subject</th>
+                            <th scope="col">Message</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            include "connection.php";
 
-$sql = "SELECT * FROM contact_us";
-$result = $conn->query($sql);
+                            $sql = "SELECT * FROM contact_us";
+                            $result = $conn->query($sql);
 
-if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
-?>
-    <tr>
-      <th scope="row"><?php echo $row['contact_id']; ?></th>
-      <td><?php echo $row['user_name']; ?></td>
-      <td><?php echo $row['sender_email']; ?></td>
-      <td><?php echo $row['subject']; ?></td>
-      <td class="message-cell"><?php echo $row['message']; ?></td>
-      <td>
-      <form action="users_contact.php" method="POST" style="display:inline;">
-            <input type="hidden" name="contact_id" value="<?php echo $row['contact_id']; ?>">
-            
-</div>
+                            if ($result->num_rows > 0) {
+                                while($row = $result->fetch_assoc()) {
+                        ?>
+                        <tr>
+                            <th scope="row"><?php echo $row['contact_id']; ?></th>
+                            <td><?php echo $row['user_name']; ?></td>
+                            <td><?php echo $row['sender_email']; ?></td>
+                            <td><?php echo $row['subject']; ?></td>
+                            <td class="message-cell"><?php echo $row['message']; ?></td>
+                            <td>
+                                <form action="users_contact.php" method="POST" style="display:inline;">
+                                    <input type="hidden" name="contact_id" value="<?php echo $row['contact_id']; ?>">
+                                </form>
+                            </td>
+                        </tr>
+                        <?php
+                                }
+                            }
+                        ?>
 
-
-
-        </form>
-
-    </td>
-    </tr>
-<?php
-    }
-}
-?>
-
-  </tbody>
-</table>
+                    </tbody>
+                </table>
 
             </div>
         </section>
@@ -290,6 +210,27 @@ if ($result->num_rows > 0) {
 
     <?php include "footer.php"; ?>
 
+    <script src="vendor/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+        <script>
+            tinymce.init({
+                selector: '#emailBody',
+                license_key: 'gpl'
+            });
+
+            $(document).ready( function() {
+                $("#send_email").on('click', function(e) {
+                    const editor = tinymce.get('emailBody');
+                    const content = editor.getContent({ format: 'text' }).trim();
+                    if($("#subject").val() == '' || content === '') {
+                        e.preventDefault();
+                        $("#validationAlert").removeClass('d-none');
+                    } else {
+                        $("#validationAlert").addClass('d-none');
+                    }
+                });
+            });           
+            
+        </script>
 <!-- JS here -->
 <script src="https://kit.fontawesome.com/3acead0521.js" crossorigin="anonymous"></script>
 		<!-- All JS Custom Plugins Link Here here -->

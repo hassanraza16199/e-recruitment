@@ -20,8 +20,25 @@ if(isset($_POST['submit'])){
     }
     $status = $_POST['status'];
     $sql = "UPDATE applications SET status = '$status' WHERE application_id = '$application_id'";
+
     if($conn->query($sql) === True){
-        header("location: application_status.php?application_id=$application_id");
+         // Prepare notification message
+         $recruiter_id = $_SESSION['id'];
+         $recruiter_name = $_SESSION['name'];
+         $notification_title = "Status";
+         $message = " Your job application against $job_title has been approved by the $recruiter_name.";
+         
+         // Insert notification data
+         $notification_sql = "INSERT INTO notification (job_or_status_id, recruiter_id, candidate_id, notification_title, message, created_at) 
+                              VALUES ('$application_id', '$recruiter_id', '$candidate_id', '$notification_title', '$message', '".date('Y-m-d h:i:s')."')";
+         
+         if ($conn->query($notification_sql) === TRUE) {
+             header("location: application_status.php?application_id=$application_id");
+             exit;
+         } else {
+             echo "Error: " . $notification_sql . "<br>" . $conn->error;
+         }
+        
     }
 }
 
@@ -234,6 +251,7 @@ if(isset($_POST['submit'])){
                             $email_address = $row['email_address'];
                             $candidate_id = $row['candidate_id'];
                             $status = $row['status'];
+                            $job_title = $row['job_title'];
                         ?>
                         <div class="row">
                             <div class="ml-3 mr-5">

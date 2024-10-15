@@ -1,15 +1,43 @@
 <?php
 include "connection.php";
 
-// Fetch notifications
-$sql = "SELECT * FROM job_post WHERE created_at >= NOW() - INTERVAL 1 DAY LIMIT 8"; // Limit to 5 results
+$candidate_id = $_SESSION['id'];
+$limit = isset($_GET['limit']) ? $_GET['limit'] : 5;
+$offset = isset($_GET['offset']) ? $_GET['offset'] : 0;
+
+// Fetch notifications with limit and offset
+$sql = "SELECT * FROM notification 
+        WHERE created_at >= NOW() - INTERVAL 20 DAY 
+        AND (notification_title = 'Job' OR (notification_title = 'Status' AND candidate_id = $candidate_id)) 
+        ORDER BY created_at DESC 
+        LIMIT $limit OFFSET $offset";
 $result = $conn->query($sql);
 
 // Count total notifications
-$count_sql = "SELECT COUNT(*) as total FROM job_post WHERE created_at >= NOW() - INTERVAL 1 DAY";
+$count_sql = "SELECT COUNT(*) as total 
+              FROM notification 
+              WHERE created_at >= NOW() - INTERVAL 20 DAY 
+              AND (notification_title = 'Job' OR (notification_title = 'Status' AND candidate_id = $candidate_id))";
 $count_result = $conn->query($count_sql);
 $count_row = $count_result->fetch_assoc();
 $total_notifications = $count_row['total'];
+
+$unread_sql = "SELECT * FROM notification 
+        WHERE created_at >= NOW() - INTERVAL 20 DAY 
+        AND (notification_title = 'Job' OR (notification_title = 'Status' AND candidate_id = $candidate_id)) 
+        AND read_as = 0 
+        ORDER BY created_at DESC 
+        LIMIT $limit OFFSET $offset";
+$unread_result = $conn->query($unread_sql);
+
+// Fetch read notifications
+$read_sql = "SELECT * FROM notification 
+        WHERE created_at >= NOW() - INTERVAL 20 DAY 
+        AND (notification_title = 'Job' OR (notification_title = 'Status' AND candidate_id = $candidate_id)) 
+        AND read_as = 1 
+        ORDER BY created_at DESC 
+        LIMIT $limit OFFSET $offset";
+$read_result = $conn->query($read_sql);
 
 ?>
 
@@ -36,99 +64,8 @@ $total_notifications = $count_row['total'];
             <link rel="stylesheet" href="assets/css/slick.css">
             <link rel="stylesheet" href="assets/css/nice-select.css">
             <link rel="stylesheet" href="assets/css/style.css">
-            <style>
-            .bell-icon {
-                position: relative; /* Make the bell icon a positioning context */
-                color: #fb246a;
-            }
-
-            .notification-count {
-                position: absolute;
-                top: 25px; /* Adjust as needed to position it properly on top */
-                right: -9px; /* Move the notification bubble slightly to the right */
-                color: #28395a;
-                border-radius: 50%;
-                padding: 2px 6px;
-                font-size: 13px;
-                font-weight: bold;
-                line-height: 1;
-                min-width: 15px;
-                text-align: center;
-                background-color: #ffffff; /* Background for visibility */
-            }
-
-            .drop-icon {
-                background-color: #fff;
-                border: none;
-            }
+            <link rel="stylesheet" href="assets/css2/nav.css">
             
-            .job-link{
-                width: 20px;
-            }
-
-            .notification-dropdown {
-            position: relative;
-            display: inline-block;
-        }
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 500px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-            right: 0;
-        }
-        .dropdown-content .unread, .dropdown-content .read {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-        }
-        .dropdown-content .unread {
-            background-color: #ffefef;
-        }
-        .dropdown-content .message {
-            display: flex;
-            align-items: center;
-            padding: 8px 0;
-        }
-        .dropdown-content .message img {
-            width: 24px;
-            height: 24px;
-            margin-right: 10px;
-        }
-        .dropdown-content .message a {
-            text-decoration: none;
-            color: #333;
-            flex-grow: 1;
-        }
-        .dropdown-content .message .action-icon {
-            margin-left: auto;
-        }
-        .action-icon a i{
-            color: blue;
-        }
-        .notification-dropdown:hover .dropdown-content {
-            display: block;
-        }
-        .header {
-            padding: 10px;
-            background-color: #f1f1f1;
-            font-weight: bold;
-        }
-        .mark-read {
-            color: #007bff;
-            cursor: pointer;
-            font-size: 12px;
-            text-align: right;
-            margin-top: -10px;
-        }
-        .show-more {
-            text-align: center;
-            color: #007bff;
-            cursor: pointer;
-            font-size: 12px;
-        }
-            </style>
    </head>
 
    <body>
@@ -196,47 +133,79 @@ $total_notifications = $count_row['total'];
                                     </nav>
                                 </div>  
                                 <?php
-                                include "connection.php";
-                                if($_SESSION['user_type'] === 'Candidate'){ ?>
+                                    include "connection.php";
+                                    if($_SESSION['user_type'] === 'Candidate'){ 
+                                ?>
 
-<div class="ml-5">
-<div class="notification-dropdown ml-5">
-    <button class="drop-icon"><i class="fa-solid fa-bell fa-xl bell-icon" ></i></button>
-    <p class="notification-count"><?php echo $total_notifications; ?></p>
-    <div class="dropdown-content">
-        <!-- Unread Messages -->
-        <div class="header">Notifications</div>
-        <?php
-
-// Check if the query was successful
-if ($result === false) {
-    // Output the error message
-    echo "Error: " . $conn->error;
-} else {
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            // Display job notifications
-            ?>
-        <div class="unread">
-            <div class="message">
-                <i class="fa-solid fa-envelope mr-3 fa-xl"></i>
-                <a href="#">
-                    <?php echo $row['recruiter_name']; ?> give oppertunity as new <a class="job-link" href="job_details.php?job_id=<?php echo $row['job_id']; ?>&recruiter_id= <?php echo $row['recruiter_id']; ?>"><?php echo $row['job_title']; ?></a> jobs.
-                </a>
-                <span class="action-icon ml-3"><a href="job_details.php?job_id=<?php echo $row['job_id']; ?>&recruiter_id= <?php echo $row['recruiter_id']; ?>"> <i class="fa-solid fa-up-right-from-square fa-lg"></i></a></span>
+<div class="notifications">
+    <div class="notification-dropdown ml-5">
+        <button class="drop-icon"><i class="fa-solid fa-bell fa-xl bell-icon"></i></button>
+        <p class="notification-count"><?php echo $total_notifications; ?></p>
+        <div class="dropdown-content">
+            <!-- Unread Messages -->
+            <div class="main-div">
+                <div class="header">Notifications</div>
+                <button class="header-del">Mark All as Read</button>
             </div>
-            <?php
-        }
-    }
-}
-                        ?>
-            <div class="show-more">Show all unread messages</div>
+            <div class="unread">
+                <h4>Unread Messages</h4>
+                <?php
+                if ($unread_result === false) {
+                    // Output the error message
+                    echo "Error: " . $conn->error;
+                } else {
+                    if ($unread_result->num_rows > 0) {
+                        while ($row = $unread_result->fetch_assoc()) {
+                ?>
+                <div class="message unread_message">
+                    <i class="fa-solid fa-envelope mr-3 fa-xl"></i>
+                    <a><?php echo $row['message']; ?></a>
+                    <?php
+                    if($row['notification_title'] === 'Job'){ ?>
+                        <span class="action-icon ml-3"><a href="job_details.php?job_id=<?php echo $row['job_or_status_id']; ?>&recruiter_id= <?php echo $row['recruiter_id']; ?>"> 
+                        <i class="fa-solid fa-up-right-from-square fa-lg"></i></a></span>
+                    <?php } ?>
+                </div>
+                <?php
+                        }
+                    }
+                }
+                ?>
+                <div id="show-more-unread" class="show-more mt-3">Show all unread messages</div>
+            </div>
+
+            <!-- Read Messages -->
+            <div class="read">
+                <h4>Read Messages</h4>
+                <?php
+                if ($read_result === false) {
+                    // Output the error message
+                    echo "Error: " . $conn->error;
+                } else {
+                    if ($read_result->num_rows > 0) {
+                        while ($row = $read_result->fetch_assoc()) {
+                ?>
+                <div class="message read_message">
+                    <i class="fa-solid fa-envelope mr-3 fa-xl"></i>
+                    <a><?php echo $row['message']; ?></a>
+                    <?php
+                    if($row['notification_title'] === 'Job'){ ?>
+                        <span class="action-icon ml-3"><a href="job_details.php?job_id=<?php echo $row['job_or_status_id']; ?>&recruiter_id= <?php echo $row['recruiter_id']; ?>"> 
+                        <i class="fa-solid fa-up-right-from-square fa-lg"></i></a></span>
+                    <?php } ?>
+                </div>
+                <?php
+                        }
+                    }
+                }
+                ?>
+                <div id="show-more-read" class="show-more mt-3">Show all read messages</div>
+            </div>
         </div>
-        
     </div>
 </div>
-</div>
-<?php }?>
+
+                        <?php }?>
                                  
                                 <div class="header-btn d-none f-right d-lg-block">
                                 
@@ -283,25 +252,103 @@ if ($result === false) {
        </div>
         <!-- Header End -->
     </header>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    
-    <script>
-function fetchNotifications() {
-    $.ajax({
-        url: "notification.php", // PHP file to fetch notifications from
-        method: "GET",
-        success: function(data) {
-            $(".job-notification").html(data); // Update the job notification area
+<script>
+    document.querySelector('.header-del').addEventListener('click', function() {
+    // Send AJAX request to mark all notifications as read
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'mark_all_read.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            // Move unread messages to read messages section
+            var unreadMessages = document.querySelector('.unread').getElementsByClassName('message');
+            var readSection = document.querySelector('.read');
+            
+            // Loop through all unread messages and move them to the read section
+            while (unreadMessages.length > 0) {
+                readSection.appendChild(unreadMessages[0]);
+            }
         }
-    });
-}
-
-// Call the function to fetch notifications when the page loads
-$(document).ready(function() {
-    fetchNotifications();
+    };
+    xhr.send();
 });
-</script>
+xhr.onload = function() {
+    if (xhr.status === 200) {
+        // Update notification count to zero
+        document.querySelector('.notification-count').textContent = 0;
 
+        // Move unread messages to read messages section
+        var unreadMessages = document.querySelector('.unread').getElementsByClassName('message');
+        var readSection = document.querySelector('.read');
+        
+        while (unreadMessages.length > 0) {
+            readSection.appendChild(unreadMessages[0]);
+        }
+    }
+};
+document.querySelector('#show-more-unread').addEventListener('click', function() {
+    // Send AJAX request to fetch all unread notifications
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'fetch_unread_notifications.php?limit=5&offset=0', true); // Change to GET
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            var notifications = JSON.parse(xhr.responseText);
+            var unreadDiv = document.querySelector('.unread');
+            unreadDiv.innerHTML = ''; // Clear existing unread notifications
+
+            // Loop through the notifications and display them
+            notifications.forEach(function(notification) {
+                var messageDiv = document.createElement('div');
+                messageDiv.className = 'unread_message';
+                messageDiv.innerHTML = '<i class="fa-solid fa-envelope mr-3 fa-xl"></i>' + 
+                                       '<a>' + notification.message + '</a>';
+                if (notification.notification_title === 'Job') {
+                    messageDiv.innerHTML += '<span class="action-icon ml-3">' + 
+                                            '<a href="job_details.php?job_id=' + notification.job_or_status_id + 
+                                            '&recruiter_id=' + notification.recruiter_id + '">' + 
+                                            '<i class="fa-solid fa-up-right-from-square fa-lg"></i></a></span>';
+                }
+                unreadDiv.appendChild(messageDiv);
+            });
+        }
+    };
+    xhr.send();
+});
+
+document.querySelector('#show-more-read').addEventListener('click', function() {
+    // Send AJAX request to fetch all read notifications
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'fetch_read_notifications.php?limit=5&offset=0', true); // Change to GET
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            var notifications = JSON.parse(xhr.responseText);
+            var readDiv = document.querySelector('.read');
+            readDiv.innerHTML = ''; // Clear existing read notifications
+
+            // Loop through the notifications and display them
+            notifications.forEach(function(notification) {
+                var messageDiv = document.createElement('div');
+                messageDiv.className = 'read_message';
+                messageDiv.innerHTML = '<i class="fa-solid fa-envelope mr-3 fa-xl"></i>' + 
+                                       '<a>' + notification.message + '</a>';
+                if (notification.notification_title === 'Job') {
+                    messageDiv.innerHTML += '<span class="action-icon ml-3">' + 
+                                            '<a href="job_details.php?job_id=' + notification.job_or_status_id + 
+                                            '&recruiter_id=' + notification.recruiter_id + '">' + 
+                                            '<i class="fa-solid fa-up-right-from-square fa-lg"></i></a></span>';
+                }
+                readDiv.appendChild(messageDiv);
+            });
+        }
+    };
+    xhr.send();
+});
+
+
+
+</script>
         
     </body>
 </html>

@@ -1,0 +1,102 @@
+.bell-icon {
+    position: relative; /* Make the bell icon a positioning context */
+    color: #fb246a;
+}
+
+.notification-count {
+    position: absolute;
+    top: 25px; /* Adjust as needed to position it properly on top */
+    right: -9px; /* Move the notification bubble slightly to the right */
+    color: #28395a;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 1;
+    min-width: 15px;
+    text-align: center;
+    background-color: #ffffff; /* Background for visibility */
+}
+
+.drop-icon {
+    background-color: #fff;
+    border: none;
+}
+
+.notification-dropdown {
+position: relative;
+display: inline-block;
+}
+.notifications{
+margin-left:120px;
+}
+.dropdown-content {
+display: none;
+position: absolute;
+background-color: #f9f9f9;
+min-width: 500px;
+box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+z-index: 1;
+right: 0;
+}
+.main-div{
+display:flex;
+}
+.dropdown-content .unread, .dropdown-content .read {
+padding: 10px;
+border-bottom: 1px solid #ddd;
+}
+.dropdown-content .unread {
+background-color: #ffefef;
+}
+.dropdown-content .message {
+display: flex;
+align-items: center;
+padding: 8px 0;
+}
+.dropdown-content .message img {
+width: 24px;
+height: 24px;
+margin-right: 10px;
+}
+.dropdown-content .message a{
+text-decoration: none;
+color: #333;
+flex-grow: 1;
+}
+.dropdown-content .message .action-icon {
+margin-left: auto;
+}
+.action-icon a i{
+color: blue;
+}
+.notification-dropdown:hover .dropdown-content {
+display: block;
+}
+.header {
+width: 70%;
+padding: 10px;
+background-color: #f1f1f1;
+font-weight: bold;
+}
+.header-del{
+background-color:#fb246a;
+color:#fff;
+border:none;
+height: 50px;
+width: 30%;
+cursor: pointer;
+}
+.mark-read {
+color: #007bff;
+cursor: pointer;
+font-size: 12px;
+text-align: right;
+margin-top: -10px;
+}
+.show-more {
+text-align: center;
+color: #007bff;
+cursor: pointer;
+font-size: 12px;
+}

@@ -9,7 +9,7 @@ if ($_SESSION['user_type'] != 'Recruiter') {
 include "connection.php";
 $pic_upload = 0;
 
-if(isset($_POST['submit'])) {
+if (isset($_POST['submit'])) {
     $recruiter_id = $_SESSION['id'];
     $recruiter_name = $_SESSION['name'];
     $date = date('Y-m-d');
@@ -27,46 +27,55 @@ if(isset($_POST['submit'])) {
     $due_date = $_POST['due_date'];
     $vacancy = $_POST['vacancy'];
     
-    $company_logo = time().$_FILES['company_logo']['name'];
+    $company_logo = time() . $_FILES['company_logo']['name'];
     
-    if(move_uploaded_file($_FILES['company_logo']['tmp_name'], $_SERVER['DOCUMENT_ROOT']. '/e-recruitment/upload/' . $company_logo)){
-        $target_file = $_SERVER['DOCUMENT_ROOT']. '/e-recruitment/upload/' . $company_logo;
+    if (move_uploaded_file($_FILES['company_logo']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/e-recruitment/upload/' . $company_logo)) {
+        $target_file = $_SERVER['DOCUMENT_ROOT'] . '/e-recruitment/upload/' . $company_logo;
         $imagefiletype = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
         $picname = basename($_FILES['company_logo']['name']);
-        $photo = time().$picname;
+        $photo = time() . $picname;
 
-        if($imagefiletype != "jpg" && $imagefiletype != "jpeg" && $imagefiletype != "png"){
+        if ($imagefiletype != "jpg" && $imagefiletype != "jpeg" && $imagefiletype != "png") {
             $_SESSION['post_message'] = "Check extension.";
-        }else if($_FILES['company_logo']['size'] > 20000000){
-            $_SESSION['post_message'] = "image exceed the size.";
-        }else{
+        } else if ($_FILES['company_logo']['size'] > 20000000) {
+            $_SESSION['post_message'] = "Image exceeds the size.";
+        } else {
             $pic_upload = 1;
         }
     }
     
-    if($pic_upload = 1){
-
-    $sql = "INSERT INTO job_post (recruiter_id, recruiter_name, company_logo, job_title, company_name, discription, company_email, categories, company_web, requirements, experience, company_location, salary, timing, due_date, vacancy, date) 
-    VALUES ('$recruiter_id', '$recruiter_name', '$photo', '$job_title', '$company_name', '$discription', '$company_email', '$categories', '$company_web', '$requirements', '$experience', '$company_location', '$salary', '$timing', '$due_date', '$vacancy', '$date')";
-    
-    $result = $conn->query($sql);
-    if ($result === TRUE) {
-        $count_sql = "SELECT COUNT(*) AS total FROM job_post";
-        $count_result = $conn->query($count_sql);
-        $count_row = $count_result->fetch_assoc();
-        $total_user_entries = $count_row['total'];
-
-        $_SESSION['post_success'] = true;
-        header("Location: feedback.php");
-    exit;
+    if ($pic_upload == 1) {
+        // Insert job post data
+        $sql = "INSERT INTO job_post (recruiter_id, recruiter_name, company_logo, job_title, company_name, discription, company_email, categories, company_web, requirements, experience, company_location, salary, timing, due_date, vacancy, date) 
+                VALUES ('$recruiter_id', '$recruiter_name', '$photo', '$job_title', '$company_name', '$discription', '$company_email', '$categories', '$company_web', '$requirements', '$experience', '$company_location', '$salary', '$timing', '$due_date', '$vacancy', '$date')";
+        
+        if ($conn->query($sql) === TRUE) {
+            $job_id = $conn->insert_id;  // Get the last inserted job ID
+            
+            // Prepare notification message
+            $notification_title = "Job";
+            $message = "$recruiter_name posted a new job $job_title.";
+            
+            // Insert notification data
+            $notification_sql = "INSERT INTO notification (job_or_status_id, recruiter_id, notification_title, message, created_at) 
+                                 VALUES ('$job_id', '$recruiter_id', '$notification_title', '$message', '".date('Y-m-d h:i:s')."')";
+            
+            if ($conn->query($notification_sql) === TRUE) {
+                $_SESSION['post_success'] = true;
+                header("Location: feedback.php");
+                exit;
+            } else {
+                echo "Error: " . $notification_sql . "<br>" . $conn->error;
+            }
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-    }else{
         $_SESSION['post_message'] = "Image cannot be uploaded.";
     }
     $conn->close();
 }
+
 
 ?>
 
@@ -82,17 +91,7 @@ if(isset($_POST['submit'])) {
         <link rel="manifest" href="site.webmanifest">
         <link rel="shortcut icon" type="image/x-icon" href="assets/img/fav.png">
 		<!-- CSS here -->
-            <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-            <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
-            <link rel="stylesheet" href="assets/css/price_rangs.css">
-            <link rel="stylesheet" href="assets/css/flaticon.css">
-            <link rel="stylesheet" href="assets/css/slicknav.css">
-            <link rel="stylesheet" href="assets/css/animate.min.css">
-            <link rel="stylesheet" href="assets/css/magnific-popup.css">
-            <link rel="stylesheet" href="assets/css/fontawesome-all.min.css">
-            <link rel="stylesheet" href="assets/css/themify-icons.css">
-            <link rel="stylesheet" href="assets/css/slick.css">
-            <link rel="stylesheet" href="assets/css/nice-select.css">
+            
             <link rel="stylesheet" href="assets/css/style.css">
             <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
             <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">

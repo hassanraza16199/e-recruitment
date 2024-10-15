@@ -220,7 +220,7 @@ if (mysqli_num_rows($result)>0) {
                 </button>
             </div>
             <div class="modal-body">
-                <form action="users_contact.php" method="POST">
+                <form action="functions.php" method="POST">
                     <input type="hidden" class="form-control" id="modal_contact_id" name="contact_id">
                     <div class="form-group">
                         <label for="modal_sender_email">To:</label>
@@ -245,6 +245,7 @@ if (mysqli_num_rows($result)>0) {
 
 <?php include "footer.php"; ?>
   <!-- JS here -->
+  <script src="vendor/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
   <script>
 function openModal(contact_id, sender_email, subject) {
     // Set the modal fields dynamically
@@ -255,6 +256,23 @@ function openModal(contact_id, sender_email, subject) {
     // Show the modal
     $('#emailModal').modal('show');
 }
+tinymce.init({
+                selector: '#emailBody',
+                license_key: 'gpl'
+            });
+
+            $(document).ready( function() {
+                $("#send_email").on('click', function(e) {
+                    const editor = tinymce.get('emailBody');
+                    const content = editor.getContent({ format: 'text' }).trim();
+                    if($("#subject").val() == '' || content === '') {
+                        e.preventDefault();
+                        $("#validationAlert").removeClass('d-none');
+                    } else {
+                        $("#validationAlert").addClass('d-none');
+                    }
+                });
+            });    
 </script>
 
         <script src="https://kit.fontawesome.com/3acead0521.js" crossorigin="anonymous"></script>
