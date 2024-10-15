@@ -129,7 +129,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
             </div>
         </div>
+
         <!-- Hero Area End -->
+         <!-- Alert Area Start -->
+         <?php if(isset($_SESSION['email_status'])) { ?>
+                <div class="alert alert-<?php echo $_SESSION['status']; ?> alert-dismissible fade show mt-2" role="alert">
+                    <?= $_SESSION['message'] ?>
+                    <?= $_SESSION['error'] ?? '' ?>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            <?php unset($_SESSION['email_status']); unset($_SESSION['status']); unset($_SESSION['message']); unset($_SESSION['error']); } ?>
+            <!-- Alert Area End -->
     <main class="ml-5 mr-5 mt-5 mb-5">
         
         <h2 class="mt-3 mb-3">Users Contact</h2>
@@ -153,7 +165,7 @@ $result = mysqli_query($conn, $sql);
 
 if (mysqli_num_rows($result)>0) {
     while($row = mysqli_fetch_assoc($result)) {
-        $sender_email = $row['sender_email'];
+        $sender_email = $row['to_email'];
         $subject = $row['subject'];
         $contact_id = $row['contact_id'];
 ?>
@@ -209,9 +221,8 @@ if (mysqli_num_rows($result)>0) {
 
     </main>
 
-<!-- Email Modal (single modal outside loop) -->
-<div id="emailModal" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog " role="document">
+    <div id="emailModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
         <div class="modal-content" style='margin-top:120px;'>
             <div class="modal-header">
                 <h5 class="modal-title">Send Email</h5>
@@ -220,11 +231,12 @@ if (mysqli_num_rows($result)>0) {
                 </button>
             </div>
             <div class="modal-body">
-                <form action="functions.php" method="POST">
+                <form action="function2.php" method="POST">
+                    <div id="validationAlert" class="alert alert-danger d-none">All fields are required!</div>
                     <input type="hidden" class="form-control" id="modal_contact_id" name="contact_id">
                     <div class="form-group">
                         <label for="modal_sender_email">To:</label>
-                        <input type="email" class="form-control" id="modal_sender_email" name="sender_email" readonly>
+                        <input type="email" class="form-control" id="modal_sender_email" name="to_email" readonly>
                     </div>
                     <div class="form-group">
                         <label for="modal_subject">Subject:</label>
@@ -243,6 +255,7 @@ if (mysqli_num_rows($result)>0) {
 
 
 
+
 <?php include "footer.php"; ?>
   <!-- JS here -->
   <script src="vendor/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
@@ -250,12 +263,13 @@ if (mysqli_num_rows($result)>0) {
 function openModal(contact_id, sender_email, subject) {
     // Set the modal fields dynamically
     document.getElementById('modal_contact_id').value = contact_id;
-    document.getElementById('modal_sender_email').value = sender_email;
+    document.getElementById('modal_sender_email').value = sender_email;  // Use sender_email instead of to_email
     document.getElementById('modal_subject').value = subject;
 
-    // Show the modal
+    // Show the modal using jQuery
     $('#emailModal').modal('show');
-}
+};
+
 tinymce.init({
                 selector: '#emailBody',
                 license_key: 'gpl'
@@ -274,6 +288,8 @@ tinymce.init({
                 });
             });    
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
         <script src="https://kit.fontawesome.com/3acead0521.js" crossorigin="anonymous"></script>
 		<!-- All JS Custom Plugins Link Here here -->

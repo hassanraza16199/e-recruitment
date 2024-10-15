@@ -3,8 +3,6 @@ session_start();
 include "connection.php";
 ?>
 
-
-
 <!doctype html>
 <html class="no-js" lang="zxx">
     <head>

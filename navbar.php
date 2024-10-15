@@ -80,7 +80,7 @@ $read_result = $conn->query($read_sql);
                         <div class="col-lg-3 col-md-2">
                             <!-- Logo -->
                             <div class="logo">
-                                <a href="index.php"><img src="assets/img/logo/pic.png" class="logohead" alt=""></a>
+                                <a href="index.php"><img src="assets/img/logo/logo.png" class="logohead" alt=""></a>
                             </div>  
                         </div>
                         <div class="col-lg-9 col-md-9">
