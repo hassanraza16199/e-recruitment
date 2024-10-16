@@ -8,9 +8,9 @@ if(isset($_POST['submit'])){
     $designation = $_POST['designation'];
     $avalibility = $_POST['avalibility'];
 
-    $sql = "INSERT INTO `hiring_managers`(`name`, `email`, `designation`, `avalibility`) VALUES ('$name','$email','$designation','$avalibility')";
+    $sql = "INSERT INTO `interviewer`(`name`, `email`, `designation`, `avalibility`) VALUES ('$name','$email','$designation','$avalibility')";
     if($conn->query($sql) === True){
-        header("location: hiring_manager.php");
+        header("location: interviewer.php");
     }else{
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
@@ -190,7 +190,7 @@ if(isset($_POST['submit'])){
                         <div class="row">
                             <div class="col-xl-12">
                                 <div class="hero-cap text-center">
-                                    <h2>Hiring Manager</h2>
+                                    <h2>Interviewer</h2>
                                 </div>
                             </div>
                         </div>
@@ -203,7 +203,7 @@ if(isset($_POST['submit'])){
             <div class="job-listing-area pt-120 pb-120">
                 <div class="main-div">
                     <div class="detail-div">
-                        <h2>Hiring Managers</h2>
+                        <h2>Interviewer</h2>
                         <table class="table">
                             <thead class="thead-light">
                                 <tr>
@@ -218,7 +218,7 @@ if(isset($_POST['submit'])){
                                 <?php
                                     include "connection.php";
                                 
-                                    $sql = "SELECT * FROM hiring_managers  ";
+                                    $sql = "SELECT * FROM interviewer  ";
                                     $result = mysqli_query($conn, $sql);
 
                                     if (mysqli_num_rows($result)>0) {
@@ -238,7 +238,7 @@ if(isset($_POST['submit'])){
                         <?php 
                                 }
                             }else{
-                                echo " No hiring Manager Found";
+                                echo " No interviewer Found";
                             }
                         ?>
                         </tbody>
@@ -249,7 +249,7 @@ if(isset($_POST['submit'])){
                         <div style="display:flex; margin-bottom:20px;">
                             <h2>Calender</h2>
                             <span  class=" email-btn">
-                                <button class="btn head-btn1" data-toggle="modal" data-target="#emailModal">Hiring Manager</button>
+                                <button class="btn head-btn1" data-toggle="modal" data-target="#emailModal">Interviewer</button>
                             </span>
                         </div>
                         <p>This place fix the calender</p>
@@ -264,13 +264,13 @@ if(isset($_POST['submit'])){
             <div class="modal-dialog " role="document">
                 <div class="modal-content" style='margin-top:120px;'>
                     <div class="modal-header">
-                        <h5 class="modal-title">Hiring Manager</h5>
+                        <h5 class="modal-title">Interviewer</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="hiring_manager.php" method="POST">
+                        <form action="interviewer.php" method="POST">
                             <div class="form-group">
                                 <label for="name">Name:</label>
                                 <input type="text" class="form-control" id="name" name="name">

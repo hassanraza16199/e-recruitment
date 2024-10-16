@@ -120,6 +120,7 @@ $read_result = $conn->query($read_sql);
                                                     <li><a href="applications.php">Applications</a></li>
                                                     <li><a href="about_us.php">Interview scheduler</a></li>
                                                     <li><a href="hiring_manager.php">Hiring Manager</a></li>
+                                                    <li><a href="interviewer.php">Interviewer</a></li>
                                                 </ul>
                                             </li>
                                             
