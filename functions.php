@@ -21,9 +21,9 @@ function sendMail($to, $subject, $message) {
         $mail->Port       = 465;
     
         //Recipients
-        $mail->setFrom('hussnainumer23@gmail.com', 'E-Recruitment System');
+        $mail->setFrom('hassan@ashlarglobal.com', 'E-Recruitment System');
         $mail->addAddress($to);
-        $mail->addReplyTo('hussnainumer23@gmail.com', 'E-Recruitment System');
+        $mail->addReplyTo('hassan@ashlarglobal.com', 'E-Recruitment System');
     
         //Content
         $mail->isHTML(true);
