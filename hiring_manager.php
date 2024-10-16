@@ -40,131 +40,12 @@ if(isset($_POST['submit'])){
         <link rel="stylesheet" href="assets/css/slick.css">
         <link rel="stylesheet" href="assets/css/nice-select.css">
         <link rel="stylesheet" href="assets/css/style.css">
+        <link rel="stylesheet" href="assets/css2/hiring.css">
         <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <style>
-           /* Main Container */
-.form-container {
-    max-width: 1000px;
-    margin: 30px auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Main Flexbox */
-.main-div {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin: 0 auto;
-    max-width: 1300px;
-    padding: 20px;
-}
-
-/* Detail Div */
-.detail-div, .status-div{
-    background: #f9f9f9;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 48%; /* Adjust to fit nicely in the flex layout */
-}
-
-.detail-div h2, .status-div h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #333;
-}
-
-.detail-div p, .status-div p {
-    font-size: 16px;
-    margin-bottom: 10px;
-    color: #555;
-}
-
-/* Modal Styling */
-.modal-content {
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    padding: 20px;
-}
-
-.modal-header {
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 10px;
-}
-
-.modal-title {
-    font-size: 20px;
-    color: #333;
-}
-
-.modal-body {
-    padding: 20px;
-}
-
-.modal-body .form-group label {
-    color: #555;
-    font-size: 14px;
-    margin-bottom: 5px;
-}
-
-/* Centering the button inside status-div */
-.email-btn {
-    margin-left: auto; /* To push it to the right */
-}
-
-/* Responsive Styling */
-@media (max-width: 768px) {
-    .main-div {
-        flex-direction: column;
-    }
-
-    .detail-div, .status-div {
-        width: 100%;
-    }
-
-    .status-div button {
-        width: 100%;
-    }
-
-    /* Adjust the modal content padding for smaller screens */
-    .modal-body {
-        padding: 15px;
-    }
-
-    .form-container {
-        margin: 20px auto;
-        padding: 15px;
-    }
-
-    .email-btn {
-        margin: 0 auto;
-        display: block;
-    }
-}
-
-@media (max-width: 480px) {
-    .form-container {
-        padding: 10px;
-    }
-
-    .form-group {
-        margin-bottom: 10px;
-    }
-
-    .modal-body {
-        padding: 10px;
-    }
-}
-
-        </style>
 
     <body>
         <!-- Preloader Start -->
@@ -252,7 +133,76 @@ if(isset($_POST['submit'])){
                                 <button class="btn head-btn1" data-toggle="modal" data-target="#emailModal">Hiring Manager</button>
                             </span>
                         </div>
-                        <p>This place fix the calender</p>
+                        <div class="calendar">
+
+<div class="col leftCol">
+  <div class="content">
+    <h4 class="date">Friday <br><span>September 12th</span></h4>
+    <div class="notes">
+      <p>
+        
+        <a href="#" title="Add note" class="addNote animate">+</a>
+      </p>
+      <ul class="noteList">
+        <li>Headbutt a lion<a href="#" title="Remove note" class="removeNote animate">x</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="col rightCol">
+  <div class="content">
+    <h2 class="year">2013</h2>
+    <ul class="months">
+      <li><a href="#" title="Jan" data-value="1">Jan</a></li>
+      <li><a href="#" title="Feb" data-value="2">Feb</a></li>
+      <li><a href="#" title="Mar" data-value="3">Mar</a></li>
+      <li><a href="#" title="Apr" data-value="4">Apr</a></li>
+      <li><a href="#" title="May" data-value="5">May</a></li>
+      <li><a href="#" title="Jun" data-value="6">Jun</a></li>
+      <li><a href="#" title="Jul" data-value="7">Jul</a></li>
+      <li><a href="#" title="Aug" data-value="8">Aug</a></li>
+      <li><a href="#" title="Sep" data-value="9" class="selected">Sep</a></li>
+      <li><a href="#" title="Oct" data-value="10">Oct</a></li>
+      <li><a href="#" title="Nov" data-value="11">Nov</a></li>
+      <li><a href="#" title="Dec" data-value="12">Dec</a></li>
+    </ul>
+    <div class="clearfix"></div>
+    <ul class="weekday">
+      <li><a href="#" title="Mon" data-value="1">Mon</a></li>
+      <li><a href="#" title="Tue" data-value="2">Tue</a></li>
+      <li><a href="#" title="Wed" data-value="3">Wed</a></li>
+      <li><a href="#" title="Thu" data-value="4">Thu</a></li>
+      <li><a href="#" title="Fri" data-value="5">Fri</a></li>
+      <li><a href="#" title="Say" data-value="6">Sat</a></li>
+      <li><a href="#" title="Sun" data-value="7">Sun</a></li>
+    </ul>
+    <div class="clearfix"></div>
+    <ul class="days">
+      <script>
+        for( var _i = 1; _i <= 31; _i += 1 ){
+          var _addClass = '';
+          if( _i === 12 ){ _addClass = ' class="selected"'; }
+          
+          switch( _i ){
+            case 8:
+            case 10:
+            case 27:
+              _addClass = ' class="event"';
+            break;
+          }
+
+          document.write( '<li><a href="#" title="'+_i+'" data-value="'+_i+'"'+_addClass+'>'+_i+'</a></li>' );
+        }
+      </script>
+    </ul>
+    <div class="clearfix"></div>
+  </div>
+</div>
+
+<div class="clearfix"></div>
+
+</div>
                     </div>
                 </div>
             </div>
