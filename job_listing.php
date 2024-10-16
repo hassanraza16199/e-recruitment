@@ -97,7 +97,6 @@ $sql .= " ORDER BY created_at DESC LIMIT $offset, $jobs_per_page";
          <title>E-Recruitment system</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="manifest" href="site.webmanifest">
         <link rel="shortcut icon" type="image/x-icon" href="assets/img/fav.png">
 		<!-- CSS here -->
             <link rel="stylesheet" href="assets/css/bootstrap.min.css">

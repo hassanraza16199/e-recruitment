@@ -49,7 +49,6 @@ $read_result = $conn->query($read_sql);
          <title>E-Recruitment system</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="manifest" href="site.webmanifest">
         <link rel="shortcut icon" type="image/x-icon" href="assets/img/fav.png">
 		<!-- CSS here -->
             <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -80,7 +79,7 @@ $read_result = $conn->query($read_sql);
                         <div class="col-lg-3 col-md-2">
                             <!-- Logo -->
                             <div class="logo">
-                                <a href="index.php"><img src="assets/img/logo/logo.png" class="logohead" alt=""></a>
+                                <a href="dashboard.php"><img src="assets/img/logo/logo.png" class="logohead" alt=""></a>
                             </div>  
                         </div>
                         <div class="col-lg-9 col-md-9">
@@ -120,7 +119,7 @@ $read_result = $conn->query($read_sql);
                                                 <ul class="submenu">
                                                     <li><a href="applications.php">Applications</a></li>
                                                     <li><a href="about_us.php">Interview scheduler</a></li>
-                                                    <li><a href="#">/</a></li>
+                                                    <li><a href="hiring_manager.php">Hiring Manager</a></li>
                                                 </ul>
                                             </li>
                                             
@@ -255,97 +254,98 @@ $read_result = $conn->query($read_sql);
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-    document.querySelector('.header-del').addEventListener('click', function() {
-    // Send AJAX request to mark all notifications as read
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'mark_all_read.php', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            // Move unread messages to read messages section
-            var unreadMessages = document.querySelector('.unread').getElementsByClassName('message');
-            var readSection = document.querySelector('.read');
-            
-            // Loop through all unread messages and move them to the read section
-            while (unreadMessages.length > 0) {
-                readSection.appendChild(unreadMessages[0]);
-            }
-        }
-    };
-    xhr.send();
-});
-xhr.onload = function() {
-    if (xhr.status === 200) {
-        // Update notification count to zero
-        document.querySelector('.notification-count').textContent = 0;
+ document.addEventListener('DOMContentLoaded', function() {
+    const headerDelButton = document.querySelector('.header-del');
+    const showMoreUnreadButton = document.querySelector('#show-more-unread');
+    const showMoreReadButton = document.querySelector('#show-more-read');
 
-        // Move unread messages to read messages section
-        var unreadMessages = document.querySelector('.unread').getElementsByClassName('message');
-        var readSection = document.querySelector('.read');
-        
-        while (unreadMessages.length > 0) {
-            readSection.appendChild(unreadMessages[0]);
-        }
+    if (headerDelButton) {
+        headerDelButton.addEventListener('click', function() {
+            // Send AJAX request to mark all notifications as read
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'mark_all_read.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Move unread messages to read messages section
+                    var unreadMessages = document.querySelector('.unread').getElementsByClassName('message');
+                    var readSection = document.querySelector('.read');
+
+                    // Loop through all unread messages and move them to the read section
+                    while (unreadMessages.length > 0) {
+                        readSection.appendChild(unreadMessages[0]);
+                    }
+
+                    // Update notification count to zero
+                    document.querySelector('.notification-count').textContent = 0;
+                }
+            };
+            xhr.send();
+        });
     }
-};
-document.querySelector('#show-more-unread').addEventListener('click', function() {
-    // Send AJAX request to fetch all unread notifications
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'fetch_unread_notifications.php?limit=5&offset=0', true); // Change to GET
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            var notifications = JSON.parse(xhr.responseText);
-            var unreadDiv = document.querySelector('.unread');
-            unreadDiv.innerHTML = ''; // Clear existing unread notifications
 
-            // Loop through the notifications and display them
-            notifications.forEach(function(notification) {
-                var messageDiv = document.createElement('div');
-                messageDiv.className = 'unread_message';
-                messageDiv.innerHTML = '<i class="fa-solid fa-envelope mr-3 fa-xl"></i>' + 
-                                       '<a>' + notification.message + '</a>';
-                if (notification.notification_title === 'Job') {
-                    messageDiv.innerHTML += '<span class="action-icon ml-3">' + 
-                                            '<a href="job_details.php?job_id=' + notification.job_or_status_id + 
-                                            '&recruiter_id=' + notification.recruiter_id + '">' + 
-                                            '<i class="fa-solid fa-up-right-from-square fa-lg"></i></a></span>';
+    if (showMoreUnreadButton) {
+        showMoreUnreadButton.addEventListener('click', function() {
+            // Send AJAX request to fetch all unread notifications
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'fetch_unread_notifications.php?limit=5&offset=0', true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var notifications = JSON.parse(xhr.responseText);
+                    var unreadDiv = document.querySelector('.unread');
+                    unreadDiv.innerHTML = ''; // Clear existing unread notifications
+
+                    // Loop through the notifications and display them
+                    notifications.forEach(function(notification) {
+                        var messageDiv = document.createElement('div');
+                        messageDiv.className = 'unread_message';
+                        messageDiv.innerHTML = '<i class="fa-solid fa-envelope mr-3 fa-xl"></i>' + 
+                                               '<a>' + notification.message + '</a>';
+                        if (notification.notification_title === 'Job') {
+                            messageDiv.innerHTML += '<span class="action-icon ml-3">' + 
+                                                    '<a href="job_details.php?job_id=' + notification.job_or_status_id + 
+                                                    '&recruiter_id=' + notification.recruiter_id + '">' + 
+                                                    '<i class="fa-solid fa-up-right-from-square fa-lg"></i></a></span>';
+                        }
+                        unreadDiv.appendChild(messageDiv);
+                    });
                 }
-                unreadDiv.appendChild(messageDiv);
-            });
-        }
-    };
-    xhr.send();
-});
+            };
+            xhr.send();
+        });
+    }
 
-document.querySelector('#show-more-read').addEventListener('click', function() {
-    // Send AJAX request to fetch all read notifications
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'fetch_read_notifications.php?limit=5&offset=0', true); // Change to GET
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            var notifications = JSON.parse(xhr.responseText);
-            var readDiv = document.querySelector('.read');
-            readDiv.innerHTML = ''; // Clear existing read notifications
+    if (showMoreReadButton) {
+        showMoreReadButton.addEventListener('click', function() {
+            // Send AJAX request to fetch all read notifications
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'fetch_read_notifications.php?limit=5&offset=0', true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var notifications = JSON.parse(xhr.responseText);
+                    var readDiv = document.querySelector('.read');
+                    readDiv.innerHTML = ''; // Clear existing read notifications
 
-            // Loop through the notifications and display them
-            notifications.forEach(function(notification) {
-                var messageDiv = document.createElement('div');
-                messageDiv.className = 'read_message';
-                messageDiv.innerHTML = '<i class="fa-solid fa-envelope mr-3 fa-xl"></i>' + 
-                                       '<a>' + notification.message + '</a>';
-                if (notification.notification_title === 'Job') {
-                    messageDiv.innerHTML += '<span class="action-icon ml-3">' + 
-                                            '<a href="job_details.php?job_id=' + notification.job_or_status_id + 
-                                            '&recruiter_id=' + notification.recruiter_id + '">' + 
-                                            '<i class="fa-solid fa-up-right-from-square fa-lg"></i></a></span>';
+                    // Loop through the notifications and display them
+                    notifications.forEach(function(notification) {
+                        var messageDiv = document.createElement('div');
+                        messageDiv.className = 'read_message';
+                        messageDiv.innerHTML = '<i class="fa-solid fa-envelope mr-3 fa-xl"></i>' + 
+                                               '<a>' + notification.message + '</a>';
+                        if (notification.notification_title === 'Job') {
+                            messageDiv.innerHTML += '<span class="action-icon ml-3">' + 
+                                                    '<a href="job_details.php?job_id=' + notification.job_or_status_id + 
+                                                    '&recruiter_id=' + notification.recruiter_id + '">' + 
+                                                    '<i class="fa-solid fa-up-right-from-square fa-lg"></i></a></span>';
+                        }
+                        readDiv.appendChild(messageDiv);
+                    });
                 }
-                readDiv.appendChild(messageDiv);
-            });
-        }
-    };
-    xhr.send();
+            };
+            xhr.send();
+        });
+    }
 });
-
 
 
 </script>

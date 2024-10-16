@@ -26,7 +26,6 @@ if(isset($_POST['submit'])){
          <title>E-Recruitment System</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="manifest" href="site.webmanifest">
 		<link rel="shortcut icon" type="image/x-icon" href="assets/img/fav.png">
 
 		<!-- CSS here -->
@@ -324,7 +323,7 @@ form.search-box .select-form .nice-select::after {
                         <div class="col-lg-3 col-md-2">
                             <!-- Logo -->
                             <div class="logo">
-                                <a href="index.php"><img src="assets/img/logo/pic.png" class="logohead" alt=""></a>
+                                <a href="index.php"><img src="assets/img/logo/logo.png" class="logohead" alt=""></a>
                             </div>  
                         </div>
                         <div class="col-lg-9 col-md-9">

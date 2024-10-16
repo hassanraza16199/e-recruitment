@@ -26,7 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
          <title>E-Recruitment system</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="manifest" href="site.webmanifest">
         <link rel="shortcut icon" type="image/x-icon" href="assets/img/fav.png">
 		<!-- CSS here -->
             <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -190,6 +189,7 @@ if (mysqli_num_rows($result)>0) {
 </button>
 
 
+
             <?php
             } else { ?>
             <form action="users_contact.php" method="POST" style="display:inline;">
@@ -221,8 +221,9 @@ if (mysqli_num_rows($result)>0) {
 
     </main>
 
-    <div id="emailModal" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+   <!-- Email Modal -->
+<div id="emailModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog " role="document">
         <div class="modal-content" style='margin-top:120px;'>
             <div class="modal-header">
                 <h5 class="modal-title">Send Email</h5>
@@ -231,7 +232,7 @@ if (mysqli_num_rows($result)>0) {
                 </button>
             </div>
             <div class="modal-body">
-                <form action="function2.php" method="POST">
+                <form action="functions.php" method="POST">
                     <div id="validationAlert" class="alert alert-danger d-none">All fields are required!</div>
                     <input type="hidden" class="form-control" id="modal_contact_id" name="contact_id">
                     <div class="form-group">
@@ -240,13 +241,13 @@ if (mysqli_num_rows($result)>0) {
                     </div>
                     <div class="form-group">
                         <label for="modal_subject">Subject:</label>
-                        <input type="text" class="form-control" id="modal_subject" name="subject" required>
+                        <input type="text" class="form-control" id="modal_subject" name="subject">
                     </div>
                     <div class="form-group">
-                        <label for="modal_message">Message:</label>
-                        <textarea class="form-control" id="modal_message" name="message" rows="4" required></textarea>
+                        <label for="emailBody">Message:</label>
+                        <textarea class="form-control" id="emailBody" name="message" rows="4"></textarea>
                     </div>
-                    <button type="submit" name="send_email" class="btn btn-primary">Send Email</button>
+                    <button type="submit" name="send_email" id="send_email" class="btn btn-primary">Send Email</button>
                 </form>
             </div>
         </div>
@@ -263,30 +264,31 @@ if (mysqli_num_rows($result)>0) {
 function openModal(contact_id, sender_email, subject) {
     // Set the modal fields dynamically
     document.getElementById('modal_contact_id').value = contact_id;
-    document.getElementById('modal_sender_email').value = sender_email;  // Use sender_email instead of to_email
+    document.getElementById('modal_sender_email').value = sender_email; // Ensure this ID matches the email field
     document.getElementById('modal_subject').value = subject;
 
     // Show the modal using jQuery
     $('#emailModal').modal('show');
-};
+}
 
 tinymce.init({
-                selector: '#emailBody',
-                license_key: 'gpl'
-            });
+    selector: '#emailBody',
+    license_key: 'gpl'
+});
 
-            $(document).ready( function() {
-                $("#send_email").on('click', function(e) {
-                    const editor = tinymce.get('emailBody');
-                    const content = editor.getContent({ format: 'text' }).trim();
-                    if($("#subject").val() == '' || content === '') {
-                        e.preventDefault();
-                        $("#validationAlert").removeClass('d-none');
-                    } else {
-                        $("#validationAlert").addClass('d-none');
-                    }
-                });
-            });    
+$(document).ready(function() {
+    $("#send_email").on('click', function(e) {
+        const editor = tinymce.get('emailBody');
+        const content = editor.getContent({ format: 'text' }).trim();
+        if($("#modal_subject").val() == '' || content === '') {
+            e.preventDefault();
+            $("#validationAlert").removeClass('d-none');
+        } else {
+            $("#validationAlert").addClass('d-none');
+        }
+    });
+});
+    
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

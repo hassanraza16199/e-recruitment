@@ -21,9 +21,9 @@ function sendMail($to, $subject, $message) {
         $mail->Port       = 465;
     
         //Recipients
-        $mail->setFrom('hassan@ashlarglobal.com', 'E-Recruitment System');
+        $mail->setFrom('hussnainumer23@gmail.com', 'E-Recruitment System');
         $mail->addAddress($to);
-        $mail->addReplyTo('hassan@ashlarglobal.com', 'E-Recruitment System');
+        $mail->addReplyTo('hussnainumer23@gmail.com', 'E-Recruitment System');
     
         //Content
         $mail->isHTML(true);
@@ -37,7 +37,6 @@ function sendMail($to, $subject, $message) {
     } catch (Exception $e) {
         return ['status' => false, 'message' => 'Email could not be sent!', 'error' => $mail->ErrorInfo];
     }
-
 }
 
 if(isset($_POST['send_email'])) {
@@ -53,15 +52,26 @@ if(isset($_POST['send_email'])) {
 
         if($send['status']) {
             $_SESSION['status'] = 'success';
+            // Redirect based on where the email is being sent
+        if(isset($_POST['application_id']) && !empty($_POST['application_id'])) {
             header("Location: application_status.php?application_id={$_POST['application_id']}");
+        } else {
+            header("Location: users_contact.php");
+        }
         } else {
             $_SESSION['status'] = 'danger';
             $_SESSION['error'] = $send['error'];
+            // Redirect based on where the email is being sent
+        if(isset($_POST['application_id']) && !empty($_POST['application_id'])) {
             header("Location: application_status.php?application_id={$_POST['application_id']}");
+        } else {
+            header("Location: users_contact.php");
         }
+        }
+
+        exit; // Stop further execution
     } else {
         echo("All fields are required!");
     }
 }
-
 ?>

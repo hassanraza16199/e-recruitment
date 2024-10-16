@@ -2,45 +2,6 @@
 session_start();
 include "connection.php";
 
-// if ($_SERVER["REQUEST_METHOD"] == "POST") {
-//     $to_email = $_POST['to_email'];
-//     $subject = $_POST['subject'];
-//     $message = $_POST['message'];
-//     $headers = "From: your-email@example.com";
-
-//     if (mail($to_email, $subject, $message, $headers)) {
-//         echo "Email successfully sent to $to_email";
-//     } else {
-//         echo "Email sending failed!";
-//     }
-// }
-if(isset($_POST['submit'])){
-    if(isset($_GET['application_id'])){
-        $application_id = $_GET['application_id'];
-    }
-    $status = $_POST['status'];
-    $sql = "UPDATE applications SET status = '$status' WHERE application_id = '$application_id'";
-
-    if($conn->query($sql) === True){
-         // Prepare notification message
-         $recruiter_id = $_SESSION['id'];
-         $recruiter_name = $_SESSION['name'];
-         $notification_title = "Status";
-         $message = " Your job application against $job_title has been approved by the $recruiter_name.";
-         
-         // Insert notification data
-         $notification_sql = "INSERT INTO notification (job_or_status_id, recruiter_id, candidate_id, notification_title, message, created_at) 
-                              VALUES ('$application_id', '$recruiter_id', '$candidate_id', '$notification_title', '$message', '".date('Y-m-d h:i:s')."')";
-         
-         if ($conn->query($notification_sql) === TRUE) {
-             header("location: application_status.php?application_id=$application_id");
-             exit;
-         } else {
-             echo "Error: " . $notification_sql . "<br>" . $conn->error;
-         }
-        
-    }
-}
 
 ?>
 
@@ -86,7 +47,7 @@ if(isset($_POST['submit'])){
                 flex-wrap: wrap;
                 justify-content: space-between;
                 margin: 0 auto;
-                max-width: 1200px;
+                max-width: 1300px;
                 padding: 20px;
             }
 
@@ -96,7 +57,7 @@ if(isset($_POST['submit'])){
                 padding: 20px;
                 margin-bottom: 20px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                width: 48%;
+                width: 50%;
             }
 
             .detail-div h2, .status-div h2 {
@@ -210,7 +171,7 @@ if(isset($_POST['submit'])){
                         <div class="row">
                             <div class="col-xl-12">
                                 <div class="hero-cap text-center">
-                                    <h2>Application Detail</h2>
+                                    <h2>Hiring Manager</h2>
                                 </div>
                             </div>
                         </div>
@@ -219,96 +180,60 @@ if(isset($_POST['submit'])){
             </div>
             <!-- Hero Area End -->
 
-            <!-- Alert Area Start -->
-            <?php if(isset($_SESSION['email_status'])) { ?>
-                <div class="alert alert-<?php echo $_SESSION['status']; ?> alert-dismissible fade show mt-2" role="alert">
-                    <?= $_SESSION['message'] ?>
-                    <?= $_SESSION['error'] ?? '' ?>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            <?php unset($_SESSION['email_status']); unset($_SESSION['status']); unset($_SESSION['message']); unset($_SESSION['error']); } ?>
-            <!-- Alert Area End -->
-
             <!-- Job List Area Start -->
             <div class="job-listing-area pt-120 pb-120">
                 <div class="main-div">
                     <div class="detail-div">
-                        <h2>Application Detail</h2>
-                    <?php
-                    include "connection.php";
-                    $application_id = $_GET['application_id'];
-                    
+                        <h2>Hiring Managers</h2>
+                        <table class="table">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Designation</th>
+                                    <th scope="col">Avalibility</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                    include "connection.php";
                                 
-                    $sql = "SELECT * FROM applications WHERE application_id = '$application_id' ";
-                    $result = mysqli_query($conn, $sql);
+                                    $sql = "SELECT * FROM hiring_managers  ";
+                                    $result = mysqli_query($conn, $sql);
 
-                    
-                    if (mysqli_num_rows($result)>0) {
-                        while($row = mysqli_fetch_assoc($result)){
-                            $email_address = $row['email_address'];
-                            $candidate_id = $row['candidate_id'];
-                            $status = $row['status'];
-                            $job_title = $row['job_title'];
-                        ?>
-                        <div class="row">
-                            <div class="ml-3 mr-5">
-                                <p><span style="font-weight:bold;">First Name </span>: <?php echo $row['firstname'];?></p>
-                            </div>
-                            <div class="ml-5">
-                                <p><span style="font-weight:bold;">Last Name </span>: <?php echo $row['lastname'];?></p>
-                            </div>
-                        </div>
-                        <div>
-                            <p><span style="font-weight:bold;">Email Address </span>: <?php echo $row['email_address'];?></p>
-                        </div>
-                        <div >
-                            <p><span style="font-weight:bold;">CNIC </span>: <?php echo $row['cnic'];?></p>
-                        </div>
-                        <div >
-                            <p><span style="font-weight:bold;">Phone NO </span>: <?php echo $row['contact_number'];?></p>
-                        </div>
-                        <div >
-                            <p><span style="font-weight:bold;">Date of Birth </span>: <?php echo $row['date_birth'];?></p>
-                        </div>
-                        <div >
-                            <p><span style="font-weight:bold;">Education </span>: <?php echo $row['candidate_education'];?></p>
-                        </div>
-                        <div >
-                            <p><span style="font-weight:bold;">Skill </span>: <?php echo $row['candidate_skill'];?></p>
-                        </div>
-                        <div >
-                            <p><span style="font-weight:bold;">Experience </span>: <?php echo $row['candidate_experience'];?></p>
-                        </div>
+                                    if (mysqli_num_rows($result)>0) {
+                                        while($row = mysqli_fetch_assoc($result)){
+                                        ?>
+                        
+                            
+                                <tr>
+                                    <th scope="row"><?php echo $row['id']; ?></th>
+                                    <td><?php echo $row['name']; ?></td>
+                                    <td><?php echo $row['email']; ?></td>
+                                    <td><?php echo $row['designation']; ?></td>
+                                    <td><?php echo $row['avalibility']; ?></td>
+                                </tr>
+                            
         
                         <?php 
                                 }
+                            }else{
+                                echo " No hiring Manager Found";
                             }
                         ?>
+                        </tbody>
+                        </table>
+                        </div>
                     </div>
                     <div class="status-div">
                         <div style="display:flex; margin-bottom:20px;">
-                            <h2>Application Status</h2>
+                            <h2>Calender</h2>
                             <span  class=" email-btn">
-                                <button class="btn head-btn1" data-toggle="modal" data-target="#emailModal">Email</button>
+                                <button class="btn head-btn1" data-toggle="modal" data-target="#emailModal">Hiring Manager</button>
                             </span>
                         </div>
-                        
-                        <form action="application_status.php?application_id=<?php echo $_GET['application_id']; ?>" method="POST" enctype="multipart/form-data" >
-                            <div class="form-group">
-                                <label  class="form-label">Status</label>
-                                <select class="form-select mb-4" name="status" id="status" >
-                                    <option selected disabled>Select Application Status</option>
-                                    <option value="View" <?php if($status =='View') echo'selected'; ?>>View</option>
-                                    <option value="Approve" <?php if($status =='Approve') echo'selected'; ?>>Approve</option>
-                                    <option value="Pending" <?php if($status =='Pending') echo'selected'; ?>>Pending</option>
-                                    <option value="Shortlist" <?php if($status =='Shortlist') echo'selected'; ?>>Shortlist</option>
-                                    <option value="Cancel" <?php if($status =='Cancel') echo'selected'; ?>>Cancel</option>
-                                </select>
-                            </div>
-                            <button style="display:flex;" type="submit"  name='submit' class="btn head-btn2 mt-3">Submit</button>
-                        </form>
+                        <p>This place fix the calender</p>
                     </div>
                 </div>
             </div>
@@ -320,28 +245,30 @@ if(isset($_POST['submit'])){
             <div class="modal-dialog " role="document">
                 <div class="modal-content" style='margin-top:120px;'>
                     <div class="modal-header">
-                        <h5 class="modal-title">Send Email</h5>
+                        <h5 class="modal-title">Hiring Manager</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="functions.php" method="POST">
-                            <div id="validationAlert" class="alert alert-danger d-none">All fields are required!</div>
-                            <input type="hidden" class="form-control" id="application_id" name="application_id" value="<?php echo $application_id; ?>" readonly>
+                        <form action="hiring_manager.php" method="POST">
                             <div class="form-group">
-                                <label for="to_email">To:</label>
-                                <input type="email" class="form-control" id="to_email" name="to_email" value="<?php echo $email_address; ?>" readonly>
+                                <label for="to_email">Name:</label>
+                                <input type="email" class="form-control" id="name" name="name">
                             </div>
                             <div class="form-group">
-                                <label for="subject">Subject:</label>
-                                <input type="text" class="form-control" id="subject" name="subject">
+                                <label for="email">Email:</label>
+                                <input type="email" class="form-control" id="email" name="email">
                             </div>
                             <div class="form-group">
-                                <label for="message">Message:</label>
-                                <textarea class="form-control" id="emailBody" name="message" rows="4"></textarea>
+                                <label for="designation">Designation:</label>
+                                <input type="text" class="form-control" id="designation" name="designation">
                             </div>
-                            <button type="submit" name="send_email" id="send_email" class="btn btn-primary">Send Email</button>
+                            <div class="form-group">
+                                <label for="avalibility">Avalibility:</label>
+                                <input type="text" class="form-control" id="avalibility" name="avalibility">
+                            </div>
+                            <button type="submit" name="submit" id="submit" class="btn btn-primary">Send Email</button>
                         </form>
                     </div>
                 </div>
@@ -349,27 +276,6 @@ if(isset($_POST['submit'])){
         </div>
 
         <?php include "footer.php"; ?>
-        <script src="vendor/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
-        <script>
-            tinymce.init({
-                selector: '#emailBody',
-                license_key: 'gpl'
-            });
-
-            $(document).ready( function() {
-                $("#send_email").on('click', function(e) {
-                    const editor = tinymce.get('emailBody');
-                    const content = editor.getContent({ format: 'text' }).trim();
-                    if($("#subject").val() == '' || content === '') {
-                        e.preventDefault();
-                        $("#validationAlert").removeClass('d-none');
-                    } else {
-                        $("#validationAlert").addClass('d-none');
-                    }
-                });
-            });           
-            
-        </script>
 
 	    <!-- JS here -->
         <script src="https://kit.fontawesome.com/3acead0521.js" crossorigin="anonymous"></script>

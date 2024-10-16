@@ -26,7 +26,6 @@ if (isset($_GET['application_id'])) {
          <title>E-Recruitment system</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="manifest" href="site.webmanifest">
         <link rel="shortcut icon" type="image/x-icon" href="assets/img/fav.png">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <link rel="stylesheet" href="assets/css2/aplication.css">
@@ -176,6 +175,7 @@ $result = mysqli_query($conn, $sql);
 // Check if results are found
 if (mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
+        $application_id = $row['application_id'];
 ?>
     <tr>
       <th scope="row"><?php echo $row['application_id']; ?></th>
