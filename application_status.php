@@ -300,11 +300,13 @@ if(isset($_POST['submit'])){
                                 <label  class="form-label">Status</label>
                                 <select class="form-select mb-4" name="status" id="status" >
                                     <option selected disabled>Select Application Status</option>
-                                    <option value="View" <?php if($status =='View') echo'selected'; ?>>View</option>
-                                    <option value="Approve" <?php if($status =='Approve') echo'selected'; ?>>Approve</option>
                                     <option value="Pending" <?php if($status =='Pending') echo'selected'; ?>>Pending</option>
+                                    <option value="Initial Screening" <?php if($status =='Initial Screening') echo'selected'; ?>>Initial Screening</option>
+                                    <option value="Technical Interviewing" <?php if($status =='Technical Interviewing') echo'selected'; ?>>Technical Interviewing</option>
+                                    <option value="Final Interview" <?php if($status =='Final Interview') echo'selected'; ?>>Final Interview</option>
                                     <option value="Shortlist" <?php if($status =='Shortlist') echo'selected'; ?>>Shortlist</option>
-                                    <option value="Cancel" <?php if($status =='Cancel') echo'selected'; ?>>Cancel</option>
+                                    <option value="Hired" <?php if($status =='Hired') echo'selected'; ?>>Hired </option>
+                                    <option value="Rejected" <?php if($status =='Rejected') echo'selected'; ?>>Rejected </option>
                                 </select>
                             </div>
                             <button style="display:flex;" type="submit"  name='submit' class="btn head-btn2 mt-3">Submit</button>

@@ -2,7 +2,6 @@
 session_start();
 include "connection.php";
 
-
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
 
@@ -295,7 +294,7 @@ if ($result->num_rows > 0) {
             </div> 
         </td>
             <td>
-        <div class="tooltip-container">
+            <div class="tooltip-container">
                 <span class="tooltip-icon"><i id="delete-<?php echo $row['id']; ?>" class="fa-solid fa-trash fa-sm ml-3" style="color:#FF0000; cursor: pointer;"></i></span>
                 <div class="tooltip-text">
                     <!-- Replace the SVG with your text -->

@@ -1,316 +1,179 @@
- /* Main Container */
- .form-container {
-    max-width: 1000px;
-    margin: 30px auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
 }
 
-/* Main Flexbox */
+.tooltip-icon {
+  font-size: 24px;
+  padding: 5px;
+  border: none;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  width: 100px;
+  background-color: #fff;
+  color: #000;
+  text-align: center;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  position: absolute;
+  top: 130%; /* Adjusts tooltip to appear below the icon */
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  white-space: nowrap;
+}
+
+.tooltip-text svg {
+  display: block;
+  margin: 0 auto;
+}
+
+.tooltip-arrow {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #ccc;
+  position: absolute;
+  bottom: 100%; /* Places the arrow above the tooltip */
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tooltip-container:hover .tooltip-text {
+  visibility: visible;
+}
+
 .main-div {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin: 0 auto;
-    max-width: 1300px;
-    padding: 20px;
+  display: flex;
+  flex-direction: column;
+  max-width: 1300px;
+  padding: 20px;
+  margin: 0 60px;
+  box-sizing: border-box; /* Ensures padding is included in the element's total width/height */
 }
 
-/* Detail Div */
-.detail-div, .status-div{
-    background: #f9f9f9;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 48%; /* Adjust to fit nicely in the flex layout */
+.main-div-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap; /* Makes it responsive */
 }
 
-.detail-div h2, .status-div h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #333;
-}
-
-.detail-div p, .status-div p {
-    font-size: 16px;
-    margin-bottom: 10px;
-    color: #555;
+.add-btn {
+  margin-left: auto; /* Aligns the button to the right */
 }
 
 /* Modal Styling */
 .modal-content {
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 20px;
 }
 
 .modal-header {
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 10px;
 }
 
 .modal-title {
-    font-size: 20px;
-    color: #333;
+  font-size: 20px;
+  color: #333;
 }
 
 .modal-body {
-    padding: 20px;
+  padding: 20px;
 }
 
 .modal-body .form-group label {
-    color: #555;
-    font-size: 14px;
-    margin-bottom: 5px;
+  color: #555;
+  font-size: 14px;
+  margin-bottom: 5px;
 }
 
-/* Centering the button inside status-div */
-.email-btn {
-    margin-left: auto; /* To push it to the right */
+/* Mobile and Tablet Responsive Adjustments */
+@media (max-width: 992px) {
+  .main-div {
+      margin: 0 30px; /* Reduce side margins for smaller devices */
+  }
+
+  .table {
+      width: 100%; /* Ensure table is responsive */
+      display: block; /* Make table elements more stackable */
+      overflow-x: auto; /* Allow horizontal scroll if needed */
+  }
 }
 
 /* Responsive Styling */
 @media (max-width: 768px) {
-    .main-div {
-        flex-direction: column;
-    }
+  /* Adjust the modal content padding for smaller screens */
+  .modal-body {
+      padding: 15px;
+  }
 
-    .detail-div, .status-div {
-        width: 100%;
-    }
+  .submit {
+      margin: 0 auto;
+      display: block;
+  }
 
-    .status-div button {
-        width: 100%;
-    }
+  .main-div {
+      margin: 0 15px; /* Further reduce side margins for smaller screens */
+      padding: 15px;
+  }
 
-    /* Adjust the modal content padding for smaller screens */
-    .modal-body {
-        padding: 15px;
-    }
+  .main-div-header {
+      flex-direction: column; /* Stack header elements */
+      align-items: flex-start;
+  }
 
-    .form-container {
-        margin: 20px auto;
-        padding: 15px;
-    }
+  .add-btn {
+      margin-top: 10px;
+      margin-left: 0;
+      width: 100%; /* Full width button on mobile */
+  }
 
-    .email-btn {
-        margin: 0 auto;
-        display: block;
-    }
+  .add-btn button {
+      width: 100%; /* Full width button on mobile */
+  }
+}
+
+@media (max-width: 576px) {
+  .main-div {
+      margin: 0 10px;
+      padding: 10px;
+  }
+
+  .table {
+      font-size: 14px; /* Adjust table text size */
+  }
+
+  .modal-body {
+      padding: 10px; /* Adjust padding for smaller modals */
+  }
+
+  .main-div-header h2 {
+      font-size: 24px; /* Reduce header font size */
+  }
+
+  .add-btn button {
+      padding: 10px 15px; /* Adjust button padding */
+      font-size: 14px; /* Reduce button text size */
+  }
 }
 
 @media (max-width: 480px) {
-    .form-container {
-        padding: 10px;
-    }
 
-    .form-group {
-        margin-bottom: 10px;
-    }
+  .form-group {
+      margin-bottom: 10px;
+  }
 
-    .modal-body {
-        padding: 10px;
-    }
+  .modal-body {
+      padding: 10px;
+  }
 }
-
-/*calender */
-input{
-  font-family: Helvetica, Arial, sans-serif;
-}
-
-h1, h2, h3, h4, h5, p{
-  margin-bottom: 10px;
-}
-
-p{
-  line-height: 20px;
-}
-
-a{
-  text-decoration: none;
-  color: #FF462B;
-}
-
-.clearfix{
-  clear: both;
-}
-
-.animate{
-  -webkit-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
-}
-
-
-/* required */
-.calendar{
-  border-radius: 4px;
-  overflow: hidden;
-  width: 100%;
-  height: inherit;
-  background-color: #ffffff;
-  color: #333333;
-}
-
-.calendar h1, .calendar h2 ,.calendar h4{
-  font-weight: 300;
-  font-size: 20px;
-  line-height: 28px;
-  text-transform: uppercase;
-  margin: 0px 0px 20px 0px;
-}
-
-.calendar h1 span{
-  display: block;
-}
-
-.calendar .col{
-  position: relative;
-  float: left;
-  height: 100%;
-}
-
-.calendar .col .content{
-  padding: 20px;
-}
-
-.calendar ul{
-  margin: 0px;
-}
-
-.calendar ul li{
-  list-style: none;
-}
-
-.calendar .leftCol{
-  width: 30%;
-  background-color: #F48989;
-}
-
-.calendar .noteList li{
-  color: #ffffff;
-  margin-bottom: 10px;
-}
-
-.calendar .notes p,
-.calendar .notes input,
-.calendar .noteList li{
-  font-weight: 300;
-  font-size: 14px;
-}
-
-.calendar .notes p{
-  border-bottom: solid 1px rgba(255,255,255,0.4);
-}
-
-.calendar .notes input{
-  background-color: #F48989;
-  color: #ffffff;
-  border: none;
-  width: 200px;
-}
-
-.calendar .addNote,
-.calendar .removeNote{
-  float: right;
-  color: rgba(255,255,255,0.4);
-  font-weight: bold;
-  margin-left: 20px;
-}
-
-.calendar .addNote:hover,
-.calendar .removeNote:hover{
-  color: #ffffff;
-}
-
-.calendar .addNote{
-  font-size: 16px;
-}
-
-.calendar .leftCol h1{
-  color: #ffffff;
-  margin-bottom: 40px;
-}
-
-.calendar .rightCol{
-  width: 70%;
-}
-
-.calendar .rightCol h2{
-  color: #C7BEBE;
-  text-align: right;
-  margin-bottom: 70px;
-}
-
-.calendar .months li,
-.calendar .weekday li,
-.calendar .days li{
-  float: left;
-  text-transform: uppercase;
-}
-
-.calendar .months li a,
-.calendar .weekday li a,
-.calendar .days li a{
-  display: block;
-  color: #747978;
-}
-
-.calendar .months li a{
-  font-size: 10px;
-  color: #C7BEBE;
-  text-align: center;
-  width: 30px;
-  margin-bottom: 17px;
-}
-
-.calendar .months li .selected{
-  font-weight: bold;
-  color: #747978;
-}
-
-.calendar .weekday li a{
-  width: 45px;
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 12px;
-}
-
-.calendar .days li{
-  width: 45px;
-}
-
-.calendar .days li a{
-  width: 28px;
-  height: 24px;
-  text-align: center;
-  margin: auto auto;
-  font-size: 10px;
-  font-weight: bold;
-  border-radius: 12px;
-  margin-bottom: 10px;
-}
-
-
-.calendar .days li a:hover{
-  background-color: #EEEDE9;
-}
-
-.calendar .days li .selected{
-  background-color: #F5A1A3!important;
-  color: #ffffff;
-}
-
-.calendar .days li .event{
-  color: #F5A1A3;
-}
-
-
-/* placeholder color */
-::-webkit-input-placeholder {color: #ffffff; }
-:-moz-placeholder {color: #ffffff; }
-::-moz-placeholder {color: #ffffff; }
-:-ms-input-placeholder {color: #ffffff; }

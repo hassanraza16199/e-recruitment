@@ -13,14 +13,17 @@ $sql = "SELECT * FROM notification
         LIMIT $limit OFFSET $offset";
 $result = $conn->query($sql);
 
-// Count total notifications
-$count_sql = "SELECT COUNT(*) as total 
-              FROM notification 
-              WHERE created_at >= NOW() - INTERVAL 20 DAY 
-              AND (notification_title = 'Job' OR (notification_title = 'Status' AND candidate_id = $candidate_id))";
-$count_result = $conn->query($count_sql);
-$count_row = $count_result->fetch_assoc();
-$total_notifications = $count_row['total'];
+// Fetch unread notification count
+$unread_count_sql = "SELECT COUNT(*) as unread_count FROM notification 
+        WHERE created_at >= NOW() - INTERVAL 20 DAY 
+        AND (notification_title = 'Job' OR (notification_title = 'Status' AND candidate_id = $candidate_id)) 
+        AND read_as = 0";
+$unread_count_result = $conn->query($unread_count_sql);
+$unread_count = 0;
+if ($unread_count_result && $unread_count_result->num_rows > 0) {
+    $row = $unread_count_result->fetch_assoc();
+    $unread_count = $row['unread_count'];
+}
 
 $unread_sql = "SELECT * FROM notification 
         WHERE created_at >= NOW() - INTERVAL 20 DAY 
@@ -140,7 +143,7 @@ $read_result = $conn->query($read_sql);
 <div class="notifications">
     <div class="notification-dropdown ml-5">
         <button class="drop-icon"><i class="fa-solid fa-bell fa-xl bell-icon"></i></button>
-        <p class="notification-count"><?php echo $total_notifications; ?></p>
+        <p class="notification-count"><?php echo $unread_count; ?></p>
         <div class="dropdown-content">
             <!-- Unread Messages -->
             <div class="main-div">

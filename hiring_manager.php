@@ -7,14 +7,35 @@ if(isset($_POST['submit'])){
     $email = $_POST['email'];
     $designation = $_POST['designation'];
     $avalibility = $_POST['avalibility'];
+    $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
 
-    $sql = "INSERT INTO `hiring_managers`(`name`, `email`, `designation`, `avalibility`) VALUES ('$name','$email','$designation','$avalibility')";
-    if($conn->query($sql) === True){
-        header("location: hiring_manager.php");
+    if ($id > 0) {
+        // Update existing record
+        $sql = "UPDATE `hiring_managers` SET `name`='$name', `email`='$email', `designation`='$designation', `avalibility`='$avalibility' WHERE `id`=$id";
+    } else {
+        // Insert new record
+        $sql = "INSERT INTO `hiring_managers`(`name`, `email`, `designation`, `avalibility`) VALUES ('$name','$email','$designation','$avalibility')";
+    }
+
+    if($conn->query($sql) === TRUE){
+        header("Location: hiring_manager.php");
     }else{
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
+}
 
+
+if (isset($_GET['id'])) {
+    $id = intval($_GET['id']);
+
+    $sql = "DELETE FROM hiring_managers WHERE id = $id";
+
+    if ($conn->query($sql) === TRUE) {
+        header("Location: hiring_manager.php");
+        exit();
+    } else {
+        echo "Error deleting user: " . $conn->error;
+    }
 }
 ?>
 
@@ -46,6 +67,188 @@ if(isset($_POST['submit'])){
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <style>
+           .tooltip-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip-icon {
+  font-size: 24px;
+  padding: 5px;
+  border: none;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  width: 100px;
+  background-color: #fff;
+  color: #000;
+  text-align: center;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  position: absolute;
+  top: 130%; /* Adjusts tooltip to appear below the icon */
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  white-space: nowrap;
+}
+
+.tooltip-text svg {
+  display: block;
+  margin: 0 auto;
+}
+
+.tooltip-arrow {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #ccc;
+  position: absolute;
+  bottom: 100%; /* Places the arrow above the tooltip */
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tooltip-container:hover .tooltip-text {
+  visibility: visible;
+}
+
+.main-div {
+  display: flex;
+  flex-direction: column;
+  max-width: 1300px;
+  padding: 20px;
+  margin: 0 60px;
+  box-sizing: border-box; /* Ensures padding is included in the element's total width/height */
+}
+
+.main-div-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap; /* Makes it responsive */
+}
+
+.add-btn {
+  margin-left: auto; /* Aligns the button to the right */
+}
+
+/* Modal Styling */
+.modal-content {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.modal-header {
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+
+.modal-title {
+  font-size: 20px;
+  color: #333;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-body .form-group label {
+  color: #555;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+/* Mobile and Tablet Responsive Adjustments */
+@media (max-width: 992px) {
+  .main-div {
+      margin: 0 30px; /* Reduce side margins for smaller devices */
+  }
+
+  .table {
+      width: 100%; /* Ensure table is responsive */
+      display: block; /* Make table elements more stackable */
+      overflow-x: auto; /* Allow horizontal scroll if needed */
+  }
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  /* Adjust the modal content padding for smaller screens */
+  .modal-body {
+      padding: 15px;
+  }
+
+  .submit {
+      margin: 0 auto;
+      display: block;
+  }
+
+  .main-div {
+      margin: 0 15px; /* Further reduce side margins for smaller screens */
+      padding: 15px;
+  }
+
+  .main-div-header {
+      flex-direction: column; /* Stack header elements */
+      align-items: flex-start;
+  }
+
+  .add-btn {
+      margin-top: 10px;
+      margin-left: 0;
+      width: 100%; /* Full width button on mobile */
+  }
+
+  .add-btn button {
+      width: 100%; /* Full width button on mobile */
+  }
+}
+
+@media (max-width: 576px) {
+  .main-div {
+      margin: 0 10px;
+      padding: 10px;
+  }
+
+  .table {
+      font-size: 14px; /* Adjust table text size */
+  }
+
+  .modal-body {
+      padding: 10px; /* Adjust padding for smaller modals */
+  }
+
+  .main-div-header h2 {
+      font-size: 24px; /* Reduce header font size */
+  }
+
+  .add-btn button {
+      padding: 10px 15px; /* Adjust button padding */
+      font-size: 14px; /* Reduce button text size */
+  }
+}
+
+@media (max-width: 480px) {
+
+  .form-group {
+      margin-bottom: 10px;
+  }
+
+  .modal-body {
+      padding: 10px;
+  }
+}
+
+        </style>
 
     <body>
         <!-- Preloader Start -->
@@ -83,8 +286,12 @@ if(isset($_POST['submit'])){
             <!-- Job List Area Start -->
             <div class="job-listing-area pt-120 pb-120">
                 <div class="main-div">
-                    <div class="detail-div">
-                        <h2>Hiring Managers</h2>
+                <div class="main-div-header">
+    <h2>Hiring Managers</h2>
+    <span class="add-btn">
+        <button class="btn head-btn1" data-toggle="modal" data-target="#add">Add Hiring Manager</button>
+    </span>
+</div>
                         <table class="table">
                             <thead class="thead-light">
                                 <tr>
@@ -93,6 +300,7 @@ if(isset($_POST['submit'])){
                                     <th scope="col">Email</th>
                                     <th scope="col">Designation</th>
                                     <th scope="col">Avalibility</th>
+                                    <th scope="col" colspan="2"> <center>Action</center></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -113,6 +321,24 @@ if(isset($_POST['submit'])){
                                     <td><?php echo $row['email']; ?></td>
                                     <td><?php echo $row['designation']; ?></td>
                                     <td><?php echo $row['avalibility']; ?></td>
+                                    <td>
+                                        <div class="tooltip-container ml-5">
+                                            <span class="tooltip-icon"><i  style="color:blue" class="fa-regular fa-pen-to-square fa-sm" ></i></span>
+                                            <div class="tooltip-text">
+                                                <!-- Replace the SVG with your text -->
+                                                Edit 
+                                            <div class="tooltip-arrow"></div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                    <div class="tooltip-container">
+                                        <span class="tooltip-icon"><i id="delete-<?php echo $row['id']; ?>" class="fa-solid fa-trash fa-sm ml-3" style="color:#FF0000; cursor: pointer;"></i></span>
+                                        <div class="tooltip-text">
+                                            <!-- Replace the SVG with your text -->
+                                            Delete 
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                                    </td>
                                 </tr>
                             
         
@@ -124,128 +350,123 @@ if(isset($_POST['submit'])){
                         ?>
                         </tbody>
                         </table>
-                        
-                    </div>
-                    <div class="status-div">
-                        <div style="display:flex; margin-bottom:20px;">
-                            <h2>Calender</h2>
-                            <span  class=" email-btn">
-                                <button class="btn head-btn1" data-toggle="modal" data-target="#emailModal">Hiring Manager</button>
-                            </span>
-                        </div>
-                        <div class="calendar">
-
-<div class="col leftCol">
-  <div class="content">
-    <h4 class="date">Friday <br><span>September 12th</span></h4>
-    <div class="notes">
-      <p>
-        
-        <a href="#" title="Add note" class="addNote animate">+</a>
-      </p>
-      <ul class="noteList">
-        <li>Headbutt a lion<a href="#" title="Remove note" class="removeNote animate">x</a></li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<div class="col rightCol">
-  <div class="content">
-    <h2 class="year">2013</h2>
-    <ul class="months">
-      <li><a href="#" title="Jan" data-value="1">Jan</a></li>
-      <li><a href="#" title="Feb" data-value="2">Feb</a></li>
-      <li><a href="#" title="Mar" data-value="3">Mar</a></li>
-      <li><a href="#" title="Apr" data-value="4">Apr</a></li>
-      <li><a href="#" title="May" data-value="5">May</a></li>
-      <li><a href="#" title="Jun" data-value="6">Jun</a></li>
-      <li><a href="#" title="Jul" data-value="7">Jul</a></li>
-      <li><a href="#" title="Aug" data-value="8">Aug</a></li>
-      <li><a href="#" title="Sep" data-value="9" class="selected">Sep</a></li>
-      <li><a href="#" title="Oct" data-value="10">Oct</a></li>
-      <li><a href="#" title="Nov" data-value="11">Nov</a></li>
-      <li><a href="#" title="Dec" data-value="12">Dec</a></li>
-    </ul>
-    <div class="clearfix"></div>
-    <ul class="weekday">
-      <li><a href="#" title="Mon" data-value="1">Mon</a></li>
-      <li><a href="#" title="Tue" data-value="2">Tue</a></li>
-      <li><a href="#" title="Wed" data-value="3">Wed</a></li>
-      <li><a href="#" title="Thu" data-value="4">Thu</a></li>
-      <li><a href="#" title="Fri" data-value="5">Fri</a></li>
-      <li><a href="#" title="Say" data-value="6">Sat</a></li>
-      <li><a href="#" title="Sun" data-value="7">Sun</a></li>
-    </ul>
-    <div class="clearfix"></div>
-    <ul class="days">
-      <script>
-        for( var _i = 1; _i <= 31; _i += 1 ){
-          var _addClass = '';
-          if( _i === 12 ){ _addClass = ' class="selected"'; }
-          
-          switch( _i ){
-            case 8:
-            case 10:
-            case 27:
-              _addClass = ' class="event"';
-            break;
-          }
-
-          document.write( '<li><a href="#" title="'+_i+'" data-value="'+_i+'"'+_addClass+'>'+_i+'</a></li>' );
-        }
-      </script>
-    </ul>
-    <div class="clearfix"></div>
-  </div>
-</div>
-
-<div class="clearfix"></div>
-
-</div>
-                    </div>
                 </div>
             </div>
             <!-- Job List Area End -->
         </main>
 
-        <!-- Email Modal -->
-        <div id="emailModal" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog " role="document">
-                <div class="modal-content" style='margin-top:120px;'>
-                    <div class="modal-header">
-                        <h5 class="modal-title">Hiring Manager</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+        <div id="add" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content" style='margin-top:120px;'>
+            <div class="modal-header">
+                <h5 class="modal-title">Hiring Manager</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="hiringmanagerForm" action="hiring_manager.php" method="POST">
+                    <input type="hidden" name="id" id="hiringmanagerId"> <!-- Hidden input for ID (used for editing) -->
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" class="form-control" id="name" name="name">
                     </div>
-                    <div class="modal-body">
-                        <form action="hiring_manager.php" method="POST">
-                            <div class="form-group">
-                                <label for="name">Name:</label>
-                                <input type="text" class="form-control" id="name" name="name">
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email:</label>
-                                <input type="email" class="form-control" id="email" name="email">
-                            </div>
-                            <div class="form-group">
-                                <label for="designation">Designation:</label>
-                                <input type="text" class="form-control" id="designation" name="designation">
-                            </div>
-                            <div class="form-group">
-                                <label for="avalibility">Avalibility:</label>
-                                <input type="text" class="form-control" id="avalibility" name="avalibility">
-                            </div>
-                            <button type="submit" name="submit" id="submit" class="btn btn-primary">Send Email</button>
-                        </form>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" class="form-control" id="email" name="email">
                     </div>
-                </div>
+                    <div class="form-group">
+                        <label for="designation">Designation:</label>
+                        <select class="form-select mb-4" name="designation" id="designation">
+                            <option selected disabled>Select Job Category</option>
+                            <option value="Design & Creative">Design & Creative</option>
+                            <option value="Design & Development">Design & Development</option>
+                            <option value="Sales & Marketing">Sales & Marketing</option>
+                            <option value="Mobile Application">Mobile Application</option>
+                            <option value="Construction">Construction</option>
+                            <option value="Information Technology">Information Technology</option>
+                            <option value="Real Estate">Real Estate</option>
+                            <option value="Content Writer">Content Writer</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="avalibility">Avalibility:</label>
+                        <select class="form-select" name="avalibility" id="avalibility">
+                            <option selected disabled>Select Avalibility</option>
+                            <option value="10:00am To 11:00am">10:00am To 11:00am</option>
+                            <option value="11:00am To 12:00pm">11:00am To 12:00pm</option>
+                            <option value="12:00pm To 01:00pm">12:00pm To 01:00pm</option>
+                            <option value="01:00pm To 02:00pm">01:00pm To 02:00pm</option>
+                            <option value="02:00pm To 03:00pm">02:00pm To 03:00pm</option>
+                            <option value="03:00am To 04:00pm">03:00am To 04:00pm</option>
+                            <option value="04:00pm To 05:00pm">04:00pm To 05:00pm</option>
+                            <option value="05:00pm To 06:00pm">05:00pm To 06:00pm</option>
+                            <option value="06:00pm To 07:00pm">06:00pm To 07:00pm</option>
+                            <option value="07:00pm To 08:00pm">07:00pm To 08:00pm</option>
+                        </select>
+                    </div>
+                    <button type="submit" name="submit" id="submitBtn" class="btn btn-primary mt-3">Add</button>
+                </form>
             </div>
         </div>
+    </div>
+</div>
+
 
         <?php include "footer.php"; ?>
+        <script>
+           document.querySelectorAll('.fa-pen-to-square').forEach(function(editBtn) {
+    editBtn.onclick = function(event) {
+        // Get the row data
+        var row = event.target.closest('tr');
+        var id = row.querySelector('th').textContent;
+        var name = row.querySelector('td:nth-child(2)').textContent;
+        var email = row.querySelector('td:nth-child(3)').textContent;
+        var designation = row.querySelector('td:nth-child(4)').textContent;
+        var avalibility = row.querySelector('td:nth-child(5)').textContent;
 
+        // Populate the form fields
+        document.getElementById('hiringmanagerId').value = id; // Corrected to 'hiringmanagerId'
+        document.getElementById('name').value = name;
+        document.getElementById('email').value = email;
+        document.getElementById('designation').value = designation;
+        document.getElementById('avalibility').value = avalibility;
+
+        // Update the modal title and button text
+        document.querySelector('.modal-title').textContent = 'Edit Hiring Manager';
+        document.getElementById('submitBtn').textContent = 'Update';
+
+        // Show the modal
+        $('#add').modal('show');
+    };
+});
+
+
+// For Add button click
+document.querySelector('.add-btn button').onclick = function() {
+    // Reset the form fields
+    document.getElementById('hiringmanagerForm').reset();
+    document.getElementById('hiringmanagerId').value = ''; // Clear hidden ID field
+
+    // Update the modal title and button text
+    document.querySelector('.modal-title').textContent = 'Add Hiring Manager';
+    document.getElementById('submitBtn').textContent = 'Add';
+
+    // Show the modal
+    $('#add').modal('show');
+};
+
+
+            document.querySelectorAll('.fa-trash').forEach(function(deleteBtn) {
+        deleteBtn.onclick = function(event) {
+            var userId = event.target.id.split('-')[1];
+            if (confirm("Are you sure you want to delete this user?")) {
+                window.location.href = "hiring_manager.php?id=" + userId;
+            }
+        };
+    });
+        </script>
 	    <!-- JS here -->
         <script src="https://kit.fontawesome.com/3acead0521.js" crossorigin="anonymous"></script>
 		<!-- All JS Custom Plugins Link Here here -->
