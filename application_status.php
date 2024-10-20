@@ -2,18 +2,6 @@
 session_start();
 include "connection.php";
 
-// if ($_SERVER["REQUEST_METHOD"] == "POST") {
-//     $to_email = $_POST['to_email'];
-//     $subject = $_POST['subject'];
-//     $message = $_POST['message'];
-//     $headers = "From: your-email@example.com";
-
-//     if (mail($to_email, $subject, $message, $headers)) {
-//         echo "Email successfully sent to $to_email";
-//     } else {
-//         echo "Email sending failed!";
-//     }
-// }
 if(isset($_POST['submit'])){
     if(isset($_GET['application_id'])){
         $application_id = $_GET['application_id'];
@@ -41,6 +29,32 @@ if(isset($_POST['submit'])){
         
     }
 }
+if (isset($_POST['schedule'])) {
+    $application_id = $_POST['application_id'];
+    $interview_date = $_POST['interview_date'];
+    $meeting_link = $_POST['meeting_link'];
+    
+    // Split the selected value into interviewer_id and interview_time
+    $interview_selection = explode('|', $_POST['interview_time']);
+    $interviewer_id = $interview_selection[0];
+    $interview_time = $interview_selection[1];
+
+    $sql = "INSERT INTO interview_schedule (application_id, interview_time, interviewer_id, interview_date, meeting_link)
+            VALUES ('$application_id', '$interview_time', '$interviewer_id', '$interview_date', '$meeting_link')";
+
+if ($conn->query($sql) === TRUE) {
+    $_SESSION['interview_scheduled'] = true;
+    $_SESSION['application_id'] = $application_id;
+    $_SESSION['email_status'] = "success";
+    $_SESSION['message'] = "Interview Scheduled Successfully!";
+    header("Location: application_status.php?application_id=$application_id");
+    exit;
+}
+ else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
 
 ?>
 
@@ -147,9 +161,16 @@ if(isset($_POST['submit'])){
             }
 
             .email-btn{
-                margin-left:190px;
+                margin-left:150px;
             }
+            /* Ensure the email modal is on top by giving it a higher z-index */
+            #emailModal {
+                    z-index: 1051; /* Default Bootstrap modals have a z-index of 1050 */
+                }
 
+                #scheduleModal {
+                    z-index: 1050; /* This will appear below the email modal */
+                }
             /* Responsive Styling */
             @media (max-width: 768px) {
                 .main-div {
@@ -290,13 +311,27 @@ if(isset($_POST['submit'])){
                     <div class="status-div">
                         <div style="display:flex; margin-bottom:20px;">
                             <h2>Application Status</h2>
-                            <span  class=" email-btn">
-                                <button class="btn head-btn1" data-toggle="modal" data-target="#emailModal">Email</button>
-                            </span>
+                            <?php if ($status === 'Hired') { ?>
+                                <span class="email-btn">
+                                    <button class="btn head-btn1" data-toggle="modal" data-target="#emailModal">Email</button>
+                                </span>
+                            <?php }elseif($status === 'Rejected'){ ?>
+                                <span class="email-btn">
+                                    <button class="btn head-btn1" data-toggle="modal" data-target="#emailModal">Rejected Email</button>
+                                </span>
+                            <?php }elseif($status === 'Technical Interviewing'){?>
+                                <span class="email-btn">
+                                    <button class="btn head-btn1" data-toggle="modal" data-target="#scheduleModal">Schedule Interview</button>
+                                </span>
+                            <?php } elseif($status === 'Final Interview'){?>
+                                <span class="email-btn">
+                                    <button class="btn head-btn1" data-toggle="modal" data-target="#scheduleModal">Schedule Final Interview</button>
+                                </span>
+                            <?php } ?>
                         </div>
                         
                         <form action="application_status.php?application_id=<?php echo $_GET['application_id']; ?>" method="POST" enctype="multipart/form-data" >
-                            <div class="form-group">
+                            <div class="form-group mb-5">
                                 <label  class="form-label">Status</label>
                                 <select class="form-select mb-4" name="status" id="status" >
                                     <option selected disabled>Select Application Status</option>
@@ -309,7 +344,7 @@ if(isset($_POST['submit'])){
                                     <option value="Rejected" <?php if($status =='Rejected') echo'selected'; ?>>Rejected </option>
                                 </select>
                             </div>
-                            <button style="display:flex;" type="submit"  name='submit' class="btn head-btn2 mt-3">Submit</button>
+                            <button style="display:flex;" type="submit"  name='submit' class="btn head-btn2 mt-5">Submit</button>
                         </form>
                     </div>
                 </div>
@@ -337,7 +372,7 @@ if(isset($_POST['submit'])){
                             </div>
                             <div class="form-group">
                                 <label for="subject">Subject:</label>
-                                <input type="text" class="form-control" id="subject" name="subject">
+                                <input type="text" class="form-control" id="subject" name="subject" value="<?php echo $status; ?>">
                             </div>
                             <div class="form-group">
                                 <label for="message">Message:</label>
@@ -349,6 +384,72 @@ if(isset($_POST['submit'])){
                 </div>
             </div>
         </div>
+
+
+<!-- Schedule Interview Modal -->
+<div id="scheduleModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content" style='margin-top:110px; margin-left:-50px; width:650px;'>
+            <div class="modal-header">
+                <h5 class="modal-title">Schedule Interview</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="scheduleInterviewForm" action="application_status.php" method="POST">
+                    <input type="hidden" class="form-control" id="application_id" name="application_id" value="<?php echo $application_id; ?>" readonly>
+
+                    <div class="form-group mb-5">
+                        <label for="interview_time">Interview Time:</label>
+                        <select class="form-select" name="interview_time" id="interview_time">
+                            <option value="" disabled selected>Select interview Schedule</option>
+                        <?php
+                            include "connection.php";
+
+                            if($status =='Technical Interviewing'){ 
+                                $sql = "SELECT * FROM interviewer";
+                                $inter_name = "Interviewer Name";
+                                $interviewer_id = $row['id'];
+
+                            } elseif($status =='Final Interview'){ 
+                                $sql = "SELECT * FROM hiring_managers";
+                                $inter_name = "Manager Name";
+                                $interviewer_id = $row['id'];
+                            }
+
+                            $result = $conn->query($sql);
+                            if ($result->num_rows > 0) {
+                                while($row = $result->fetch_assoc()) {?>
+                            <option value="<?php echo $row['id'] . '|' . $row['avalibility']; ?>">
+                                <?php echo $inter_name . ": " . $row['name'] . " | Category: " . $row['designation'] . " | Availability: " . $row['avalibility']; ?>
+                            </option>
+                            <?php 
+                                }
+                            }?>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="interview_date">Interview Date:</label>
+                        <input type="date" class="form-control" id="interview_date" name="interview_date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Meeting_link">Meetinglink:</label>
+                        <input type="text" class="form-control" id="meeting_link" name="meeting_link" placeholder="Enter Interview Meeting Link" required>
+                    </div>
+                    <button type="submit" name="schedule" class="btn btn-primary">Schedule Interview</button>
+
+                    <?php if(isset($_SESSION['interview_scheduled'])) { ?>
+                        <!-- Show email button after interview is scheduled -->
+                        <button type="button" class="btn btn-success mt-3" data-toggle="modal" data-target="#emailModal">Send Interview Details Email</button>
+                    <?php } ?>
+                </form> 
+            </div>
+        </div>
+    </div>
+</div>
 
         <?php include "footer.php"; ?>
         <script src="vendor/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
@@ -369,8 +470,21 @@ if(isset($_POST['submit'])){
                         $("#validationAlert").addClass('d-none');
                     }
                 });
-            });           
-            
+            });
+            <?php
+if (isset($_SESSION['interview_scheduled'])) {
+    echo "<script>console.log('Modal will open. Session is set.')</script>";
+?>
+    <script>
+        $(document).ready(function () {
+            console.log('Opening modal...');
+            $('#scheduleModal').modal('show');
+        });
+    </script>
+<?php
+    unset($_SESSION['interview_scheduled']);
+} ?>
+
         </script>
 
 	    <!-- JS here -->
