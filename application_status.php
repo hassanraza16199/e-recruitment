@@ -14,6 +14,8 @@ if(isset($_POST['submit'])){
          $recruiter_id = $_SESSION['id'];
          $recruiter_name = $_SESSION['name'];
          $notification_title = "Status";
+         $job_title = $_POST['job_title'];
+         $candidate_id = $_POST['candidate_id'];
          $message = " Your job application against $job_title has been approved by the $recruiter_name.";
          
          // Insert notification data
@@ -344,6 +346,8 @@ if ($conn->query($sql) === TRUE) {
                                     <option value="Rejected" <?php if($status =='Rejected') echo'selected'; ?>>Rejected </option>
                                 </select>
                             </div>
+                            <input type="hidden" name="job_title" value="<?= $job_title; ?>">
+                            <input type="hidden" name="candidate_id" value="<?= $candidate_id; ?>">
                             <button style="display:flex;" type="submit"  name='submit' class="btn head-btn2 mt-5">Submit</button>
                         </form>
                     </div>
