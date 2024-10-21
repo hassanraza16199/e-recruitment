@@ -80,11 +80,12 @@ background-color: #f1f1f1;
 font-weight: bold;
 }
 .header-del{
-background-color:#fb246a;
-color:#fff;
+background-color:#fff;
+color:#007bff;
 border:none;
 height: 50px;
 width: 30%;
+font-size:12px;
 cursor: pointer;
 }
 .mark-read {

@@ -67,7 +67,6 @@ $read_result = $conn->query($read_sql);
             <link rel="stylesheet" href="assets/css/nice-select.css">
             <link rel="stylesheet" href="assets/css/style.css">
             <link rel="stylesheet" href="assets/css2/nav.css">
-            
    </head>
 
    <body>
@@ -151,7 +150,7 @@ $read_result = $conn->query($read_sql);
                 <button class="header-del">Mark All as Read</button>
             </div>
             <div class="unread">
-                <h4>Unread Messages</h4>
+                <h5>Unread Messages</h5>
                 <?php
                 if ($unread_result === false) {
                     // Output the error message
@@ -179,7 +178,7 @@ $read_result = $conn->query($read_sql);
 
             <!-- Read Messages -->
             <div class="read">
-                <h4>Read Messages</h4>
+                <h5>Read Messages</h5>
                 <?php
                 if ($read_result === false) {
                     // Output the error message
