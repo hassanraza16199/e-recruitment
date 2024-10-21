@@ -49,7 +49,7 @@ include "connection.php";
     <?php
     include "connection.php";
         $job_id = $_GET['job_id'];
-        $recruiter_id = $_GET['recruiter_id'];
+        $recruiter_id = isset($_GET['recruiter_id']) ? $_GET['recruiter_id'] : '';
                     
                     $sql = "SELECT * FROM job_post WHERE job_id = '$job_id' ";
                     $result = mysqli_query($conn, $sql);
