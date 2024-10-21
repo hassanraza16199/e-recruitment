@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 17, 2024 at 08:06 AM
+-- Generation Time: Oct 21, 2024 at 07:23 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -54,12 +54,13 @@ CREATE TABLE `applications` (
 
 INSERT INTO `applications` (`application_id`, `candidate_id`, `recruiter_id`, `job_id`, `job_title`, `firstname`, `lastname`, `email_address`, `cnic`, `contact_number`, `date_birth`, `city`, `candidate_education`, `candidate_skill`, `candidate_experience`, `resume`, `status`, `date`) VALUES
 (58, 18, 21, 85, '', 'kiran', '12', 'kiran@gmail.com', '', 0, '', '', 'BSCS', 'Front end', '1', '1727452614HussnainUmer-CV.pdf', '', '2024-09-27'),
-(59, 18, 21, 85, '', 'kiran', '12', 'noreenasma368@gmail.com\n', '', 0, '', 'Pakistan', 'Inter', 'Back end', '1', '1727533898HussnainUmer-CV.pdf', 'Pending', '2024-09-28'),
+(59, 18, 21, 85, '', 'kiran', '12', 'noreenasma368@gmail.com\n', '', 0, '', 'Pakistan', 'Inter', 'Back end', '1', '1727533898HussnainUmer-CV.pdf', 'Technical Interviewing', '2024-09-28'),
 (62, 18, 21, 87, '', 'kiran', '12', 'eye@gmail.com', '23233232322323', 111111111, '2000-11-02', 'Pakistan', 'Mphil', 'dfhgd', '1', '1728119250HussnainUmer-CV.pdf', '', '2024-10-05'),
 (63, 18, 21, 87, '', 'kiran', '12', 'hussnain.umer.vu@gmail.com', '23233232322323', 1111111111, '', '', 'dhg', 'dfhgd', '1', '1728279530HussnainUmer-CV.pdf', 'Approve', '2024-10-07'),
 (64, 18, 21, 87, '', 'kiran', '12', 'eye@gmail.com', '23233232322323', 1111111111, '', '', 'dhg', 'dfhgd', 'dsfgh', '1728279571HussnainUmer-CV.pdf', '', '2024-10-07'),
 (65, 18, 21, 87, '', 'kiran', '12', 'eye@gmail.com', '', 1111111111, '', '', '', '', '', '1728279589HussnainUmer-CV.pdf', 'Pending', '2024-10-07'),
-(66, 18, 21, 87, 'Sign1', 'kiran', '12', 'eye@gmail.com', '', 1111111111, '', '', '', '', '', '1728279859HussnainUmer-CV.pdf', 'Shortlist', '2024-10-07');
+(66, 18, 21, 87, 'Sign1', 'kiran', '12', 'eye@gmail.com', '', 1111111111, '', '', '', '', '', '1728279859HussnainUmer-CV.pdf', 'Shortlist', '2024-10-07'),
+(67, 18, 21, 106, 'Sign', 'kiran', 'Testing', 'eye@gmail.com', '23233232322323', 1111111111, '', '', 'dhg', 'dfhgd', 'dsfgh', '1729177475HussnainUmer-CV.pdf', '', '2024-10-17');
 
 -- --------------------------------------------------------
 
@@ -173,7 +174,9 @@ CREATE TABLE `hiring_managers` (
 --
 
 INSERT INTO `hiring_managers` (`id`, `name`, `email`, `designation`, `avalibility`) VALUES
-(1, 'hussnain', 'hussnain@gmail.com', 'front end', '12:00 to 01:00');
+(1, 'hussnain', 'hussnain@gmail.com', 'Design & Creative', '11:00am To 12:00pm'),
+(3, 'Asma', 'asma342@gmail.com', 'Design & Development', '04:00pm To 05:00pm'),
+(4, 'ali', 'ality342@gmail.com', 'Mobile Application', '03:00am To 04:00pm');
 
 -- --------------------------------------------------------
 
@@ -194,7 +197,36 @@ CREATE TABLE `interviewer` (
 --
 
 INSERT INTO `interviewer` (`id`, `name`, `email`, `designation`, `avalibility`) VALUES
-(1, 'asma', 'asma342@gmail.com', 'front end', '12:00 to 01:00');
+(3, 'ali', 'ality342@gmail.com', 'Design & Development', '12:00am To 01:00pm'),
+(4, 'umer', 'ality342@gmail.com', 'Design & Development', '11:00am To 12:00pm');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `interview_schedule`
+--
+
+CREATE TABLE `interview_schedule` (
+  `schedule_id` int(11) NOT NULL,
+  `application_id` int(11) NOT NULL,
+  `interviewer_id` int(11) NOT NULL,
+  `interview_time` varchar(250) NOT NULL,
+  `interview_date` varchar(250) NOT NULL,
+  `meeting_link` varchar(250) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `interview_schedule`
+--
+
+INSERT INTO `interview_schedule` (`schedule_id`, `application_id`, `interviewer_id`, `interview_time`, `interview_date`, `meeting_link`) VALUES
+(1, 59, 0, '11:00am To 12:00pm', '2024-10-19', 'link'),
+(2, 59, 4, '11:00am To 12:00pm', '2024-10-21', 'link'),
+(3, 59, 3, '12:00am To 01:00pm', '2024-10-22', 'link2'),
+(4, 59, 3, '12:00am To 01:00pm', '2024-10-22', 'link2'),
+(5, 59, 4, '11:00am To 12:00pm', '2024-10-22', 'link2'),
+(6, 59, 12, '', '2024-10-25', 'link2'),
+(7, 59, 3, '12:00am To 01:00pm', '2024-10-28', 'link2');
 
 -- --------------------------------------------------------
 
@@ -236,7 +268,6 @@ INSERT INTO `job_post` (`job_id`, `recruiter_id`, `job_title`, `recruiter_name`,
 (98, 21, 'New0', 'Andleeb', '1727792826external.png', 'New1', 'New', 'Karachi', 'new.com', 'new@gmail.com', '10000', 'Remote', '2024-10-01', 'Other', 'New2', 'New\r\n3', '2024-11-11', '5', 'active', '2024-10-10 14:27:06'),
 (99, 21, 'Dip', 'Andleeb', '1727415327Capture.PNG', 'Dip', 'Backend', 'Lahore', 'drop.com', 'drop@gmail.com', '20000', 'Full Time', '2024-09-27', 'Design & Development', 'lenders and partners can develop an accurate impression of who you are.1 A good company description should succinctly outline key details while co', 'Bscs\r\n1 year', '2024-11-11', '2', 'active', '2024-10-10 05:35:27'),
 (100, 21, 'Sign1', 'Andleeb', '1727618737project3.PNG', 'Drop', 'dfghsdfhgf\r\ndf', 'Lahore', 'drop.com', 'drop@gmail.com', '10000', 'Remote', '2024-09-29', 'Sales & Marketing', '1', 'ghjjh\r\nghjk', '2024-11-17', '7', 'active', '2024-10-10 14:05:37'),
-(101, 21, 'Sign1', 'Andleeb', '1727618737project3.PNG', 'Drop', 'dfghsdfhgf\r\ndf', 'Lahore', 'drop.com', 'drop@gmail.com', '10000', 'Remote', '2024-09-29', 'Sales & Marketing', '1', 'ghjjh\r\nghjk', '2024-11-17', '7', 'active', '2024-10-10 14:05:37'),
 (102, 21, 'Dip', 'Andleeb', '1727415327Capture.PNG', 'Dip', 'Backend', 'Lahore', 'drop.com', 'drop@gmail.com', '20000', 'Full Time', '2024-09-27', 'Design & Development', 'lenders and partners can develop an accurate impression of who you are.1 A good company description should succinctly outline key details while co', 'Bscs\r\n1 year', '2024-11-11', '2', 'active', '2024-10-10 05:35:27'),
 (103, 21, 'New0', 'Andleeb', '1727792826external.png', 'New1', 'New', 'Karachi', 'new.com', 'new@gmail.com', '10000', 'Remote', '2024-10-01', 'Other', 'New2', 'New\r\n3', '2024-11-11', '5', 'active', '2024-10-10 14:27:06'),
 (104, 21, 'Front End', 'Andleeb', '1728655790e-recruitment-system-high-resolution-logo-removebg.png', 'KT', 'fghsdfg', 'Islamabad', 'om.com', 'new@gmail.com', '1000', 'Full Time', '2024-10-11', 'Design & Development', 'The company description of your business plan describ', 'dfghdfg', '2024-11-11', '10', 'active', '2024-10-11 14:09:50'),
@@ -298,7 +329,15 @@ INSERT INTO `notification` (`notification_id`, `job_or_status_id`, `recruiter_id
 (13, 104, 21, 0, 'Job', 'Andleeb posted a new job Front End', '1', '2024-10-10 19:00:00'),
 (14, 104, 21, 0, 'Job', 'Andleeb posted a new job Front End', '1', '2024-10-10 19:00:00'),
 (15, 65, 21, 18, 'Status', ' Your job application against  has been approved by tha ', '1', '2024-10-11 00:34:45'),
-(16, 63, 1, 0, 'Status', ' Your job application against  has been approved by the Admin.', '', '2024-10-16 04:21:03');
+(16, 63, 1, 0, 'Status', ' Your job application against  has been approved by the Admin.', '', '2024-10-16 04:21:03'),
+(17, 104, 21, 0, 'Job', 'Andleeb posted a new job Front End', '1', '2024-10-16 19:00:00'),
+(18, 59, 1, 0, 'Status', ' Your job application against  has been approved by the Admin.', '', '2024-10-18 03:58:23'),
+(19, 59, 1, 0, 'Status', ' Your job application against  has been approved by the Admin.', '', '2024-10-18 04:07:07'),
+(20, 59, 1, 0, 'Status', ' Your job application against  has been approved by the Admin.', '', '2024-10-18 04:18:42'),
+(21, 59, 1, 0, 'Status', ' Your job application against  has been approved by the Admin.', '', '2024-10-18 04:18:54'),
+(22, 59, 1, 0, 'Status', ' Your job application against  has been approved by the Admin.', '', '2024-10-18 00:58:00'),
+(23, 59, 21, 0, 'Status', ' Your job application against  has been approved by the Andleeb.', '', '2024-10-19 02:16:47'),
+(24, 59, 21, 0, 'Status', ' Your job application against  has been approved by the Andleeb.', '', '2024-10-19 02:16:59');
 
 -- --------------------------------------------------------
 
@@ -324,7 +363,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `name`, `email`, `password`, `birthdate`, `city`, `phone`, `user_type`, `time`, `status`) VALUES
-(1, 'Admin', 'admin@gmail.com', '12345', '2001-12-10', 'Pakistan', '03490445362', 'admin', '0000-00-00 00:00:00', 'active'),
+(1, 'Admin', 'admin@gmail.com', '12345', '', '', '', 'admin', '2024-10-18 08:33:31', 'active'),
 (18, 'Kiran', 'kiran@gmail.com', '12345', '2000-11-11', '11111111111', '11111111111', 'Candidate', '2024-08-08 08:13:52', 'active'),
 (21, 'Andleeb', 'andleeb@gmail.com', '12345', '1990-12-12', 'Pakistan', '03110765697', 'Recruiter', '2024-08-31 08:16:23', 'active');
 
@@ -366,6 +405,12 @@ ALTER TABLE `interviewer`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `interview_schedule`
+--
+ALTER TABLE `interview_schedule`
+  ADD PRIMARY KEY (`schedule_id`);
+
+--
 -- Indexes for table `job_post`
 --
 ALTER TABLE `job_post`
@@ -398,7 +443,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `applications`
 --
 ALTER TABLE `applications`
-  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT for table `contact_us`
@@ -416,13 +461,19 @@ ALTER TABLE `feedback`
 -- AUTO_INCREMENT for table `hiring_managers`
 --
 ALTER TABLE `hiring_managers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `interviewer`
 --
 ALTER TABLE `interviewer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `interview_schedule`
+--
+ALTER TABLE `interview_schedule`
+  MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `job_post`
@@ -440,7 +491,7 @@ ALTER TABLE `mail`
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `user`
