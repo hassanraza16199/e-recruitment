@@ -99,242 +99,245 @@ $sql .= " ORDER BY created_at DESC LIMIT $offset, $jobs_per_page";
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" type="image/x-icon" href="assets/img/fav.png">
 		<!-- CSS here -->
-            <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-            <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
-            <link rel="stylesheet" href="assets/css/price_rangs.css">
-            <link rel="stylesheet" href="assets/css/flaticon.css">
-            <link rel="stylesheet" href="assets/css/slicknav.css">
-            <link rel="stylesheet" href="assets/css/animate.min.css">
-            <link rel="stylesheet" href="assets/css/magnific-popup.css">
-            <link rel="stylesheet" href="assets/css/fontawesome-all.min.css">
-            <link rel="stylesheet" href="assets/css/themify-icons.css">
-            <link rel="stylesheet" href="assets/css/slick.css">
-            <link rel="stylesheet" href="assets/css/nice-select.css">
-            <link rel="stylesheet" href="assets/css/style.css">
-            <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
-            <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-            <style>
-                .d-flex{
-                    justify-content:center;
-                }
-                .icon-btn{
-                    color:black;
-                    background:white;
-                    border:0;
-                    height: 50px;
-                    border-top-left-radius: 25px;
-                    border-bottom-left-radius: 25px;
-                }
-                .select-input{
-                    width: 35%;
-                    height: 50px;
-                    border:none;
-                    
-                }
-                .search-btn{
-                    border-top-right-radius: 25px;
-                    border-bottom-right-radius: 25px;
-                    background: #fb246a;
-	                color:white;
-                    height: 50px;
-	                display: inline-block;
-	                padding: 13px 35px;
-	                font-family: "Muli", sans-serif;
-	                font-size: 14px;
-	                font-weight: 400;
-	                border: 1px solid #fb246a;
-	                letter-spacing: 3px;
-	                text-align: center;
-	                text-transform: uppercase;
-	                cursor: pointer
-                }
-                .modal-confirm {
-color: #fb246a;
-width: 325px;
-}
-.modal-confirm .modal-content {
-padding: 20px;
-border-radius: 5px;
-margin-top:30%;
-border: none;
-}
-.modal-confirm .modal-header {
-border-bottom: none;
-position: relative;
-}
-.modal-confirm h4 {
-text-align: center;
-font-size: 26px;
-margin: 30px 0 -15px;
-}
-.modal-confirm .form-control, .modal-confirm .btn {
-min-height: 40px;
-border-radius: 3px;
-}
-.modal-confirm .close {
-position: absolute;
-top: -5px;
-right: -5px;
-}
-.modal-confirm .modal-footer {
-border: none;
-text-align: center;
-border-radius: 5px;
-font-size: 13px;
-}
-.modal-confirm .icon-box {
-color: #fff;
-position: absolute;
-margin: 0 auto;
-left: 0;
-right: 0;
-top: -70px;
-width: 95px;
-height: 95px;
-border-radius: 50%;
-z-index: 9;
-background: #fb246a;
-padding: 15px;
-text-align: center;
-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
-}
-.modal-confirm .icon-box i {
-font-size: 58px;
-position: relative;
-top: 3px;
-}
-.modal-confirm.modal-dialog {
-margin-top: 80px;
-}
-.modal-confirm .btn {
-color: #fff;
-border-radius: 4px;
-background: #fb246a;
-text-decoration: none;
-transition: all 0.4s;
-line-height: normal;
-border: none;
-}
-.modal-confirm .btn:hover, .modal-confirm .btn:focus {
-background: #fb246a;
-outline: none;
-}
-.trigger-btn {
-display: inline-block;
-margin: 100px auto;
-}
-.icons{
-    justify-content:center;
-}
-.icons a{
-  display: flex;
-  align-items: center;
-  margin:7px 18px;
-  border-radius: 50%;
-  justify-content: center;
-  transition: all 0.3s ease-in-out;
-}
-.icons a{
-  height: 50px;
-  width: 50px;
-  font-size: 20px;
-  text-decoration: none;
-  border: 1px solid transparent;
-}
-.icons a i{
-  transition: transform 0.3s ease-in-out;
-}
-.icons a:nth-child(1){
-  color: #1877F2;
-  border-color: #b7d4fb;
-}
-.icons a:nth-child(1):hover{
-  background: #1877F2;
-}
-.icons a:nth-child(2){
-  color: #46C1F6;
-  border-color: #b6e7fc;
-}
-.icons a:nth-child(2):hover{
-  background: #46C1F6;
-}
-.icons a:nth-child(3){
-  color: #e1306c;
-  border-color: #f5bccf;
-}
-.icons a:nth-child(3):hover{
-  background: #e1306c;
-}
-.icons a:nth-child(4){
-  color: #25D366;
-  border-color: #bef4d2;
-}
-.icons a:nth-child(4):hover{
-  background: #25D366;
-}
-.icons a:nth-child(5){
-  color: #0088cc;
-  border-color: #b3e6ff;
-}
-.icons a:nth-child(5):hover{
-  background: #0088cc;
-}
-.icons a:hover{
-  color: #fff;
-  border-color: transparent;
-}
-.icons a:hover i{
-  transform: scale(1.2);
-}
-.field{
-    display:flex;
-  margin: 12px 0 -5px 0;
-  height: 45px;
-  border-radius: 4px;
-  padding: 0 5px;
-  border: 1px solid #757171;
-}
-.field.active{
-  border-color: #7d2ae8;
-}
-.field i{
-  margin:10px 2px;
-  width: 50px;
-  font-size: 18px;
-  text-align: center;
-  color:black;
-}
-.field input{
-  width: 100%;
-  height: 100%;
-  border: none;
-  outline: none;
-  font-size: 15px;
-}
-.input_btn{
-  color: #fff;
-  padding: 5px 18px;
-  border:none;
-  background: #fb246a;
-}
-.input_btn:hover{
-  background: #fb246a;
-}
-.share_btn {
-    color: #8b92dd;
-    display: block;
-    width:100%;
-    border: 1px solid #8b92dd;
-    border-radius: 30px;
-    padding: 4px 33px;
-    text-align: center;
-    margin-bottom: 25px;
-}
-
-            </style>
+        <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+        <link rel="stylesheet" href="assets/css/price_rangs.css">
+        <link rel="stylesheet" href="assets/css/flaticon.css">
+        <link rel="stylesheet" href="assets/css/slicknav.css">
+        <link rel="stylesheet" href="assets/css/animate.min.css">
+        <link rel="stylesheet" href="assets/css/magnific-popup.css">
+        <link rel="stylesheet" href="assets/css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="assets/css/themify-icons.css">
+        <link rel="stylesheet" href="assets/css/slick.css">
+        <link rel="stylesheet" href="assets/css/nice-select.css">
+        <link rel="stylesheet" href="assets/css/style.css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <style>
+            .d-flex{
+                justify-content:center;
+            }
+            .icon-btn{
+                color:black;
+                background:white;
+                border:0;
+                height: 50px;
+                border-top-left-radius: 25px;
+                border-bottom-left-radius: 25px;
+            }
+            .select-input{
+                width: 35%;
+                height: 50px;
+                border:none;
+                
+            }
+            .search-btn{
+                border-top-right-radius: 25px;
+                border-bottom-right-radius: 25px;
+                background: #fb246a;
+                color:white;
+                height: 50px;
+                display: inline-block;
+                padding: 13px 35px;
+                font-family: "Muli", sans-serif;
+                font-size: 14px;
+                font-weight: 400;
+                border: 1px solid #fb246a;
+                letter-spacing: 3px;
+                text-align: center;
+                text-transform: uppercase;
+                cursor: pointer
+            }
+            .modal-confirm {
+                color: #fb246a;
+                width: 325px;
+            }
+            .modal-confirm .modal-content {
+                padding: 20px;
+                border-radius: 5px;
+                margin-top:30%;
+                border: none;
+            }
+            .modal-confirm .modal-header {
+                border-bottom: none;
+                position: relative;
+            }
+            .modal-confirm h4 {
+                text-align: center;
+                font-size: 26px;
+                margin: 30px 0 -15px;
+            }
+            .modal-confirm .form-control, .modal-confirm .btn {
+                min-height: 40px;
+                border-radius: 3px;
+            }
+            .modal-confirm .close {
+                position: absolute;
+                top: -5px;
+                right: -5px;
+            }
+            .modal-confirm .modal-footer {
+                border: none;
+                text-align: center;
+                border-radius: 5px;
+                font-size: 13px;
+            }
+            .modal-confirm .icon-box {
+                color: #fff;
+                position: absolute;
+                margin: 0 auto;
+                left: 0;
+                right: 0;
+                top: -70px;
+                width: 95px;
+                height: 95px;
+                border-radius: 50%;
+                z-index: 9;
+                background: #fb246a;
+                padding: 15px;
+                text-align: center;
+                box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+            }
+            .modal-confirm .icon-box i {
+                font-size: 58px;
+                position: relative;
+                top: 3px;
+            }
+            .modal-confirm.modal-dialog {
+                margin-top: 80px;
+            }
+            .modal-confirm .btn {
+                color: #fff;
+                border-radius: 4px;
+                background: #fb246a;
+                text-decoration: none;
+                transition: all 0.4s;
+                line-height: normal;
+                border: none;
+            }
+            .modal-confirm .btn:hover, .modal-confirm .btn:focus {
+                background: #fb246a;
+                outline: none;
+            }
+            .trigger-btn {
+                display: inline-block;
+                margin: 100px auto;
+            }
+            .icons{
+                justify-content:center;
+            }
+            .icons a{
+                display: flex;
+                align-items: center;
+                margin:7px 18px;
+                border-radius: 50%;
+                justify-content: center;
+                transition: all 0.3s ease-in-out;
+            }
+            .icons a{
+                height: 50px;
+                width: 50px;
+                font-size: 20px;
+                text-decoration: none;
+                border: 1px solid transparent;
+            }
+            .icons a i{
+                transition: transform 0.3s ease-in-out;
+            }
+            .icons a:nth-child(1){
+                color: #1877F2;
+                border-color: #b7d4fb;
+            }
+            .icons a:nth-child(1):hover{
+                background: #1877F2;
+            }
+            .icons a:nth-child(2){
+                color: #46C1F6;
+                border-color: #b6e7fc;
+            }
+            .icons a:nth-child(2):hover{
+                background: #46C1F6;
+            }
+            .icons a:nth-child(3){
+                color: #e1306c;
+                border-color: #f5bccf;
+            }
+            .icons a:nth-child(3):hover{
+                background: #e1306c;
+            }
+            .icons a:nth-child(4){
+                color: #25D366;
+                border-color: #bef4d2;
+            }
+            .icons a:nth-child(4):hover{
+                background: #25D366;
+            }
+            .icons a:nth-child(5){
+                color: #0088cc;
+                border-color: #b3e6ff;
+            }
+            .icons a:nth-child(5):hover{
+                background: #0088cc;
+            }
+            .icons a:hover{
+                color: #fff;
+                border-color: transparent;
+            }
+            .icons a:hover i{
+                transform: scale(1.2);
+            }
+            .field{
+                display:flex;
+                margin: 12px 0 -5px 0;
+                height: 45px;
+                border-radius: 4px;
+                padding: 0;
+                border: 1px solid #757171;
+            }
+            .field.active{
+                border-color: #7d2ae8;
+            }
+            .field i{
+                margin:10px 2px;
+                width: 50px;
+                font-size: 18px;
+                text-align: center;
+                color:black;
+            }
+            .field input{
+                width: 100%;
+                height: 100%;
+                border: none;
+                outline: none;
+                font-size: 15px;
+            }
+            .input_btn{
+                color: #fff;
+                padding-top: 10px;
+                padding-bottom: 9px;
+                padding-right: 18px;
+                padding-left: 18px;
+                border:none;
+                background: #fb246a;
+                cursor: pointer;
+            }
+            .input_btn:hover{
+                background: #fb246a;
+            }
+            .share_btn {
+                color: #8b92dd;
+                display: block;
+                width:100%;
+                border: 1px solid #8b92dd;
+                border-radius: 30px;
+                padding: 4px 33px;
+                text-align: center;
+                margin-bottom: 25px;
+            }
+        </style>
    </head>
 
    <body>
@@ -354,7 +357,6 @@ margin: 100px auto;
 
 
     <main>
-
         <!-- Hero Area Start-->
         <div class="slider-area ">
             <div class="single-slider section-overly slider-height2 d-flex align-items-center" data-background="assets/img/hero/about.jpg">
@@ -385,13 +387,7 @@ margin: 100px auto;
                         <div class="row">
                             <div class="col-12">
                                     <div class="small-section-tittle2 mb-45">
-                                    <div class="ion"> <svg 
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        width="20px" height="12px">
-                                    <path fill-rule="evenodd"  fill="rgb(27, 207, 107)"
-                                        d="M7.778,12.000 L12.222,12.000 L12.222,10.000 L7.778,10.000 L7.778,12.000 ZM-0.000,-0.000 L-0.000,2.000 L20.000,2.000 L20.000,-0.000 L-0.000,-0.000 ZM3.333,7.000 L16.667,7.000 L16.667,5.000 L3.333,5.000 L3.333,7.000 Z"/>
-                                    </svg>
+                                        <div class="ion"> <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20px" height="12px"><path fill-rule="evenodd"  fill="rgb(27, 207, 107)" d="M7.778,12.000 L12.222,12.000 L12.222,10.000 L7.778,10.000 L7.778,12.000 ZM-0.000,-0.000 L-0.000,2.000 L20.000,2.000 L20.000,-0.000 L-0.000,-0.000 ZM3.333,7.000 L16.667,7.000 L16.667,5.000 L3.333,5.000 L3.333,7.000 Z"/></svg>
                                     </div>
                                     <h4>Filter Jobs</h4>
                                 </div>
@@ -406,49 +402,49 @@ margin: 100px auto;
                                </div>
                                 <!-- Select job items start -->
                                 <form method="GET" action="job_listing.php">
-                                <div class="select-job-items2">
-                                    <select name="categories" required>
-                                        <option selected disabled>Select Job Category</option>
-                                        <option value="Design & Creative">Design & Creative</option>
-                                        <option value="Design & Development">Design & Development</option>
-                                        <option value="Sales & Marketing">Sales & Marketing</option>
-                                        <option value="Mobile Application">Mobile Application</option>
-                                        <option value="Construction">Construction</option>
-                                        <option value="Information Technology">Information Technology</option>
-                                        <option value="Real Estate">Real Estate</option>
-                                        <option value="Content Writer">Content Writer</option>
-                                        <option value="Other">Other</option>
-                                    </select>
-                                </div>
-                                <!--  Select job items End-->
-                                <!-- select-Categories start -->
-                                <div class="select-Categories pt-80 pb-50">
-                                    <div class="small-section-tittle2">
-                                        <h4>Job Type</h4>
+                                    <div class="select-job-items2">
+                                        <select name="categories" required>
+                                            <option selected disabled>Select Job Category</option>
+                                            <option value="Design & Creative">Design & Creative</option>
+                                            <option value="Design & Development">Design & Development</option>
+                                            <option value="Sales & Marketing">Sales & Marketing</option>
+                                            <option value="Mobile Application">Mobile Application</option>
+                                            <option value="Construction">Construction</option>
+                                            <option value="Information Technology">Information Technology</option>
+                                            <option value="Real Estate">Real Estate</option>
+                                            <option value="Content Writer">Content Writer</option>
+                                            <option value="Other">Other</option>
+                                        </select>
                                     </div>
-                                    <label class="container">Full Time
-                                        <input type="checkbox" name="timing[]" value="Full Time">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container">Part Time
-                                        <input type="checkbox" name="timing[]" value="Part Time">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container">Remote
-                                        <input type="checkbox" name="timing[]" value="Remote">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container">Freelance
-                                        <input type="checkbox" name="timing[]" value="Freelance">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
+                                    <!--  Select job items End-->
+                                    <!-- select-Categories start -->
+                                    <div class="select-Categories pt-80 pb-50">
+                                        <div class="small-section-tittle2">
+                                            <h4>Job Type</h4>
+                                        </div>
+                                        <label class="container">Full Time
+                                            <input type="checkbox" name="timing[]" value="Full Time">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container">Part Time
+                                            <input type="checkbox" name="timing[]" value="Part Time">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container">Remote
+                                            <input type="checkbox" name="timing[]" value="Remote">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container">Freelance
+                                            <input type="checkbox" name="timing[]" value="Freelance">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
                                 <!-- select-Categories End -->
                             </div>
                             <!-- single two -->
                             <div class="single-listing">
-                               <div class="small-section-tittle2">
-                                     <h4>Job Location</h4>
+                                <div class="small-section-tittle2">
+                                    <h4>Job Location</h4>
                                </div>
                                 <!-- Select job items start -->
                                 <div class="select-job-items2">
@@ -496,10 +492,9 @@ margin: 100px auto;
                             <div class="single-listing">
                                 <!-- Range Slider Start -->
                                 <aside class="left_widgets p_filter_widgets price_rangs_aside sidebar_box_shadow">
-                                    
                                     <button type="submit" class='btn mt-5'>Filter Jobs</button>
                                 </aside>
-            </form>
+                                </form>
                               <!-- Range Slider End -->
                             </div>
                         </div>
@@ -509,7 +504,6 @@ margin: 100px auto;
                     <div class="col-xl-9 col-lg-9 col-md-8">
                         <!-- Featured_job_start -->
                         <section class="featured-job-area">
-                            
                                 <!-- Count of Job list Start -->
                                 <div class="row">
                                     <div class="col-lg-12">
@@ -656,7 +650,7 @@ if ($result->num_rows > 0) {
         echo "</div>";
         echo "<div class='items-link items-link2 f-right'>";
         echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'>" . $row['timing'] . "</a> <br>";
-         echo "<button class='share_btn' style='margin-top:-25px;cursor: pointer;'>Share</button> <br>";
+         echo "<button class='share_btn' style='margin-top:-25px; cursor: pointer;' data-url='job_details.php?job_id=" . $row['job_id'] . "' data-toggle='modal' data-target='#shareModal'>Share</button> <br>";
         echo "<span><i class='fas fa-map-marker-alt'></i> " . $row['company_location'] . "</span>";
         echo "<span class='mt-2'>Salary:  " . $row['salary'] . "</span>";
         echo "<span class='mt-2'>  " . $time_ago . "</span>";
@@ -716,7 +710,7 @@ if ($result->num_rows > 0) {
     </main>
 
 <!-- Share Modal Section -->
-<div id="myModal" class="modal fade">
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-confirm">
         <div class="modal-content">
             <div class="modal-header">
@@ -728,16 +722,14 @@ if ($result->num_rows > 0) {
             <div class="modal-body">
                 <p class="text-center">Help others by sharing this job with your network!</p>
                 <ul class="icons row">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-whatsapp"></i></a>
-                    <a href="#"><i class="fab fa-telegram-plane"></i></a>
+                    <a href="#" id="fbIcon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" id="twitterIcon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" id="linkedinIcon"><i class="fab fa-linkedin"></i></a>
                 </ul>
                 <p>Or copy link</p>
-                <div class="field">
+                <div class="field align-items-center">
                     <i class="fa-solid fa-link"></i>
-                    <input type="text" class="field_input" readonly value="Link">
+                    <input type="text" class="field_input" id="jobLink" readonly>
                     <button class="input_btn">Copy</button>
                 </div>
             </div>
@@ -751,60 +743,68 @@ if ($result->num_rows > 0) {
     <?php include "footer.php"; ?>
     
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Attach a click event listener to the Share button
-        document.querySelectorAll('.share_btn').forEach(function(button) {
-            button.addEventListener('click', function() {
-                // Show the modal when the Share button is clicked
-                $('#myModal').modal('show');
-            });
+        document.querySelector('.input_btn').addEventListener('click', function() {
+            var copyText = document.querySelector('.field_input');
+            copyText.select();
+            document.execCommand('copy');
+            alert("Copied the link: " + copyText.value);
         });
-    });
-    document.querySelector('.input_btn').addEventListener('click', function() {
-    var copyText = document.querySelector('.field_input');
-    copyText.select();
-    document.execCommand('copy');
-    alert("Copied the link: " + copyText.value);
-});
-</script>
+
+        $(".share_btn").on('click', function() {
+            let url = $(this).attr("data-url");
+            let baseUrl = window.location.origin;
+            if(baseUrl === 'http://localhost') {
+                baseUrl = baseUrl + '/' + 'e-recruitment'
+            }
+            let fullURL = baseUrl + '/' + url;
+            let fb_url = "https://www.facebook.com/sharer/sharer.php?u=" + fullURL;
+            let twitter_url = "https://twitter.com/intent/tweet?url=" + fullURL;
+            let linkedin_url = "https://www.linkedin.com/sharing/share-offsite/?url=" + fullURL;
+
+            $("#jobLink").val(fullURL);
+            $("#fbIcon").attr("href", fb_url);
+            $("#twitterIcon").attr("href", twitter_url);
+            $("#linkedinIcon").attr("href", linkedin_url);
+        });
+    </script>
 
 	<!-- JS here -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-        <script src="https://kit.fontawesome.com/3acead0521.js" crossorigin="anonymous"></script>
-		<!-- All JS Custom Plugins Link Here here -->
-        <script src="./assets/js/vendor/modernizr-3.5.0.min.js"></script>
-		<!-- Jquery, Popper, Bootstrap -->
-		<script src="./assets/js/vendor/jquery-1.12.4.min.js"></script>
-        <script src="./assets/js/popper.min.js"></script>
-        <script src="./assets/js/bootstrap.min.js"></script>
-	    <!-- Jquery Mobile Menu -->
-        <script src="./assets/js/jquery.slicknav.min.js"></script>
+    <script src="https://kit.fontawesome.com/3acead0521.js" crossorigin="anonymous"></script>
+    <!-- All JS Custom Plugins Link Here here -->
+    <script src="./assets/js/vendor/modernizr-3.5.0.min.js"></script>
+    <!-- Jquery, Popper, Bootstrap -->
+    <script src="./assets/js/vendor/jquery-1.12.4.min.js"></script>
+    <script src="./assets/js/popper.min.js"></script>
+    <script src="./assets/js/bootstrap.min.js"></script>
+    <!-- Jquery Mobile Menu -->
+    <script src="./assets/js/jquery.slicknav.min.js"></script>
 
-		<!-- Jquery Slick , Owl-Carousel Range -->
-        <script src="./assets/js/owl.carousel.min.js"></script>
-        <script src="./assets/js/slick.min.js"></script>
-        <script src="./assets/js/price_rangs.js"></script>
-		<!-- One Page, Animated-HeadLin -->
-        <script src="./assets/js/wow.min.js"></script>
-		<script src="./assets/js/animated.headline.js"></script>
-        <script src="./assets/js/jquery.magnific-popup.js"></script>
+    <!-- Jquery Slick , Owl-Carousel Range -->
+    <script src="./assets/js/owl.carousel.min.js"></script>
+    <script src="./assets/js/slick.min.js"></script>
+    <script src="./assets/js/price_rangs.js"></script>
+    <!-- One Page, Animated-HeadLin -->
+    <script src="./assets/js/wow.min.js"></script>
+    <script src="./assets/js/animated.headline.js"></script>
+    <script src="./assets/js/jquery.magnific-popup.js"></script>
 
-		<!-- Scrollup, nice-select, sticky -->
-        <script src="./assets/js/jquery.scrollUp.min.js"></script>
-        <script src="./assets/js/jquery.nice-select.min.js"></script>
-		<script src="./assets/js/jquery.sticky.js"></script>
-        
-        <!-- contact js -->
-        <script src="./assets/js/contact.js"></script>
-        <script src="./assets/js/jquery.form.js"></script>
-        <script src="./assets/js/jquery.validate.min.js"></script>
-        <script src="./assets/js/mail-script.js"></script>
-        <script src="./assets/js/jquery.ajaxchimp.min.js"></script>
-        
-		<!-- Jquery Plugins, main Jquery -->	
-        <script src="./assets/js/plugins.js"></script>
-        <script src="./assets/js/main.js"></script>
+    <!-- Scrollup, nice-select, sticky -->
+    <script src="./assets/js/jquery.scrollUp.min.js"></script>
+    <script src="./assets/js/jquery.nice-select.min.js"></script>
+    <script src="./assets/js/jquery.sticky.js"></script>
+    
+    <!-- contact js -->
+    <script src="./assets/js/contact.js"></script>
+    <script src="./assets/js/jquery.form.js"></script>
+    <script src="./assets/js/jquery.validate.min.js"></script>
+    <script src="./assets/js/mail-script.js"></script>
+    <script src="./assets/js/jquery.ajaxchimp.min.js"></script>
+    
+    <!-- Jquery Plugins, main Jquery -->	
+    <script src="./assets/js/plugins.js"></script>
+    <script src="./assets/js/main.js"></script>
         
     </body>
 </html>
