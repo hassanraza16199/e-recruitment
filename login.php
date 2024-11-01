@@ -22,7 +22,7 @@ if (isset($_POST['submit'])) {
       $_SESSION['birthdate'] = $data['birthdate'];
       
       if($data['user_type'] === 'Candidate'){
-      header('location:dashboard.php');
+      header('location:job_listing.php');
       }elseif($data['user_type'] === 'Recruiter'){
         header('location:dashboard.php');
       }else{

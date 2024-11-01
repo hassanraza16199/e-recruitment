@@ -28,7 +28,12 @@ include "connection.php";
             <link rel="stylesheet" href="assets/css/slick.css">
             <link rel="stylesheet" href="assets/css/nice-select.css">
             <link rel="stylesheet" href="assets/css/style.css">
-            <style>
+            <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
     .post_btn {
         padding-left: 60%; /* Default for larger screens */
     }
@@ -113,7 +118,178 @@ include "connection.php";
 .dropdown-menu {
     margin-top: 0; /* Optional: Adjust margin to ensure proper placement */
 }
-
+.modal-confirm {
+                color: #fb246a;
+                width: 325px;
+            }
+            .modal-confirm .modal-content {
+                padding: 20px;
+                border-radius: 5px;
+                margin-top:30%;
+                border: none;
+            }
+            .modal-confirm .modal-header {
+                border-bottom: none;
+                position: relative;
+            }
+            .modal-confirm h4 {
+                text-align: center;
+                font-size: 26px;
+                margin: 30px 0 -15px;
+            }
+            .modal-confirm .form-control, .modal-confirm .btn {
+                min-height: 40px;
+                border-radius: 3px;
+            }
+            .modal-confirm .close {
+                position: absolute;
+                top: -5px;
+                right: -5px;
+            }
+            .modal-confirm .modal-footer {
+                border: none;
+                text-align: center;
+                border-radius: 5px;
+                font-size: 13px;
+            }
+            .modal-confirm .icon-box {
+                color: #fff;
+                position: absolute;
+                margin: 0 auto;
+                left: 0;
+                right: 0;
+                top: -70px;
+                width: 95px;
+                height: 95px;
+                border-radius: 50%;
+                z-index: 9;
+                background: #fb246a;
+                padding: 15px;
+                text-align: center;
+                box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+            }
+            .modal-confirm .icon-box i {
+                font-size: 58px;
+                position: relative;
+                top: 3px;
+            }
+            .modal-confirm.modal-dialog {
+                margin-top: 80px;
+            }
+            .modal-confirm .btn {
+                color: #fff;
+                border-radius: 4px;
+                background: #fb246a;
+                text-decoration: none;
+                transition: all 0.4s;
+                line-height: normal;
+                border: none;
+            }
+            .modal-confirm .btn:hover, .modal-confirm .btn:focus {
+                background: #fb246a;
+                outline: none;
+            }
+            .trigger-btn {
+                display: inline-block;
+                margin: 100px auto;
+            }
+            .icons{
+                justify-content:center;
+            }
+            .icons a{
+                display: flex;
+                align-items: center;
+                margin:7px 18px;
+                border-radius: 50%;
+                justify-content: center;
+                transition: all 0.3s ease-in-out;
+            }
+            .icons a{
+                height: 50px;
+                width: 50px;
+                font-size: 20px;
+                text-decoration: none;
+                border: 1px solid transparent;
+            }
+            .icons a i{
+                transition: transform 0.3s ease-in-out;
+            }
+            .icons a:nth-child(1){
+                color: #1877F2;
+                border-color: #b7d4fb;
+            }
+            .icons a:nth-child(1):hover{
+                background: #1877F2;
+            }
+            .icons a:nth-child(2){
+                color: #46C1F6;
+                border-color: #b6e7fc;
+            }
+            .icons a:nth-child(2):hover{
+                background: #46C1F6;
+            }
+            .icons a:nth-child(3){
+                color: #e1306c;
+                border-color: #f5bccf;
+            }
+            .icons a:nth-child(3):hover{
+                background: #e1306c;
+            }
+            .icons a:hover{
+                color: #fff;
+                border-color: transparent;
+            }
+            .icons a:hover i{
+                transform: scale(1.2);
+            }
+            .field{
+                display:flex;
+                margin: 12px 0 -5px 0;
+                height: 45px;
+                border-radius: 4px;
+                padding: 0;
+                border: 1px solid #757171;
+            }
+            .field.active{
+                border-color: #7d2ae8;
+            }
+            .field i{
+                margin:10px 2px;
+                width: 50px;
+                font-size: 18px;
+                text-align: center;
+                color:black;
+            }
+            .field input{
+                width: 100%;
+                height: 100%;
+                border: none;
+                outline: none;
+                font-size: 15px;
+            }
+            .input_btn{
+                color: black;
+                padding-top: 10px;
+                padding-bottom: 9px;
+                padding-right: 18px;
+                padding-left: 18px;
+                border:none;
+                
+            }
+            .input_btn:hover{
+                color:#fff;
+                background: #fb246a;
+            }
+.share_btn {
+    color: #8b92dd;
+    display: block;
+    width:100%;
+    border: 1px solid #8b92dd;
+    border-radius: 30px;
+    padding: 4px 33px;
+    text-align: center;
+    margin-bottom: 50px;
+}
     
 </style>
 
@@ -222,15 +398,18 @@ include "connection.php";
                                             </a>
                                             </div>
                                             </div>";
-
-                                        echo "<span> Post date: " . $row['date'] ."</span>";
-                                        echo "</div>";
-                                        echo "</div>";
+                                            
+                                            if ($_SESSION['user_type'] === 'admin') {
+                                                echo "<button class='share_btn' style='margin-top:-60px; cursor: pointer;' data-url='job_details.php?job_id=" . $row['job_id'] . "' data-toggle='modal' data-target='#shareModal'>Share</button><br>";
+                                            }
+                                            
+                                            echo "<span> Post date: " . $row['date'] ."</span>";
+                                            echo "</div>";
+                                            echo "</div>";
                                         }
                                     } else {
                                         echo "No job posts found.";
                                     }
-                                    $conn->close();
                                 ?>
                                 </div>
         </div>
@@ -238,23 +417,87 @@ include "connection.php";
         
     </main>
 
+    <!-- Share Modal Section -->
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="icon-box">
+                    <i class="material-icons">&#xE80D;</i> <!-- Share icon -->
+                </div>
+                <h4 class="modal-title">Share this Job!</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Help others by sharing this job with your network!</p>
+                <ul class="icons row">
+                    <a href="#" id="fbIcon" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" id="twitterIcon" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="#" id="linkedinIcon" target="_blank"><i class="fab fa-linkedin"></i></a>
+                </ul>
+                <p>Or copy link</p>
+                <div class="field align-items-center">
+                    <i class="fa-solid fa-link"></i>
+                    <input type="text" class="field_input" id="jobLink" readonly>
+                    <button class="input_btn">Copy</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success btn-block" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
     <?php include "footer.php"; ?>
     
 
     <script>
         function toggleJobStatus(jobId) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "deactive_job.php?id=" + jobId, true);
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            location.reload(); // Reload the page to reflect the changes
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "deactive_job.php?id=" + jobId, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    location.reload(); // Reload the page to reflect the changes
+                }
+            };
+            xhr.send();
         }
-    };
-    xhr.send();
-}
 
+        $(document).ready(function () {
+    // Use event delegation for dynamically generated share buttons
+    $(document).on('click', '.share_btn', function() {
+        let url = $(this).attr("data-url");
+        let baseUrl = window.location.origin;
+        
+        // Update base URL if on localhost
+        if (baseUrl === 'http://localhost') {
+            baseUrl = baseUrl + '/' + 'e-recruitment';
+        }
+        
+        let fullURL = baseUrl + '/' + url;
+        
+        // Prepare URLs for social media
+        let fb_url = "https://www.facebook.com/sharer/sharer.php?u=" + fullURL;
+        let twitter_url = "https://twitter.com/intent/tweet?url=" + fullURL;
+        let linkedin_url = "https://www.linkedin.com/sharing/share-offsite/?url=" + fullURL;
+        
+        // Update modal fields with the URL and social media links
+        $("#jobLink").val(fullURL);           // Update the job link input field
+        $("#fbIcon").attr("href", fb_url).attr("target", "_blank");    // Set Facebook share link
+        $("#twitterIcon").attr("href", twitter_url).attr("target", "_blank");  // Set Twitter share link
+        $("#linkedinIcon").attr("href", linkedin_url).attr("target", "_blank");  // Set LinkedIn share link
+    });
 
+    // Copy the job link to clipboard when the "Copy" button is clicked
+    $('.input_btn').on('click', function() {
+        var copyText = $('#jobLink'); // Select the input field with job link
+        copyText.select();
+        document.execCommand('copy'); // Copy the link to clipboard
+        
+        // Alert message for feedback
+        alert("Copied the link: " + copyText.val());
+    });
+});
 
     </script>
 	<!-- JS here -->

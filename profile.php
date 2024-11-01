@@ -447,6 +447,21 @@ margin: 100px auto;
     <!-- Preloader Start -->
     <?php include "navbar.php"; ?>
 
+    <!-- Hero Area Start-->
+    <div class="slider-area ">
+                <div class="single-slider section-overly slider-height2 d-flex align-items-center" data-background="assets/img/hero/about.jpg">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="hero-cap text-center">
+                                    <h2>Profile</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Hero Area End -->
     
     <!-- ================ contact section start ================= -->
     <section class="contact-section">
@@ -465,7 +480,7 @@ margin: 100px auto;
               
               <div class="row">
                   <div class="bio-row">
-                      <p><span style="font-weight:bold;">First Name </span>: <?php echo $_SESSION['name'];?></p>
+                      <p><span style="font-weight:bold;">Name </span>: <?php echo $_SESSION['name'];?></p>
                   </div>
                   <div class="bio-row">
                       <p><span style="font-weight:bold;">City </span>: <?php echo $_SESSION['city'];?></p>

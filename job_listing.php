@@ -268,20 +268,6 @@ $sql .= " ORDER BY created_at DESC LIMIT $offset, $jobs_per_page";
             .icons a:nth-child(3):hover{
                 background: #e1306c;
             }
-            .icons a:nth-child(4){
-                color: #25D366;
-                border-color: #bef4d2;
-            }
-            .icons a:nth-child(4):hover{
-                background: #25D366;
-            }
-            .icons a:nth-child(5){
-                color: #0088cc;
-                border-color: #b3e6ff;
-            }
-            .icons a:nth-child(5):hover{
-                background: #0088cc;
-            }
             .icons a:hover{
                 color: #fff;
                 border-color: transparent;
@@ -315,16 +301,15 @@ $sql .= " ORDER BY created_at DESC LIMIT $offset, $jobs_per_page";
                 font-size: 15px;
             }
             .input_btn{
-                color: #fff;
+                color: black;
                 padding-top: 10px;
                 padding-bottom: 9px;
                 padding-right: 18px;
                 padding-left: 18px;
                 border:none;
-                background: #fb246a;
-                cursor: pointer;
             }
             .input_btn:hover{
+                color:#fff;
                 background: #fb246a;
             }
             .share_btn {
@@ -336,6 +321,7 @@ $sql .= " ORDER BY created_at DESC LIMIT $offset, $jobs_per_page";
                 padding: 4px 33px;
                 text-align: center;
                 margin-bottom: 25px;
+                cursor: pointer;
             }
         </style>
    </head>
@@ -650,7 +636,9 @@ if ($result->num_rows > 0) {
         echo "</div>";
         echo "<div class='items-link items-link2 f-right'>";
         echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'>" . $row['timing'] . "</a> <br>";
-         echo "<button class='share_btn' style='margin-top:-25px; cursor: pointer;' data-url='job_details.php?job_id=" . $row['job_id'] . "' data-toggle='modal' data-target='#shareModal'>Share</button> <br>";
+
+        echo "<button class='share_btn' style='margin-top:-25px; cursor: pointer;' data-url='job_details.php?job_id=" . $row['job_id'] . "' data-toggle='modal' data-target='#shareModal'>Share</button> <br>";
+
         echo "<span><i class='fas fa-map-marker-alt'></i> " . $row['company_location'] . "</span>";
         echo "<span class='mt-2'>Salary:  " . $row['salary'] . "</span>";
         echo "<span class='mt-2'>  " . $time_ago . "</span>";

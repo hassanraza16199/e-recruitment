@@ -1,6 +1,7 @@
 .bell-icon {
     position: relative; /* Make the bell icon a positioning context */
     color: #fb246a;
+    margin-left: 230px;
 }
 
 .notification-count {
@@ -17,16 +18,24 @@
     text-align: center;
     background-color: #ffffff; /* Background for visibility */
 }
-
 .drop-icon {
     background-color: #fff;
     border: none;
+    cursor: pointer;
 }
-
 .notification-dropdown {
 position: relative;
 display: inline-block;
 }
+/* Remove hover display */
+.notification-dropdown:hover .dropdown-content {
+    display: none;
+}
+
+#notification-dropdown-content {
+    display: none; /* Hide by default */
+}
+
 .notifications{
 margin-left:120px;
 }

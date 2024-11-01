@@ -1,62 +1,92 @@
 <?php
 session_start();
 include "connection.php";
+include "functions.php"; // Ensure that the function for sending email is included
 
-if(isset($_POST['submit'])){
-    if(isset($_GET['application_id'])){
+if (isset($_POST['submit'])) {
+    if (isset($_GET['application_id'])) {
         $application_id = $_GET['application_id'];
     }
     $status = $_POST['status'];
     $sql = "UPDATE applications SET status = '$status' WHERE application_id = '$application_id'";
 
-    if($conn->query($sql) === True){
-         // Prepare notification message
-         $recruiter_id = $_SESSION['id'];
-         $recruiter_name = $_SESSION['name'];
-         $notification_title = "Status";
-         $job_title = $_POST['job_title'];
-         $candidate_id = $_POST['candidate_id'];
-         $message = " Your job application against $job_title has been approved by the $recruiter_name.";
-         
-         // Insert notification data
-         $notification_sql = "INSERT INTO notification (job_or_status_id, recruiter_id, candidate_id, notification_title, message, created_at) 
-                              VALUES ('$application_id', '$recruiter_id', '$candidate_id', '$notification_title', '$message', '".date('Y-m-d h:i:s')."')";
-         
-         if ($conn->query($notification_sql) === TRUE) {
-             header("location: application_status.php?application_id=$application_id");
-             exit;
-         } else {
-             echo "Error: " . $notification_sql . "<br>" . $conn->error;
-         }
+    if ($conn->query($sql) === TRUE) {
+        // Prepare notification message
+        $recruiter_id = $_SESSION['id'];
+        $recruiter_name = $_SESSION['name'];
+        $notification_title = "Status";
+        $job_title = $_POST['job_title'];
+        $candidate_id = $_POST['candidate_id'];
+        $message = "Your job application against $job_title has been updated by $recruiter_name.";
+
+        // Insert notification data
+        $notification_sql = "INSERT INTO notification (job_or_status_id, recruiter_id, candidate_id, notification_title, message, created_at) 
+                             VALUES ('$application_id', '$recruiter_id', '$candidate_id', '$notification_title', '$message', '" . date('Y-m-d h:i:s') . "')";
         
+        if ($conn->query($notification_sql) === TRUE) {
+            // Check if the status is "Rejected" to send the email
+            if ($status === 'Rejected') {
+                $to_email = $_POST['email_address'];
+                $subject = "Application Status: Rejected";
+                $message = "Dear Candidate, \n\nWe regret to inform you that your application for $job_title has been rejected. \n\nBest regards, \n$recruiter_name";
+                
+                // Send the email
+                $send = sendMail($to_email, $subject, $message);
+                
+                if ($send['status']) {
+                    $_SESSION['status'] = 'success';
+                    $_SESSION['message'] = 'Email sent successfully!';
+                } else {
+                    $_SESSION['status'] = 'danger';
+                    $_SESSION['message'] = 'Failed to send the email!';
+                    $_SESSION['error'] = $send['error'];
+                }
+            }
+
+            header("location: application_status.php?application_id=$application_id");
+            exit;
+        } else {
+            echo "Error: " . $notification_sql . "<br>" . $conn->error;
+        }
     }
 }
+
 if (isset($_POST['schedule'])) {
     $application_id = $_POST['application_id'];
     $interview_date = $_POST['interview_date'];
     $meeting_link = $_POST['meeting_link'];
     
-    // Split the selected value into interviewer_id and interview_time
-    $interview_selection = explode('|', $_POST['interview_time']);
-    $interviewer_id = $interview_selection[0];
-    $interview_time = $interview_selection[1];
+    if (isset($_POST['interview_time'])) {
+        // Split the selected interview time data by '|'
+        $interview_selection = explode('|', $_POST['interview_time']);
+        $interviewer_id = $interview_selection[0];  // The first part is the interviewer ID
+        $available_times = array_slice($interview_selection, 1);  // Remaining parts are available times
 
-    $sql = "INSERT INTO interview_schedule (application_id, interview_time, interviewer_id, interview_date, meeting_link)
-            VALUES ('$application_id', '$interview_time', '$interviewer_id', '$interview_date', '$meeting_link')";
+        // Check if available times are set
+        if (!empty($available_times)) {
+            // Convert selected time(s) to JSON if storing in database
+            $selected_times_json = json_encode($available_times);
+            
+            // Prepare SQL for inserting the interview schedule
+            $sql = "INSERT INTO interview_schedule (application_id, interview_time, interviewer_id, interview_date, meeting_link)
+                    VALUES ('$application_id', '$selected_times_json', '$interviewer_id', '$interview_date', '$meeting_link')";
 
-if ($conn->query($sql) === TRUE) {
-    $_SESSION['interview_scheduled'] = true;
-    $_SESSION['application_id'] = $application_id;
-    $_SESSION['email_status'] = "success";
-    $_SESSION['message'] = "Interview Scheduled Successfully!";
-    header("Location: application_status.php?application_id=$application_id");
-    exit;
-}
- else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+            if ($conn->query($sql) === TRUE) {
+                $_SESSION['interview_scheduled'] = true;
+                $_SESSION['application_id'] = $application_id;
+                $_SESSION['message'] = "Interview Scheduled Successfully!";
+                header("Location: application_status.php?application_id=$application_id");
+                exit;
+            } else {
+                echo "Error: " . $sql . "<br>" . $conn->error;
+            }
+        } else {
+            echo "Interview time is not set.";
+        }
+    } else {
+        echo "Interview time is not set.";
     }
 }
-
 
 ?>
 
@@ -424,13 +454,22 @@ if ($conn->query($sql) === TRUE) {
 
                             $result = $conn->query($sql);
                             if ($result->num_rows > 0) {
-                                while($row = $result->fetch_assoc()) {?>
-                            <option value="<?php echo $row['id'] . '|' . $row['avalibility']; ?>">
-                                <?php echo $inter_name . ": " . $row['name'] . " | Category: " . $row['designation'] . " | Availability: " . $row['avalibility']; ?>
-                            </option>
-                            <?php 
+                                while($row = $result->fetch_assoc()) {
+                                    // Decode availability JSON into an array
+                                    $availability = json_decode($row['avalibility'], true);
+                                    $availabilityOptions = implode('|', $availability); // Combine times with "|"
+                                    // Set option value as "id|time1|time2|..."
+                                    $optionValue = "{$row['id']}|{$availabilityOptions}";
+                                    ?>
+                                    <option value="<?php echo $optionValue; ?>">
+                                        <?php 
+                                        echo "$inter_name: {$row['name']} | Category: {$row['designation']} | Availability: " . implode(', ', $availability);
+                                        ?>
+                                    </option>
+                                    <?php 
                                 }
-                            }?>
+                            }
+                            ?>
                         </select>
                     </div>
 
@@ -443,11 +482,11 @@ if ($conn->query($sql) === TRUE) {
                         <label for="Meeting_link">Meetinglink:</label>
                         <input type="text" class="form-control" id="meeting_link" name="meeting_link" placeholder="Enter Interview Meeting Link" required>
                     </div>
-                    <button type="submit" name="schedule" class="btn btn-primary">Schedule Interview</button>
+                    <button type="submit" name="schedule" class="btn head-btn1 mr-5">Schedule Interview</button>
 
                     <?php if(isset($_SESSION['interview_scheduled'])) { ?>
                         <!-- Show email button after interview is scheduled -->
-                        <button type="button" class="btn btn-success mt-3" data-toggle="modal" data-target="#emailModal">Send Interview Details Email</button>
+                        <button type="button" class="btn head-btn2 ml-5" data-toggle="modal" data-target="#emailModal">Interview Email</button>
                     <?php } ?>
                 </form> 
             </div>
