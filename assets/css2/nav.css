@@ -3,20 +3,17 @@
     color: #fb246a;
     margin-left: 230px;
 }
-
+/* Notification count adjustments */
 .notification-count {
     position: absolute;
-    top: 25px; /* Adjust as needed to position it properly on top */
-    right: -9px; /* Move the notification bubble slightly to the right */
+    top: 10px;
+    right: -5px;
     color: #28395a;
     border-radius: 50%;
     padding: 2px 6px;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: bold;
-    line-height: 1;
-    min-width: 15px;
-    text-align: center;
-    background-color: #ffffff; /* Background for visibility */
+    background-color: #ffffff;
 }
 .drop-icon {
     background-color: #fff;
@@ -109,4 +106,37 @@ text-align: center;
 color: #007bff;
 cursor: pointer;
 font-size: 12px;
+}
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .notification-count {
+        font-size: 10px;
+        top: 5px;
+        right: -5px;
+        padding: 1px 5px;
+    }
+    .dropdown-content {
+        min-width: 100%; /* Full-width dropdown for smaller screens */
+        max-width: 300px; /* Optional max width */
+    }
+    .dropdown-content .message a {
+        font-size: 12px; /* Adjust font size for smaller screens */
+    }
+}
+
+/* Mobile Adjustments */
+@media (max-width: 576px) {
+    .notifications {
+        margin-left: 0; /* Remove margin on small screens */
+    }
+    .dropdown-content {
+        min-width: 90%; /* Occupy most of the screen width */
+    }
+    .dropdown-content .message {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .dropdown-content .message .action-icon {
+        margin-top: 5px;
+    }
 }
