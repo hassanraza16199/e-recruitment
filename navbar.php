@@ -67,6 +67,24 @@ $read_result = $conn->query($read_sql);
             <link rel="stylesheet" href="assets/css/nice-select.css">
             <link rel="stylesheet" href="assets/css/style.css">
             <link rel="stylesheet" href="assets/css2/nav.css">
+            <style>
+                .header {
+                width: 70%;
+                padding: 10px;
+                background-color: #f1f1f1;
+                font-size: 23px;
+                font-weight: bold;
+                }
+                .header-del{
+                background-color:#f1f1f1;
+                color:#007bff;
+                border:none;
+                height: 50px;
+                width: 30%;
+                font-size:12px;
+                cursor: pointer;
+                }
+            </style>
    </head>
 
    <body>
@@ -99,7 +117,6 @@ $read_result = $conn->query($read_sql);
                                             <?php
                                                 }elseif($_SESSION['user_type'] === 'Recruiter'){
                                             ?>
-                                            <li><a href="dashboard.php">Home</a></li>
                                             <li><a href="posted_jobs.php">Jobs </a></li>
                                             <li><a href="resumes.php">Resumes</a></li>
                                             <li><a href="#">Pages</a>
@@ -136,72 +153,72 @@ $read_result = $conn->query($read_sql);
                                     if($_SESSION['user_type'] === 'Candidate'){ 
                                 ?>
 
-<div class="notifications">
-    <div class="notification-dropdown ml-5">
-        <button id="bell-icon" class="drop-icon"><i class="fa-solid fa-bell fa-xl bell-icon"></i></button>
-        <p class="notification-count"><?php echo $unread_count; ?></p>
-        <div id="notification-dropdown-content" class="dropdown-content">
-            <!-- Unread Messages -->
-            <div class="main-div">
-                <div class="header">Notifications</div>
-                <button class="header-del">Mark All as Read</button>
-            </div>
-            <!-- HTML part for the buttons in the Unread and Read sections -->
-<div class="unread">
-    <h5>Unread Messages</h5>
-    <div id="unread-messages">
-        <?php
-        if ($unread_result && $unread_result->num_rows > 0) {
-            while ($row = $unread_result->fetch_assoc()) {
-        ?>
-        <div class="message unread_message">
-            <i class="fa-solid fa-envelope mr-3 fa-xl"></i>
-            <a><?php echo $row['message']; ?></a>
-            <?php if ($row['notification_title'] === 'Job') { ?>
-                <span class="action-icon ml-3">
-                    <a href="job_details.php?job_id=<?php echo $row['job_or_status_id']; ?>&recruiter_id=<?php echo $row['recruiter_id']; ?>"> 
-                        <i class="fa-solid fa-up-right-from-square fa-lg"></i>
-                    </a>
-                </span>
-            <?php } ?>
-        </div>
-        <?php
-            }
-        }
-        ?>
-    </div>
-    <div id="show-more-unread" class="show-more mt-3">Show all unread messages</div>
-</div>
+                                <div class="notifications">
+                                    <div class="notification-dropdown ml-5">
+                                        <button id="bell-icon" class="drop-icon"><i class="fa-solid fa-bell fa-xl bell-icon"></i></button>
+                                        <p class="notification-count"><?php echo $unread_count; ?></p>
+                                        <div id="notification-dropdown-content" class="dropdown-content">
+                                            <!-- Unread Messages -->
+                                            <div class="main-div">
+                                                <div class="header">Notifications</div>
+                                                <button class="header-del">Mark All as Read</button>
+                                            </div>
+                                            <!-- HTML part for the buttons in the Unread and Read sections -->
+                                <div class="unread">
+                                    <h6>Unread Messages</h6>
+                                    <div id="unread-messages">
+                                        <?php
+                                        if ($unread_result && $unread_result->num_rows > 0) {
+                                            while ($row = $unread_result->fetch_assoc()) {
+                                        ?>
+                                        <div class="message unread_message">
+                                            <i class="fa-solid fa-envelope mr-3 fa-xl"></i>
+                                            <a><?php echo $row['message']; ?></a>
+                                            <?php if ($row['notification_title'] === 'Job') { ?>
+                                                <span class="action-icon ml-3">
+                                                    <a href="job_details.php?job_id=<?php echo $row['job_or_status_id']; ?>&recruiter_id=<?php echo $row['recruiter_id']; ?>"> 
+                                                        <i class="fa-solid fa-up-right-from-square fa-lg"></i>
+                                                    </a>
+                                                </span>
+                                            <?php } ?>
+                                        </div>
+                                        <?php
+                                            }
+                                        }
+                                        ?>
+                                    </div>
+                                    <div id="show-more-unread" class="show-more mt-3">Show all unread messages</div>
+                                </div>
 
-<div class="read">
-    <h5>Read Messages</h5>
-    <div id="read-messages">
-        <?php
-        if ($read_result && $read_result->num_rows > 0) {
-            while ($row = $read_result->fetch_assoc()) {
-        ?>
-        <div class="message read_message">
-            <i class="fa-solid fa-envelope mr-3 fa-xl"></i>
-            <a><?php echo $row['message']; ?></a>
-            <?php if ($row['notification_title'] === 'Job') { ?>
-                <span class="action-icon ml-3">
-                    <a href="job_details.php?job_id=<?php echo $row['job_or_status_id']; ?>&recruiter_id=<?php echo $row['recruiter_id']; ?>"> 
-                        <i class="fa-solid fa-up-right-from-square fa-lg"></i>
-                    </a>
-                </span>
-            <?php } ?>
-        </div>
-        <?php
-            }
-        }
-        ?>
-    </div>
-    <div id="show-more-read" class="show-more mt-3">Show all read messages</div>
-</div>
+                                <div class="read">
+                                    <h6>Read Messages</h6>
+                                    <div id="read-messages">
+                                        <?php
+                                        if ($read_result && $read_result->num_rows > 0) {
+                                            while ($row = $read_result->fetch_assoc()) {
+                                        ?>
+                                        <div class="message read_message">
+                                            <i class="fa-solid fa-envelope mr-3 fa-xl"></i>
+                                            <a><?php echo $row['message']; ?></a>
+                                            <?php if ($row['notification_title'] === 'Job') { ?>
+                                                <span class="action-icon ml-3">
+                                                    <a href="job_details.php?job_id=<?php echo $row['job_or_status_id']; ?>&recruiter_id=<?php echo $row['recruiter_id']; ?>"> 
+                                                        <i class="fa-solid fa-up-right-from-square fa-lg"></i>
+                                                    </a>
+                                                </span>
+                                            <?php } ?>
+                                        </div>
+                                        <?php
+                                            }
+                                        }
+                                        ?>
+                                    </div>
+                                    <div id="show-more-read" class="show-more mt-3">Show all read messages</div>
+                                </div>
 
-        </div>
-    </div>
-</div>
+                                        </div>
+                                    </div>
+                                </div>
 
                         <?php }?>
                                  

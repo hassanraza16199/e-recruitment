@@ -24,7 +24,7 @@ if (isset($_POST['submit'])) {
       if($data['user_type'] === 'Candidate'){
       header('location:job_listing.php');
       }elseif($data['user_type'] === 'Recruiter'){
-        header('location:dashboard.php');
+        header('location:posted_jobs.php');
       }else{
         header('location:users.php');
       }

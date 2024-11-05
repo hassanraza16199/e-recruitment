@@ -1,7 +1,6 @@
 <?php
 session_start();
 include "connection.php";
-include "functions.php"; // Ensure that the function for sending email is included
 
 if (isset($_POST['submit'])) {
     if (isset($_GET['application_id'])) {
@@ -17,34 +16,13 @@ if (isset($_POST['submit'])) {
         $notification_title = "Status";
         $job_title = $_POST['job_title'];
         $candidate_id = $_POST['candidate_id'];
-        $message = "Your job application against $job_title has been updated by $recruiter_name.";
-
+        $message = "Your job application '$job_title' has been approved by the '$recruiter_name'.";
+         
         // Insert notification data
         $notification_sql = "INSERT INTO notification (job_or_status_id, recruiter_id, candidate_id, notification_title, message, created_at) 
-                             VALUES ('$application_id', '$recruiter_id', '$candidate_id', '$notification_title', '$message', '" . date('Y-m-d h:i:s') . "')";
-        
+                          VALUES ('$application_id', '$recruiter_id', '$candidate_id', '$notification_title', '$message', '" . date('Y-m-d h:i:s') . "')";
         if ($conn->query($notification_sql) === TRUE) {
-            // Check if the status is "Rejected" to send the email
-            if ($status === 'Rejected') {
-                $to_email = $_POST['email_address'];
-                $subject = "Application Status: Rejected";
-                $message = "Dear Candidate, \n\nWe regret to inform you that your application for $job_title has been rejected. \n\nBest regards, \n$recruiter_name";
-                
-                // Send the email
-                $send = sendMail($to_email, $subject, $message);
-                
-                if ($send['status']) {
-                    $_SESSION['status'] = 'success';
-                    $_SESSION['message'] = 'Email sent successfully!';
-                } else {
-                    $_SESSION['status'] = 'danger';
-                    $_SESSION['message'] = 'Failed to send the email!';
-                    $_SESSION['error'] = $send['error'];
-                }
-            }
-
             header("location: application_status.php?application_id=$application_id");
-            exit;
         } else {
             echo "Error: " . $notification_sql . "<br>" . $conn->error;
         }
@@ -59,21 +37,21 @@ if (isset($_POST['schedule'])) {
     if (isset($_POST['interview_time'])) {
         // Split the selected interview time data by '|'
         $interview_selection = explode('|', $_POST['interview_time']);
-        $interviewer_id = $interview_selection[0];  // The first part is the interviewer ID
-        $available_times = array_slice($interview_selection, 1);  // Remaining parts are available times
+        $interviewer_id = $interview_selection[0];
+        $available_times = array_slice($interview_selection, 1, -1);
+        $schedule_email = end($interview_selection);  // Now it is defined
 
         // Check if available times are set
         if (!empty($available_times)) {
-            // Convert selected time(s) to JSON if storing in database
             $selected_times_json = json_encode($available_times);
             
-            // Prepare SQL for inserting the interview schedule
-            $sql = "INSERT INTO interview_schedule (application_id, interview_time, interviewer_id, interview_date, meeting_link)
-                    VALUES ('$application_id', '$selected_times_json', '$interviewer_id', '$interview_date', '$meeting_link')";
+            $sql = "INSERT INTO interview_schedule (application_id, interview_time, interviewer_id, interview_date, meeting_link, schedule_email)
+                    VALUES ('$application_id', '$selected_times_json', '$interviewer_id', '$interview_date', '$meeting_link', '$schedule_email')";
 
             if ($conn->query($sql) === TRUE) {
                 $_SESSION['interview_scheduled'] = true;
                 $_SESSION['application_id'] = $application_id;
+                $_SESSION['schedule_email'] = $schedule_email;
                 $_SESSION['message'] = "Interview Scheduled Successfully!";
                 header("Location: application_status.php?application_id=$application_id");
                 exit;
@@ -87,8 +65,8 @@ if (isset($_POST['schedule'])) {
         echo "Interview time is not set.";
     }
 }
-
 ?>
+
 
 <!doctype html>
 <html class="no-js" lang="zxx">
@@ -357,7 +335,7 @@ if (isset($_POST['schedule'])) {
                                 </span>
                             <?php } elseif($status === 'Final Interview'){?>
                                 <span class="email-btn">
-                                    <button class="btn head-btn1" data-toggle="modal" data-target="#scheduleModal">Schedule Final Interview</button>
+                                    <button class="btn head-btn1" data-toggle="modal" data-target="#scheduleModal">Schedule Interview</button>
                                 </span>
                             <?php } ?>
                         </div>
@@ -386,43 +364,52 @@ if (isset($_POST['schedule'])) {
             <!-- Job List Area End -->
         </main>
 
-        <!-- Email Modal -->
-        <div id="emailModal" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog " role="document">
-                <div class="modal-content" style='margin-top:120px;'>
-                    <div class="modal-header">
-                        <h5 class="modal-title">Send Email</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+       <!-- Email Modal -->
+<div id="emailModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style='margin-top:120px;'>
+            <div class="modal-header">
+                <h5 class="modal-title">Send Email</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="functions.php" method="POST">
+                    <div id="validationAlert" class="alert alert-danger d-none">All fields are required!</div>
+                    <input type="hidden" class="form-control" id="application_id" name="application_id" value="<?php echo $application_id; ?>" readonly>
+                    
+                    <div class="form-group">
+                        <label for="to_email">To:</label>
+                        <input type="email" class="form-control" id="to_email" name="to_email" 
+                            value="<?php 
+                                if ($status == 'Technical Interviewing' || $status == 'Final Interview') {
+                                    echo $email_address . (isset($_SESSION['schedule_email']) ? ', ' . $_SESSION['schedule_email'] : '');
+                                } else {
+                                    echo $email_address;
+                                } 
+                            ?>" readonly>
                     </div>
-                    <div class="modal-body">
-                        <form action="functions.php" method="POST">
-                            <div id="validationAlert" class="alert alert-danger d-none">All fields are required!</div>
-                            <input type="hidden" class="form-control" id="application_id" name="application_id" value="<?php echo $application_id; ?>" readonly>
-                            <div class="form-group">
-                                <label for="to_email">To:</label>
-                                <input type="email" class="form-control" id="to_email" name="to_email" value="<?php echo $email_address; ?>" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="subject">Subject:</label>
-                                <input type="text" class="form-control" id="subject" name="subject" value="<?php echo $status; ?>">
-                            </div>
-                            <div class="form-group">
-                                <label for="message">Message:</label>
-                                <textarea class="form-control" id="emailBody" name="message" rows="4"></textarea>
-                            </div>
-                            <button type="submit" name="send_email" id="send_email" class="btn btn-primary">Send Email</button>
-                        </form>
+                    
+                    <div class="form-group">
+                        <label for="subject">Subject:</label>
+                        <input type="text" class="form-control" id="subject" name="subject" value="<?php echo $status; ?>">
                     </div>
-                </div>
+                    <div class="form-group">
+                        <label for="message">Message:</label>
+                        <textarea class="form-control" id="emailBody" name="message" rows="4"></textarea>
+                    </div>
+                    <button type="submit" name="send_email" id="send_email" class="btn btn-primary">Send Email</button>
+                </form>
             </div>
         </div>
+    </div>
+</div>
 
 
 <!-- Schedule Interview Modal -->
 <div id="scheduleModal" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog " role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content" style='margin-top:110px; margin-left:-50px; width:650px;'>
             <div class="modal-header">
                 <h5 class="modal-title">Schedule Interview</h5>
@@ -438,15 +425,14 @@ if (isset($_POST['schedule'])) {
                         <label for="interview_time">Interview Time:</label>
                         <select class="form-select" name="interview_time" id="interview_time">
                             <option value="" disabled selected>Select interview Schedule</option>
-                        <?php
-                            include "connection.php";
-
-                            if($status =='Technical Interviewing'){ 
+                            <?php
+                            
+                            if ($status == 'Technical Interviewing') { 
                                 $sql = "SELECT * FROM interviewer";
                                 $inter_name = "Interviewer Name";
                                 $interviewer_id = $row['id'];
 
-                            } elseif($status =='Final Interview'){ 
+                            } elseif ($status == 'Final Interview') { 
                                 $sql = "SELECT * FROM hiring_managers";
                                 $inter_name = "Manager Name";
                                 $interviewer_id = $row['id'];
@@ -454,19 +440,34 @@ if (isset($_POST['schedule'])) {
 
                             $result = $conn->query($sql);
                             if ($result->num_rows > 0) {
-                                while($row = $result->fetch_assoc()) {
-                                    // Decode availability JSON into an array
-                                    $availability = json_decode($row['avalibility'], true);
-                                    $availabilityOptions = implode('|', $availability); // Combine times with "|"
-                                    // Set option value as "id|time1|time2|..."
-                                    $optionValue = "{$row['id']}|{$availabilityOptions}";
-                                    ?>
-                                    <option value="<?php echo $optionValue; ?>">
-                                        <?php 
-                                        echo "$inter_name: {$row['name']} | Category: {$row['designation']} | Availability: " . implode(', ', $availability);
+                                while ($row = $result->fetch_assoc()) {
+                                    // Check if 'avalibility' exists in the row
+                                    $schedule_email = $row['email'];
+                                    if (isset($row['avalibility'])) {
+                                        // Decode availability JSON into an array
+                                        $availability = json_decode($row['avalibility'], true);
+
+                                        // Ensure that availability is an array
+                                        if (is_array($availability)) {
+                                            $availabilityOptions = implode('|', $availability); // Combine times with "|"
+                                        } else {
+                                            $availabilityOptions = ''; // Default to empty if it's not an array
+                                        }
+
+                                        // Set option value as "id|time1|time2|..."
+                                        $optionValue = "{$row['id']}|{$availabilityOptions}|{$schedule_email}";
                                         ?>
-                                    </option>
-                                    <?php 
+                                        <option value="<?php echo $optionValue; ?>">
+                                            <?php 
+                                            echo "$inter_name: {$row['name']} | Category: {$row['designation']} | Availability: " . implode(' | ', $availability);
+                                            ?>
+                                        </option>
+                                        <?php 
+                                    } else {
+                                        // Handle the case where 'avalibility' is not set
+                                        // You can choose to skip this entry or provide a default message
+                                        echo "<option value=''>No availability data for {$row['name']}</option>";
+                                    }
                                 }
                             }
                             ?>
@@ -479,12 +480,12 @@ if (isset($_POST['schedule'])) {
                     </div>
 
                     <div class="form-group">
-                        <label for="Meeting_link">Meetinglink:</label>
+                        <label for="Meeting_link">Meeting link:</label>
                         <input type="text" class="form-control" id="meeting_link" name="meeting_link" placeholder="Enter Interview Meeting Link" required>
                     </div>
                     <button type="submit" name="schedule" class="btn head-btn1 mr-5">Schedule Interview</button>
 
-                    <?php if(isset($_SESSION['interview_scheduled'])) { ?>
+                    <?php if (isset($_SESSION['interview_scheduled'])) { ?>
                         <!-- Show email button after interview is scheduled -->
                         <button type="button" class="btn head-btn2 ml-5" data-toggle="modal" data-target="#emailModal">Interview Email</button>
                     <?php } ?>
@@ -493,6 +494,7 @@ if (isset($_POST['schedule'])) {
         </div>
     </div>
 </div>
+
 
         <?php include "footer.php"; ?>
         <script src="vendor/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
@@ -515,18 +517,18 @@ if (isset($_POST['schedule'])) {
                 });
             });
             <?php
-if (isset($_SESSION['interview_scheduled'])) {
-    echo "<script>console.log('Modal will open. Session is set.')</script>";
-?>
-    <script>
-        $(document).ready(function () {
-            console.log('Opening modal...');
-            $('#scheduleModal').modal('show');
-        });
-    </script>
-<?php
-    unset($_SESSION['interview_scheduled']);
-} ?>
+            if (isset($_SESSION['interview_scheduled'])) {
+                echo "<script>console.log('Modal will open. Session is set.')</script>";
+            ?>
+                <script>
+                    $(document).ready(function () {
+                        console.log('Opening modal...');
+                        $('#scheduleModal').modal('show');
+                    });
+                </script>
+            <?php
+                unset($_SESSION['interview_scheduled']);
+            } ?>
 
         </script>
 

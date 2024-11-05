@@ -1,10 +1,8 @@
 <?php
-
 session_start();
+
 include "connection.php";
-
 ?>
-
 
 
 <!doctype html>
@@ -31,49 +29,99 @@ include "connection.php";
             <link rel="stylesheet" href="assets/css/nice-select.css">
             <link rel="stylesheet" href="assets/css/style.css">
             <style>
-                /* Add this to your style section */
-.modal-content embed {
-    width: 100%;
-    height: 100%;
-    border: none;
-    overflow: hidden; /* Disable scroll */
+/* Style for the main filter container */
+.filter-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
 }
 
-                .d-flex{
-                    justify-content:center;
-                }
-                .icon-btn{
-                    color:black;
-                    background:white;
-                    border:0;
-                    height: 50px;
-                    border-top-left-radius: 25px;
-                    border-bottom-left-radius: 25px;
-                }
-                .select-input{
-                    width: 34%;
-                    height: 50px;
-                    border:none;
-                    
-                }
-                .search-btn{
-                    border-top-right-radius: 25px;
-                    border-bottom-right-radius: 25px;
-                    background: #fb246a;
-	                color:white;
-                    height: 50px;
-	                display: inline-block;
-	                padding: 13px 35px;
-	                font-family: "Muli", sans-serif;
-	                font-size: 14px;
-	                font-weight: 400;
-	                border: 1px solid #fb246a;
-	                letter-spacing: 3px;
-	                text-align: center;
-	                text-transform: uppercase;
-	                cursor: pointer
-                }
-            </style>
+/* Styling for the search icon button */
+.icon-btn {
+    color: #333;
+    background: #fff;
+    border: none;
+    height: 50px;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    padding: 0 15px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Styling for the search input field */
+.select-input {
+    width: 100%;
+    max-width: 500px;
+    height: 50px;
+    border: none;
+    padding-left: 15px;
+    font-size: 16px;
+    color: #333;
+    background: #fff;
+    outline: none;
+}
+.hero-cap {
+    text-align: center;
+}
+
+.hero-cap form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto; /* Center align the form */
+}
+
+/* Styling for the search button */
+.search-btn {
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    background: #fb246a;
+    color: white;
+    height: 50px;
+    padding: 0 30px;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    border: 1px solid #fb246a;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .filter-container {
+        flex-direction: column;
+        width: 90%;
+        margin: auto;
+    }
+
+    .icon-btn, .select-input, .search-btn {
+        width: 100%;
+        border-radius: 25px;
+    }
+
+    .select-input {
+        font-size: 14px;
+    }
+
+    .search-btn, .icon-btn {
+        height: 45px;
+        font-size: 14px;
+        margin-top: 10px;
+    }
+}
+</style>
+
    </head>
 
    <body>
@@ -141,7 +189,7 @@ if (mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
         $application_id = $row['application_id'];
 ?>
-        <div class="mt-3 ml-3 mr-3 mb-3" style="border-radius:5px;">
+        <div class="mt-3 ml-4 mr-4 mb-3" style="border-radius:5px;">
             <div class="card" style="width: 11rem; height:15rem;">
                 <embed src="/e-recruitment/cv/<?php echo $row['resume']; ?>" type="application/pdf" width="100%" height="200px" />
                 <div class="card-body" style="border-top:1px solid rgba(0, 0, 0, .125); height: 70px;">

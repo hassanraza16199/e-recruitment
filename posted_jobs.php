@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 include "connection.php";
 
 ?>
@@ -344,73 +343,69 @@ include "connection.php";
                 </div>
             </div>
                 <hr>
-        <?php
+                <?php
+        // Initialize conditions and retrieve search query if it exists
         $conditions = [];
-
         if (!empty($_GET['search'])) {
             $search = $conn->real_escape_string($_GET['search']);
             $conditions[] = "(job_title LIKE '%$search%' OR discription LIKE '%$search%' OR company_location LIKE '%$search%' OR requirements LIKE '%$search%')";
         }
-                                    if($_SESSION['user_type'] === 'Recruiter'){
-                                    $recruiter_id = $_SESSION['id'];
-                                    $sql = "SELECT * FROM job_post where recruiter_id = '$recruiter_id'";
-                                    }else{
-                                        $sql = "SELECT * FROM job_post";
-                                    }
-                                    $result = $conn->query($sql);
-                                    
-                                    
-                                    if ($result->num_rows > 0) {
-                                        while($row = $result->fetch_assoc()) {
-                                        
-                                            echo "<div class='single-job-items mb-30' style='margin-left:5%; margin-right:5%;'>";
-                                            echo "<div class='job-items'>";
-                                            echo "<div class='company-img'>";
-                                            // Including both job_id and recruiter_id in the URL
-                                            echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'><img style='width:120px; height:120px;' src='/e-recruitment/upload/" . $row['company_logo'] . "'></a>";
-                                            echo "</div>";
-                                            echo "<div class='job-tittle job-tittle2'>";
-                                            echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'>";
-                                            echo "<h4>" . $row['job_title'] . "</h4>";
-                                            echo "</a>";
-                                            echo "<ul>";
-                                            echo "<li>" . $row['company_name'] . "</li>";
-                                            echo "<li>     </li>";
-                                            echo "<li> Category:" . $row['categories'] . "</li> <br>";
-                                            
-                                            $discriptionPreview = substr($row['discription'], 0, 50) . (strlen($row['discription']) > 15 ? '...' : '');
-                                            echo "<li >" . $discriptionPreview . "</li> <br>";
-                                            $requirementsPreview = substr($row['requirements'], 0, 50) . (strlen($row['requirements']) > 15 ? '...' : '');
-                                            echo "<li class='mt-2'>" . $requirementsPreview . "</li>";
-                                            echo "</ul>";
-                                            echo "</div>";
-                                            echo "</div>";
-                                            echo "<div class='items-link items-link2 f-right'>";
-                                            echo "<div class='dropdown'>
-                                            <button class=' btn-link dropdown-toggle' type='button' id='dropdownMenuButton' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                                            <i class='fas fa-ellipsis-v fa-lg'></i>
-                                            </button>
-                                            <div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenuButton'>
-                                            <a class='dropdown-item ' style='border:none;' href='edit_job.php?job_id=". $row['job_id'] ."'>Edit</a>
-                                            <a class='dropdown-item' style='border:none;' href='delete_job.php?job_id= ". $row['job_id']. "'>Delete</a>
-                                            <a class='dropdown-item' style='border:none;' href='deactive_job.php?job_id=". $row['job_id'] ."' onclick='toggleJobStatus(" .$row['job_id'] .")'>
-                                            ". ($row['status'] === 'active' ? 'Deactivate' : 'Activate') ."
-                                            </a>
-                                            </div>
-                                            </div>";
-                                            
-                                            if ($_SESSION['user_type'] === 'admin') {
-                                                echo "<button class='share_btn' style='margin-top:-60px; cursor: pointer;' data-url='job_details.php?job_id=" . $row['job_id'] . "' data-toggle='modal' data-target='#shareModal'>Share</button><br>";
-                                            }
-                                            
-                                            echo "<span> Post date: " . $row['date'] ."</span>";
-                                            echo "</div>";
-                                            echo "</div>";
-                                        }
-                                    } else {
-                                        echo "No job posts found.";
-                                    }
-                                ?>
+
+        // Base SQL depending on user type
+        if ($_SESSION['user_type'] === 'Recruiter') {
+            $recruiter_id = $_SESSION['id'];
+            $sql = "SELECT * FROM job_post WHERE recruiter_id = '$recruiter_id' ORDER BY date DESC";
+        } else {
+            $sql = "SELECT * FROM job_post WHERE 1 ORDER BY date DESC"; // Sort by date in descending order
+        }
+
+        // Add search conditions if any
+        if (count($conditions) > 0) {
+            $sql .= " AND " . implode(" AND ", $conditions);
+        }
+
+        // Execute query
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                echo "<div class='single-job-items mb-30' style='margin-left:5%; margin-right:5%;'>";
+                echo "<div class='job-items'>";
+                echo "<div class='company-img'>";
+                echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'><img style='width:120px; height:120px;' src='/e-recruitment/upload/" . $row['company_logo'] . "'></a>";
+                echo "</div>";
+                echo "<div class='job-tittle job-tittle2'>";
+                echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'>";
+                echo "<h4>" . $row['job_title'] . "</h4>";
+                echo "</a>";
+                echo "<ul>";
+                echo "<li>" . $row['company_name'] . "</li>";
+                echo "<li> Category: " . $row['categories'] . "</li><br>";
+                
+                $discriptionPreview = substr($row['discription'], 0, 50) . (strlen($row['discription']) > 15 ? '...' : '');
+                echo "<li>" . $discriptionPreview . "</li><br>";
+                $requirementsPreview = substr($row['requirements'], 0, 50) . (strlen($row['requirements']) > 15 ? '...' : '');
+                echo "<li class='mt-2'>" . $requirementsPreview . "</li>";
+                echo "</ul>";
+                echo "</div>";
+                echo "</div>";
+                echo "<div class='items-link items-link2 f-right'>";
+                echo "<div class='dropdown'>
+                        <button class='btn-link dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                        <i class='fas fa-ellipsis-v fa-lg'></i></button>
+                        <div class='dropdown-menu dropdown-menu-right'>
+                            <a class='dropdown-item' href='edit_job.php?job_id=". $row['job_id'] ."'>Edit</a>
+                            <a class='dropdown-item' href='delete_job.php?job_id=". $row['job_id']. "'>Delete</a>
+                            <a class='dropdown-item' href='deactive_job.php?job_id=". $row['job_id'] ."' onclick='toggleJobStatus(" .$row['job_id'] .")'>". ($row['status'] === 'active' ? 'Deactivate' : 'Activate') ."</a>
+                        </div>
+                      </div>";
+                echo "</div>";
+                echo "</div>";
+            }
+        } else {
+            echo "No job posts found.";
+        }
+        ?>
                                 </div>
         </div>
 

@@ -3,11 +3,10 @@ session_start();
 include "connection.php";
 
 // Check if the form is submitted
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (isset($_POST['update'])) {
     $id= $_SESSION['id'];
     $name = $_POST['name'];
     $email = $_POST['email'];
-    $password = $_POST['password'];
     $birthdate = $_POST['birthdate'];
     $country = $_POST['country'];
     $phone = $_POST['phone'];
@@ -15,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Update query
     $user_id = $_SESSION['id']; // Assuming the user ID is stored in the session
-    $sql = "UPDATE user SET name='$name', email='$email', password='$password', birthdate='$birthdate', country='$country', phone='$phone' WHERE id='$id'";
+    $sql = "UPDATE user SET name='$name', email='$email', birthdate='$birthdate', country='$country', phone='$phone' WHERE id='$id'";
 
     if ($conn->query($sql) === TRUE) {
         // Update session variables with new data
@@ -31,9 +30,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo "Error updating record: " . $conn->error;
     }
-
-    $conn->close();
 }
+if (isset($_POST['rest'])) {
+    $id = $_SESSION['id'];
+    $oldPassword = $_POST['oldPassword'];
+    $newPassword = $_POST['newPassword'];
+
+    $sql = "SELECT * FROM user WHERE id ='$id'";
+    $result = mysqli_query($conn, $sql);
+
+    // Check if results are found
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        if ($id == $row['id'] && $oldPassword == $row['password']) {
+            $sql = "UPDATE user SET password='$newPassword' WHERE id='$id'";
+            if ($conn->query($sql) === TRUE) {
+                $_SESSION['password_change_success'] = true;
+                header("Location: profile.php?password_success=1");
+                exit();
+            } else {
+                echo "Error updating record: " . $conn->error;
+            }
+        } else {
+            echo "<script>alert('Your old password does not match.')</script>";
+        }
+    }
+}
+
 ?>
 
 
@@ -282,7 +305,6 @@ ul.summary-list > li:last-child  {
     display: inline-block;
 }
 
-
 .activity .activity-desk .arrow {
     border-right: 8px solid #F4F4F4 !important;
 }
@@ -357,12 +379,7 @@ ul.summary-list > li:last-child  {
 color: #fb246a;
 width: 325px;
 }
-.modal-confirm .modal-content {
-padding: 20px;
-border-radius: 5px;
-margin-top:32%;
-border: none;
-}
+
 .modal-confirm .modal-header {
 border-bottom: none;
 position: relative;
@@ -428,7 +445,17 @@ outline: none;
 display: inline-block;
 margin: 100px auto;
 }
-  
+#changePasswordBtn{
+    margin-left:400px;
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 85px auto; /* Centers the modal with a top margin of 150px */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    max-width: 600px; /* Ensures it doesn't get too wide on larger screens */
+}
         </style>
 </head>
 
@@ -469,57 +496,52 @@ margin: 100px auto;
                 <div class="row ml-5">
                     <div class="col-12">
                         <h2 class="contact-title">Profile</h2>
-                    </div>
-
-                                  
-  <div class="profile-info col-md-9">
-      
-      <div class="panel">
-          
-          <div class="panel-body bio-graph-info">
-              
-              <div class="row">
-                  <div class="bio-row">
-                      <p><span style="font-weight:bold;">Name </span>: <?php echo $_SESSION['name'];?></p>
-                  </div>
-                  <div class="bio-row">
-                      <p><span style="font-weight:bold;">City </span>: <?php echo $_SESSION['city'];?></p>
-                  </div>
-                  <div class="bio-row">
-                      <p><span style="font-weight:bold;">Date of Birth</span>: <?php echo $_SESSION['birthdate'];?></p>
-                  </div>
-                  <div class="bio-row">
-                      <p><span style="font-weight:bold;">Email </span>: <?php echo $_SESSION['email'];?></p>
-                  </div>
-                  <div class="bio-row">
-                      <p><span style="font-weight:bold;">Mobile </span>: <?php echo $_SESSION['phone'];?></p>
-                  </div>
-                  <div class="bio-row">
-                      <p><span style="font-weight:bold;">Phone </span>: <?php echo $_SESSION['phone'];?></p>
-                  </div>
-                  <div class="bio-row">
-                      <p><span style="font-weight:bold;">Type </span>: <?php echo $_SESSION['user_type'];?></p>
-                  </div>
-              </div>
-          </div>
-      </div>
-              
-                <div class="mt-5">
-                    <button class="btn head-btn1">Update</button>
+                    </div>              
+                    <div class="profile-info col-md-9">
+                        
+                        <div class="panel">
+                            
+                            <div class="panel-body bio-graph-info">
+                                
+                                <div class="row">
+                                    <div class="bio-row">
+                                        <p><span style="font-weight:bold;">Name </span>: <?php echo $_SESSION['name'];?></p>
+                                    </div>
+                                    <div class="bio-row">
+                                        <p><span style="font-weight:bold;">City </span>: <?php echo $_SESSION['city'];?></p>
+                                    </div>
+                                    <div class="bio-row">
+                                        <p><span style="font-weight:bold;">Date of Birth</span>: <?php echo $_SESSION['birthdate'];?></p>
+                                    </div>
+                                    <div class="bio-row">
+                                        <p><span style="font-weight:bold;">Email </span>: <?php echo $_SESSION['email'];?></p>
+                                    </div>
+                                    <div class="bio-row">
+                                        <p><span style="font-weight:bold;">Mobile </span>: <?php echo $_SESSION['phone'];?></p>
+                                    </div>
+                                    <div class="bio-row">
+                                        <p><span style="font-weight:bold;">Phone </span>: <?php echo $_SESSION['phone'];?></p>
+                                    </div>
+                                    <div class="bio-row">
+                                        <p><span style="font-weight:bold;">Type </span>: <?php echo $_SESSION['user_type'];?></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="mt-5">
+                                <button class="btn head-btn1">Update</button>
+                                <button class="btn head-btn2" id="changePasswordBtn">Change Password</button>
+                            </div>
+                            
+                        </div>
+                    </div>       
                 </div>
-          </div>
-      </div>
-  </div>       
-                </div>
-                
-
-
             </div>
         </section>
     <!-- ================ contact section end ================= -->
 <!-- Edit Profile Modal -->
 <div id="editProfileModal" class="modal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; overflow:auto; background-color: rgba(0,0,0,0.4);">
-    <div class="modal-content " style="background-color:#fefefe; margin:auto; padding:20px; border:1px solid #888; width:50%;">
+    <div class="modal-content">
         <span class="close" >&times;</span>
         <h2>Edit Profile</h2>
         <form action="profile.php" method="post">
@@ -531,10 +553,6 @@ margin: 100px auto;
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" name="email" id="email" class="form-control" value="<?php echo $_SESSION['email']; ?>">
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" name="password" id="password" class="form-control" >
             </div>
             <div class="form-group">
                 <label for="birthdate">Date of Birth</label>
@@ -549,13 +567,13 @@ margin: 100px auto;
                 <input type="text" name="phone" id="phone" class="form-control" value="<?php echo $_SESSION['phone']; ?>">
             </div>
             <!-- Add other fields as necessary -->
-            <button type="submit" name="submit" class="btn btn-primary">Save Changes</button>
+            <button type="update" name="update" class="btn btn-primary">Save Changes</button>
         </form>
     </div>
 </div>
 
 <!-- Success Modal HTML -->
-<div id="myModal" class="modal fade">
+<div id="myModal" class="modal fade" >
         <div class="modal-dialog modal-confirm">
             <div class="modal-content">
                 <div class="modal-header">
@@ -573,7 +591,51 @@ margin: 100px auto;
             </div>
         </div>
     </div>
+<!-- Change Password Modal -->
+<div id="changePasswordModal" class="modal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; overflow:auto; background-color: rgba(0,0,0,0.4);">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Change Password</h2>
+        <form id="changePasswordForm" method="POST" action="profile.php">
+        <input type="hidden" name="id" id="id" class="form-control" value="<?php echo $_SESSION['id']; ?>">
+            <div class="form-group mt-3">
+                <label for="oldPassword">Old Password:</label>
+                <input type="password" class="form-control" id="oldPassword" name="oldPassword" required>
+            </div>
 
+            <div class="form-group">
+                <label for="newPassword">New Password:</label>
+                <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+            </div>
+
+            <button type="submit" name="rest" class="btn mt-3">Change Password</button>
+        </form>
+    </div>
+</div>
+<!-- Success Modal HTML for Password Change -->
+<div id="passwordSuccessModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="icon-box">
+                    <i class="material-icons">&#xE876;</i>
+                </div>
+                <h4 class="modal-title">Success!</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Your password has been updated successfully!</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success btn-block" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
     <?php include "footer.php"; ?>
@@ -581,6 +643,36 @@ margin: 100px auto;
 <!-- JS here -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('changePasswordBtn').onclick = function() {
+    document.getElementById('changePasswordModal').style.display = 'block';
+};
+
+document.querySelectorAll('.close').forEach(button => {
+    button.onclick = function() {
+        button.closest('.modal').style.display = 'none';
+    };
+    
+});
+
+document.getElementById('changePasswordForm').onsubmit = function() {
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    if (newPassword !== confirmPassword) {
+        alert('New Passwords and Conform password do not match.');
+        return false;
+    }
+};
+const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('password_success')) {
+        $('#passwordSuccessModal').modal('show');
+        // Hide the modal after 3 seconds
+        setTimeout(function(){
+            window.location.href = 'profile.php?success=1';
+        }, 1500);
+    }
+});
+document.addEventListener('DOMContentLoaded', function() {
+
     var modal = document.getElementById("editProfileModal");  // Profile Edit Modal
     var btn = document.querySelector(".btn.head-btn1");       // Update Button
     var span = document.getElementsByClassName("close")[0];   // Close Button for Edit Modal
@@ -638,15 +730,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-
-
-
 </script>
 
-
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-
 <script src="https://kit.fontawesome.com/3acead0521.js" crossorigin="anonymous"></script>
 		<!-- All JS Custom Plugins Link Here here -->
         <script src="./assets/js/vendor/modernizr-3.5.0.min.js"></script>
