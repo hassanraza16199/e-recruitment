@@ -2,6 +2,25 @@
 session_start();
 include "connection.php";
 
+if (isset($_POST['submit'])){
+    $id = $_POST['id'];
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $birthdate = $_POST['birthdate'];
+    $city = $_POST['city'];
+    $password = $_POST['password'];
+    // Add other fields as necessary
+
+    $sql = "UPDATE user SET name = '$name', email = '$email', password = '$password', phone = '$phone', birthdate = '$birthdate', city = '$city' WHERE id = $id";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "User updated successfully";
+        header("location: users.php");
+    } else {
+        echo "Error updating user: " . $conn->error;
+    }
+}
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
 
@@ -234,48 +253,34 @@ if (isset($_GET['id'])) {
       <th scope="col">Email</th>
       <th scope="col">Phone</th>
       <th scope="col">Date of Birth</th>
-      <th scope="col">Counrty</th>
+      <th scope="col">City</th>
       <th scope="col">Role</th>
       <th scope="col" colspan="2"><span class="ml-5">Action</span></th>
     </tr>
   </thead>
   <tbody>
   <?php
-include "connection.php";
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    
-    $id = $_POST['id'];
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
-    $birthdate = $_POST['birthdate'];
-    $country = $_POST['phone'];
-    $password = $_POST['password'];
-    // Add other fields as necessary
+$limit = 15;
+$current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($current_page - 1) * $limit;
 
-    $sql = "UPDATE user SET name = '$name', email = '$email', password = '$password', phone = '$phone', birthdate = '$birthdate', country = '$country' WHERE id = $id";
+// Count total number of users
+$total_users_query = "SELECT COUNT(*) as total FROM user WHERE user_type = 'Recruiter' OR user_type = 'Candidate'";
+$total_users_result = $conn->query($total_users_query);
+$total_users = $total_users_result->fetch_assoc()['total'];
 
-    if ($conn->query($sql) === TRUE) {
-        echo "User updated successfully";
-        header("location: users.php");
-    } else {
-        echo "Error updating user: " . $conn->error;
-    }
+// Calculate total pages
+$total_pages = ceil($total_users / $limit);
 
-     // Redirect back to the user list page
-    exit();
-}
-$sql = "SELECT * FROM user";
+// Fetch users for the current page
+$sql = "SELECT * FROM user WHERE user_type = 'Recruiter' OR user_type = 'Candidate' LIMIT $limit OFFSET $offset";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
-    $i = 1;
     while($row = $result->fetch_assoc()) {
-        // Corrected condition to properly check user_type
-        if ($row['user_type'] === 'Recruiter' || $row['user_type'] === 'Candidate') {
             $id = $row['id'];
 ?>
     <tr>
-      <th scope="row"><?php echo $row['id']; ?></th>
+      <th scope="row"><?php echo $id; ?></th>
       <td><?php echo $row['name']; ?></td>
       <td><?php echo $row['email']; ?></td>
       <td><?php echo $row['phone']; ?></td>
@@ -295,7 +300,7 @@ if ($result->num_rows > 0) {
         </td>
             <td>
             <div class="tooltip-container">
-                <span class="tooltip-icon"><i id="delete-<?php echo $row['id']; ?>" class="fa-solid fa-trash fa-sm ml-3" style="color:#FF0000; cursor: pointer;"></i></span>
+                <span class="tooltip-icon"><i id="delete-<?php echo $id; ?>" class="fa-solid fa-trash fa-sm ml-3" style="color:#FF0000; cursor: pointer;"></i></span>
                 <div class="tooltip-text">
                     <!-- Replace the SVG with your text -->
                     Delete 
@@ -304,8 +309,8 @@ if ($result->num_rows > 0) {
     </td>
     </tr>
 <?php
-            $i++; // Increment the counter correctly
-        }
+            
+        
     }
 } else {
     echo "No user found.";
@@ -315,6 +320,44 @@ if ($result->num_rows > 0) {
   </tbody>
 </table>
 
+<!-- Pagination Links -->
+<?php if ($total_users > 15): ?>
+            <div class="pagination-area pb-115 text-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="single-wrap d-flex justify-content-center">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination justify-content-start">
+                                        <?php if ($current_page > 1): ?>
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page=<?php echo $current_page - 1; ?>" aria-label="Previous">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                </a>
+                                            </li>
+                                        <?php endif; ?>
+
+                                        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                            <li class="page-item <?php echo $i == $current_page ? 'active' : ''; ?>">
+                                                <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                            </li>
+                                        <?php endfor; ?>
+
+                                        <?php if ($current_page < $total_pages): ?>
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page=<?php echo $current_page + 1; ?>" aria-label="Next">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                </a>
+                                            </li>
+                                        <?php endif; ?>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
     </main>
     
 <!-- Edit Form Modal -->
@@ -345,8 +388,8 @@ if ($result->num_rows > 0) {
                 <input type="text" name="birthdate" id="birthdate" class="form-control">
             </div>
             <div class="form-group">
-                <label for="country">Country:</label>
-                <input type="text" name="country" id="country" class="form-control">
+                <label for="city">City:</label>
+                <input type="text" name="city" id="city" class="form-control">
             </div>
 
             <!-- Add more fields as necessary -->
@@ -360,53 +403,60 @@ if ($result->num_rows > 0) {
   <!-- JS here -->
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     var modal = document.getElementById("editModal");
     var span = document.getElementsByClassName("close")[0];
 
+    // Edit button functionality
     document.querySelectorAll('.fa-pen-to-square').forEach(function(editBtn) {
-        editBtn.onclick = function(event) {
+        editBtn.addEventListener('click', function(event) {
+            // Find the closest table row and extract data
             var tr = event.target.closest('tr');
             var userId = tr.querySelector('th').innerText;
             var userName = tr.querySelector('td:nth-child(2)').innerText;
             var userEmail = tr.querySelector('td:nth-child(3)').innerText;
-            var userPassword = tr.querySelector('td:nth-child(4)').innerText;
             var userPhone = tr.querySelector('td:nth-child(5)').innerText;
-            var userBirthdate = tr.querySelector('td:nth-child(6)').innerText;
-            var userCountry = tr.querySelector('td:nth-child(7)').innerText;
+            var userBirthdate = tr.querySelector('td:nth-child(4)').innerText;
+            var userCity = tr.querySelector('td:nth-child(6)').innerText;
 
+            // Populate the modal form fields
             document.getElementById('id').value = userId;
             document.getElementById('name').value = userName;
             document.getElementById('email').value = userEmail;
-            document.getElementById('password').value = userPassword;
+            document.getElementById('password').value = ''; // Blank by default for security
             document.getElementById('phone').value = userPhone;
             document.getElementById('birthdate').value = userBirthdate;
-            document.getElementById('country').value = userCountry;
+            document.getElementById('city').value = userCity;
 
-            modal.style.display = "block";
-        };
+            // Display the modal
+            modal.style.display = "flex";
+        });
     });
+
+    // Delete button functionality
     document.querySelectorAll('.fa-trash').forEach(function(deleteBtn) {
-        deleteBtn.onclick = function(event) {
+        deleteBtn.addEventListener('click', function(event) {
             var userId = event.target.id.split('-')[1];
             if (confirm("Are you sure you want to delete this user?")) {
                 window.location.href = "users.php?id=" + userId;
             }
-        };
+        });
     });
 
+    // Close the modal when the close button is clicked
     span.onclick = function() {
         modal.style.display = "none";
     };
 
+    // Close the modal if the user clicks outside the modal content
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = "none";
         }
     };
 });
+</script>
 
-  </script>
 
         <script src="https://kit.fontawesome.com/3acead0521.js" crossorigin="anonymous"></script>
 		<!-- All JS Custom Plugins Link Here here -->

@@ -97,6 +97,13 @@ include "connection.php";
     justify-content: center;
 }
 
+.resumes-embed {
+    width: 100%;
+    height: 200px; /* Set a fixed height appropriate for your layout */
+    overflow: hidden; /* Hide overflow to prevent scrollbars */
+    display: block; /* Ensure it displays as a block element */
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .filter-container {
@@ -167,70 +174,124 @@ include "connection.php";
             <div class="form-container ml-5 mr-5">
                 <h3>Users Resumes</h3>
                 <div class="row">
-                <?php
-include "connection.php";
-$recruiter_id = $_SESSION['id'];
+                    <?php
+                    include "connection.php";
+                    $recruiter_id = $_SESSION['id'];
 
-// Base query
-$sql = "SELECT * FROM applications WHERE recruiter_id = '$recruiter_id'";
+                    // Base query for counting total resumes
+                    $count_sql = "SELECT COUNT(*) AS total FROM applications WHERE recruiter_id = '$recruiter_id'";
 
-// Check if the search keyword is set and not empty
-if (isset($_GET['search']) && !empty($_GET['search'])) {
-    $searchKeyword = mysqli_real_escape_string($conn, $_GET['search']);
-    // Add an additional condition for searching by firstname
-    $sql .= " AND firstname LIKE '%$searchKeyword%'";
-}
+                    // Check if the search keyword is set and not empty
+                    if (isset($_GET['search']) && !empty($_GET['search'])) {
+                        $searchKeyword = mysqli_real_escape_string($conn, $_GET['search']);
+                        $count_sql .= " AND firstname LIKE '%$searchKeyword%'";
+                    }
 
-// Execute the query
-$result = mysqli_query($conn, $sql);
+                    // Execute count query
+                    $count_result = mysqli_query($conn, $count_sql);
+                    $count_row = mysqli_fetch_assoc($count_result);
+                    $total_resumes = $count_row['total'];
+                    $items_per_page = 18;
+                    $total_pages = ceil($total_resumes / $items_per_page);
 
-// Check if results are found
-if (mysqli_num_rows($result) > 0) {
-    while ($row = mysqli_fetch_assoc($result)) {
-        $application_id = $row['application_id'];
-?>
-        <div class="mt-3 ml-4 mr-4 mb-3" style="border-radius:5px;">
-            <div class="card" style="width: 11rem; height:15rem;">
-                <embed src="/e-recruitment/cv/<?php echo $row['resume']; ?>" type="application/pdf" width="100%" height="200px" />
-                <div class="card-body" style="border-top:1px solid rgba(0, 0, 0, .125); height: 70px;">
-                    <span class="row">
-                        <p style="font-size: 12px; width:80px;"> <?php echo $row['firstname']; ?></p>
-                        <span>
-                            <span class="ml-2">
-                                <a href="application_status.php?application_id=<?php echo $application_id; ?>"><img src="assets/img/go-to.png" style="width: 15px; margin-top:-7px; cursor:pointer;" alt=""></a>
-                                
-                            </span> 
-                            <span class="ml-2">
-                                <i class="fa-solid fa-paperclip open-pdf" data-pdf="/e-recruitment/cv/<?php echo $row['resume']; ?>" style="cursor:pointer;"></i>
-                            </span>  
-                            <span class="ml-2">
-                                <i class="fa-solid fa-download" style="cursor:pointer;" onclick="openPdfPopup('/e-recruitment/cv/<?php echo $row['resume']; ?>')"></i>
-                            </span>
-                        </span>
-                    </span>
+                    // Determine the current page
+                    $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+                    $offset = ($current_page - 1) * $items_per_page;
+
+                    // Modify main query to limit results based on pagination
+                    $sql = "SELECT * FROM applications WHERE recruiter_id = '$recruiter_id'";
+                    if (isset($_GET['search']) && !empty($_GET['search'])) {
+                        $sql .= " AND firstname LIKE '%$searchKeyword%'";
+                    }
+                    $sql .= " LIMIT $offset, $items_per_page";
+
+                    // Execute main query
+                    $result = mysqli_query($conn, $sql);
+
+                    // Check if results are found
+                    if (mysqli_num_rows($result) > 0) {
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            $application_id = $row['application_id'];
+                    ?>
+                            <div class="mt-3 ml-4 mr-4 mb-3" style="border-radius:5px;">
+                                <div class="card" style="width: 11rem; height:17rem;">
+                                    <embed class="resumes-embed" src="/e-recruitment/cv/<?php echo $row['resume']; ?>" type="application/pdf" />
+                                    <div class="card-body" style="border-top:1px solid rgba(0, 0, 0, .125); height: 70px;">
+                                        <span class="row">
+                                            <p style="font-size: 12px; width:80px;"> <?php echo $row['firstname']; ?></p>
+                                            <span>
+                                                <span class="ml-2">
+                                                    <a href="application_status.php?application_id=<?php echo $application_id; ?>"><img src="assets/img/go-to.png" style="width: 15px; margin-top:-7px; cursor:pointer;" alt=""></a>
+                                                    
+                                                </span> 
+                                                <span class="ml-2">
+                                                    <i class="fa-solid fa-paperclip open-pdf" data-pdf="/e-recruitment/cv/<?php echo $row['resume']; ?>" style="cursor:pointer;"></i>
+                                                </span>  
+                                                <span class="ml-2">
+                                                    <i class="fa-solid fa-download" style="cursor:pointer;" onclick="openPdfPopup('/e-recruitment/cv/<?php echo $row['resume']; ?>')"></i>
+                                                </span>
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                    <?php
+                        }
+                    } else {
+                        echo "<p>No resumes found.</p>";
+                    }
+                    ?>   
                 </div>
             </div>
         </div>
-<?php
-    }
-} else {
-    echo "<p>No resumes found.</p>";
-}
-?>
+        
+        <!-- Pagination Links -->
+<?php if ($total_resumes > 18): ?>
+<div class="pagination-area pb-115 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="single-wrap d-flex justify-content-center">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-start">
+                            <?php if ($current_page > 1): ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<?php echo $current_page - 1; ?>" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
 
-                
-            </div>
+                            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                <li class="page-item <?php echo $i == $current_page ? 'active' : ''; ?>">
+                                    <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                </li>
+                            <?php endfor; ?>
+
+                            <?php if ($current_page < $total_pages): ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<?php echo $current_page + 1; ?>" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                        </ul>
+                    </nav>
+                </div>
             </div>
         </div>
-        <!-- Job List Area End -->
-    </main>
-    <!-- Modal for displaying the PDF -->
-<div id="pdfModal" class="modal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background-color:rgba(0, 0, 0, 0.5);">
-    <div class="modal-content" style="margin:auto; background-color:white; padding:20px; width:80%; height:80%;">
-        <span id="closeModal" style="float:right; cursor:pointer; font-size:24px;">&times;</span>
-        <embed id="pdfViewer" src="" type="application/pdf" width="100%" height="100%" />
     </div>
 </div>
+<?php endif; ?>
+    </main>
+
+    <!-- Modal for displaying the PDF -->
+    <div id="pdfModal" class="modal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background-color:rgba(0, 0, 0, 0.5);">
+        <div class="modal-content" style="margin:auto; background-color:white; padding:20px; width:80%; height:80%;">
+            <span id="closeModal" style="float:right; cursor:pointer; font-size:24px;">&times;</span>
+            <embed id="pdfViewer" src="" type="application/pdf" width="100%" height="100%" />
+        </div>
+    </div>
 
     <?php include "footer.php"; ?>
     <script>

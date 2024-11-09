@@ -270,6 +270,8 @@ $read_result = $conn->query($read_sql);
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+    <?php
+    if($_SESSION['user_type'] === 'Candidate'){?>
 document.addEventListener('DOMContentLoaded', function () {
     const bellIcon = document.getElementById('bell-icon');
     const dropdownContent = document.getElementById('notification-dropdown-content');
@@ -286,6 +288,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
 document.addEventListener('DOMContentLoaded', function () {
     let unreadOffset = 0;
     let readOffset = 0;
@@ -345,7 +348,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-
+<?php }?>
 </script>
         
     </body>

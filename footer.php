@@ -29,28 +29,32 @@
             margin: 0;
         }
 
-        /* Flexbox to push footer down */
+        /* Flexbox for full-height content and footer positioning */
         body {
             display: flex;
             flex-direction: column;
+            min-height: 100vh;
         }
 
         .content-wrapper {
-            flex: 1; /* Fills the available space */
+            flex: 1; /* Fills available space above footer */
         }
 
+        /* Footer Styling */
         .footer-area {
             background: #010b1d;
             color: #7f7f7f;
-            padding: 10px 0;
+            padding: 50px 0;
             text-align: center;
             display: flex;
             justify-content: space-between;
+            align-items: center;
             flex-wrap: wrap;
+            transition: none; /* Ensures no animation on padding */
         }
 
         .footer-copy-right p {
-            margin-bottom: 20px;
+            margin: 0;
             font-size: 14px;
         }
 
@@ -61,46 +65,21 @@
         }
 
         .footer-social {
-            margin-top: -20px;
+            margin-top: 10px;
         }
 
+        /* Responsive footer adjustments */
         @media (max-width: 767px) {
             .footer-area {
                 padding: 30px 0;
                 text-align: center;
+                flex-direction: column;
             }
-
             .footer-copy-right p {
                 font-size: 14px;
-                line-height: 1.5;
             }
-
             .footer-social {
                 margin-top: 20px;
-            }
-
-            .footer-social a i {
-                font-size: 20px;
-                margin-left: 15px;
-            }
-
-            .footer-border {
-                text-align: center;
-                padding: 20px 0;
-            }
-        }
-
-        @media (min-width: 768px) and (max-width: 991px) {
-            .footer-copy-right {
-                text-align: center;
-            }
-
-            .footer-social {
-                text-align: center;
-            }
-
-            .footer-border {
-                padding: 20px 0;
             }
         }
 
@@ -109,21 +88,14 @@
                 font-size: 16px;
                 margin-left: 10px;
             }
-
             .footer-copy-right p {
                 font-size: 12px;
                 text-align: center;
             }
-
-            .footer-border {
-                padding: 15px 0;
-            }
-
             .footer-area {
                 padding: 20px 0;
             }
         }
-
     </style>
 </head>
 <body>
@@ -134,7 +106,7 @@
 
     <footer>
         <!-- Footer Start -->
-        <div class="footer-area footer-bg footer-padding">
+        <div class="footer-area">
             <div class="container">
                 <div class="footer-border">
                     <hr>

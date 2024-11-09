@@ -141,89 +141,139 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
             <?php unset($_SESSION['email_status']); unset($_SESSION['status']); unset($_SESSION['message']); unset($_SESSION['error']); } ?>
             <!-- Alert Area End -->
-    <main class="ml-5 mr-5 mt-5 mb-5">
-        
-        <h2 class="mt-3 mb-3">Users Contact</h2>
-        <hr>
-        <table class="table">
-  <thead>
-    <tr>
-    <th scope="col">Sr</th>
-      <th scope="col">Name</th>
-      <th scope="col">Email</th>
-      <th scope="col">Subject</th>
-      <th scope="col">Message</th>
-      <th scope="col">Action</th>
-    </tr>
-  </thead>
-  <tbody>
-  <?php
+        <main class="ml-5 mr-5 mt-5 mb-5">
+            
+            <h2 class="mt-3 mb-3">Users Contact</h2>
+            <hr>
+            <table class="table">
+                <thead>
+                    <tr>
+                    <th scope="col">Sr</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Subject</th>
+                    <th scope="col">Message</th>
+                    <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php
 
-$sql = "SELECT * FROM contact_us";
-$result = mysqli_query($conn, $sql);
+                // Set pagination parameters
+                $contacts_per_page = 15;
+                $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+                $offset = ($current_page - 1) * $contacts_per_page;
 
-if (mysqli_num_rows($result)>0) {
-    while($row = mysqli_fetch_assoc($result)) {
-        $sender_email = $row['to_email'];
-        $subject = $row['subject'];
-        $contact_id = $row['contact_id'];
-?>
-    <tr>
-      <th scope="row"><?php echo $contact_id; ?></th>
-      <td><?php echo $row['user_name']; ?></td>
-      <td><?php echo $sender_email; ?></td>
-      <td><?php echo $subject; ?></td>
-      <td class="message-cell"><?php echo $row['message']; ?></td>
-      <td>
-      
-            <?php 
-             if($_SESSION['user_type'] === 'Recruiter') { ?>
-             <button style="border:none; background-color:#fff;" onclick="openModal('<?php echo $contact_id; ?>', '<?php echo $sender_email; ?>', '<?php echo $subject; ?>')">
-    <div class="tooltip-container">
-        <span class="tooltip-icon"><i class="fa-solid fa-reply fa-lg" style="color: #35D7FF;"></i></span>
-        <div class="tooltip-text">
-           Reply 
-            <div class="tooltip-arrow"></div>
-        </div>
-    </div>
-</button>
+                // Get total number of contacts
+                $sql_count = "SELECT COUNT(*) AS total_contacts FROM contact_us";
+                $result_count = $conn->query($sql_count);
+                $row_count = $result_count->fetch_assoc();
+                $total_contacts = $row_count['total_contacts'];
+                $total_pages = ceil($total_contacts / $contacts_per_page);
+
+                // Fetch contacts with limit and offset
+                $sql = "SELECT * FROM contact_us LIMIT $contacts_per_page OFFSET $offset";
+                $result = mysqli_query($conn, $sql);
+
+                if (mysqli_num_rows($result)>0) {
+                    while($row = mysqli_fetch_assoc($result)) {
+                        $sender_email = $row['to_email'];
+                        $subject = $row['subject'];
+                        $contact_id = $row['contact_id'];
+                ?>
+                    <tr>
+                    <th scope="row"><?php echo $contact_id; ?></th>
+                    <td><?php echo $row['user_name']; ?></td>
+                    <td><?php echo $sender_email; ?></td>
+                    <td><?php echo $subject; ?></td>
+                    <td class="message-cell"><?php echo $row['message']; ?></td>
+                    <td>
+                    
+                            <?php 
+                            if($_SESSION['user_type'] === 'Recruiter') { ?>
+                            <button style="border:none; background-color:#fff;" onclick="openModal('<?php echo $contact_id; ?>', '<?php echo $sender_email; ?>', '<?php echo $subject; ?>')">
+                    <div class="tooltip-container">
+                        <span class="tooltip-icon"><i class="fa-solid fa-reply fa-lg" style="color: #35D7FF;"></i></span>
+                        <div class="tooltip-text">
+                        Reply 
+                            <div class="tooltip-arrow"></div>
+                        </div>
+                    </div>
+                </button>
 
 
 
-            <?php
-            } else { ?>
-            <form action="users_contact.php" method="POST" style="display:inline;">
-            <input type="hidden" name="contact_id" value="<?php echo $row['contact_id']; ?>">
-               <button type="submit" style="border:none; background:none;">
-                
-                <div class="tooltip-container">
-                <span class="tooltip-icon"><i class="fa-solid fa-trash fa-lg" style="color:#FF0000; cursor: pointer;"></i></span>
-                <div class="tooltip-text">
-                    <!-- Replace the SVG with your text -->
-                    Delete 
-                <div class="tooltip-arrow"></div>
+                            <?php
+                            } else { ?>
+                            <form action="users_contact.php" method="POST" style="display:inline;">
+                            <input type="hidden" name="contact_id" value="<?php echo $row['contact_id']; ?>">
+                            <button type="submit" style="border:none; background:none;">
+                                
+                                <div class="tooltip-container">
+                                <span class="tooltip-icon"><i class="fa-solid fa-trash fa-lg" style="color:#FF0000; cursor: pointer;"></i></span>
+                                <div class="tooltip-text">
+                                    <!-- Replace the SVG with your text -->
+                                    Delete 
+                                <div class="tooltip-arrow"></div>
+                            </div>
+                            </button>
+                        </form>
+                            <?php
+                            } ?>
+                        
+                    </td>
+                    </tr>
+                <?php
+                    }
+                }
+
+                ?>
+
+                </tbody>
+                </table>
+
+ <!-- Pagination Links -->
+ <?php if ($total_contacts > 15): ?>
+            <div class="pagination-area pb-115 text-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="single-wrap d-flex justify-content-center">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination justify-content-start">
+                                        <?php if ($current_page > 1): ?>
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page=<?php echo $current_page - 1; ?>" aria-label="Previous">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                </a>
+                                            </li>
+                                        <?php endif; ?>
+
+                                        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                            <li class="page-item <?php echo $i == $current_page ? 'active' : ''; ?>">
+                                                <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                            </li>
+                                        <?php endfor; ?>
+
+                                        <?php if ($current_page < $total_pages): ?>
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page=<?php echo $current_page + 1; ?>" aria-label="Next">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                </a>
+                                            </li>
+                                        <?php endif; ?>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            </button>
-        </form>
-            <?php
-            } ?>
-        
-    </td>
-    </tr>
-<?php
-    }
-}
-
-?>
-
-  </tbody>
-</table>
-
+        <?php endif; ?>
     </main>
 
-   <!-- Email Modal -->
-<div id="emailModal" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog " role="document">
+    <div id="emailModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
         <div class="modal-content" style='margin-top:120px;'>
             <div class="modal-header">
                 <h5 class="modal-title">Send Email</h5>
@@ -256,7 +306,6 @@ if (mysqli_num_rows($result)>0) {
 
 
 
-
 <?php include "footer.php"; ?>
   <!-- JS here -->
   <script src="vendor/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
@@ -277,6 +326,9 @@ tinymce.init({
 });
 
 $(document).ready(function() {
+    $('.close').on('click', function() {
+        $('#emailModal').modal('hide');
+    });
     $("#send_email").on('click', function(e) {
         const editor = tinymce.get('emailBody');
         const content = editor.getContent({ format: 'text' }).trim();

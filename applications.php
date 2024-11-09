@@ -16,8 +16,6 @@ if (isset($_GET['application_id'])) {
 }
 ?>
 
-
-
 <!doctype html>
 <html class="no-js" lang="zxx">
     <head>
@@ -29,7 +27,6 @@ if (isset($_GET['application_id'])) {
         <link rel="shortcut icon" type="image/x-icon" href="assets/img/fav.png">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <link rel="stylesheet" href="assets/css2/aplication.css">
-
    </head>
 
    <body>
@@ -93,11 +90,18 @@ if (isset($_GET['application_id'])) {
                 </div>
                 <div class="filter-dropdown" id="filter-dropdown">
                     <div class="filter-div">
-                        <p class="rest"><a >FILTERS</a></p>
+                    <p class="rest"><a >FILTERS</a> <span id="close-filter" class="close">x</span></p>
                         <form  action="applications.php" method="GET" id="filterForm">
                             <div id="education-field mt-2" >
                                 <label for="Experience">Education:</label> <br>
-                                <input type="text" class="form-control" id="candidate_education" name="candidate_education" placeholder="Enter the education">
+                                <select class="form-select" name="candidate_education" id="candidate_education" >
+                                    <option selected disabled>Select Education</option>
+                                    <option value="Intermediate">Intermediate</option>
+                                    <option value="B.com">B.com</option>
+                                    <option value="Bachelor\'s Degree(BS)">Bachelor\'s Degree(BS)</option>
+                                    <option value="Associate Degree">Associate Degree</option>
+                                    <option value="Doctorate">Doctorate</option>
+                                </select>
                             </div>
                             <div id="skills-field mt-2" >
                                 <label for="Skills">Skills:</label><br>
@@ -131,7 +135,6 @@ if (isset($_GET['application_id'])) {
       <?php } else { ?>
         <th scope="col" >Action</th>
       <?php }?>
-      
     </tr>
   </thead>
   <tbody>
@@ -156,21 +159,30 @@ if (isset($_GET['candidate_experience']) && !empty($_GET['candidate_experience']
     $filters[] = "candidate_experience LIKE '%$experience%'";
 }
 
-// Base query
+// Pagination configuration
+$applications_per_page = 15; // Number of applications per page
+$current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($current_page - 1) * $applications_per_page;
+
+// Query to count the total number of applications
+$total_applications_query = "SELECT COUNT(*) as total_applications FROM applications";
 if ($_SESSION['user_type'] === 'Recruiter') {
     $recruiter_id = $_SESSION['id'];
-    $sql = "SELECT * FROM applications WHERE recruiter_id = '$recruiter_id'";
-} elseif ($_SESSION['user_type'] === 'admin') {
-    $sql = "SELECT * FROM applications";
+    $total_applications_query .= " WHERE recruiter_id = '$recruiter_id'";
 }
 
-// Append filters if there are any
-if (!empty($filters)) {
-    $sql .= " AND " . implode(' AND ', $filters);
-}
+$total_applications_result = $conn->query($total_applications_query);
+$total_applications_row = $total_applications_result->fetch_assoc();
+$total_applications = $total_applications_row['total_applications'];
+$total_pages = ceil($total_applications / $applications_per_page);
 
-// Execute the query
-$result = mysqli_query($conn, $sql);
+// Fetch applications for the current page
+$sql = "SELECT * FROM applications ";
+if ($_SESSION['user_type'] === 'Recruiter') {
+    $sql .= "WHERE recruiter_id = '$recruiter_id' ";
+}
+$sql .= "LIMIT $applications_per_page OFFSET $offset";
+$result = $conn->query($sql);
 
 // Check if results are found
 if (mysqli_num_rows($result) > 0) {
@@ -226,7 +238,45 @@ if (mysqli_num_rows($result) > 0) {
 </table>
             </div>
         </div>
-        <!-- Job List Area End -->
+        
+<!-- Pagination Links -->
+<?php if ($total_applications > 15): ?>
+<div class="pagination-area pb-115 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="single-wrap d-flex justify-content-center">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-start">
+                            <?php if ($current_page > 1): ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<?php echo $current_page - 1; ?>" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+
+                            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                <li class="page-item <?php echo $i == $current_page ? 'active' : ''; ?>">
+                                    <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                </li>
+                            <?php endfor; ?>
+
+                            <?php if ($current_page < $total_pages): ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<?php echo $current_page + 1; ?>" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
     </main>
 
 
@@ -240,8 +290,66 @@ if (mysqli_num_rows($result) > 0) {
 
     <?php include "footer.php"; ?>
 
+<script>
+    document.querySelectorAll('.fa-trash').forEach(function(deleteBtn) {
+    deleteBtn.onclick = function(event) {
+        var userApplicationId = event.target.id.split('-')[1];
+        if (confirm("Are you sure you want to delete this user?")) {
+            window.location.href = "applications.php?application_id=" + userApplicationId;
+        }
+    };
+});
 
-    <script src="./assets/js/multi-select.js"></script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('filter-button').addEventListener('click', function() {
+        var filterDropdown = document.getElementById('filter-dropdown');
+        if (filterDropdown.style.display === 'none' || filterDropdown.style.display === '') {
+            filterDropdown.style.display = 'block';
+        } else {
+            filterDropdown.style.display = 'none';
+        }
+    });
+
+    // Add click event listener to the close filter button
+    document.getElementById('close-filter').addEventListener('click', function() {
+        var filterDropdown = document.getElementById('filter-dropdown');
+        filterDropdown.style.display = 'none'; // Hide the filter dropdown
+    });
+});
+
+
+// Get the modal element and close button
+var modal = document.getElementById("pdfModal");
+var closeModal = document.getElementById("closeModal");
+var pdfViewer = document.getElementById("pdfViewer");
+
+// Add click event listener to all elements with the 'open-pdf' class (both img and icon)
+document.querySelectorAll('.open-pdf').forEach(function (element) {
+    element.addEventListener('click', function () {
+        // Get the PDF file path from the data-pdf attribute
+        var pdfPath = this.getAttribute('data-pdf');
+        // Set the src of the embed element to display the PDF
+        pdfViewer.setAttribute('src', pdfPath);
+        // Show the modal
+        modal.style.display = 'block';
+    });
+});
+
+// Close the modal when the 'close' button is clicked
+closeModal.onclick = function () {
+    modal.style.display = 'none';
+};
+
+// Close the modal when clicking outside the modal content
+window.onclick = function (event) {
+    if (event.target == modal) {
+        modal.style.display = 'none';
+    }
+};
+
+
+</script>
+
         <script src="https://kit.fontawesome.com/3acead0521.js" crossorigin="anonymous"></script>
 		<!-- All JS Custom Plugins Link Here here -->
         <script src="./assets/js/vendor/modernizr-3.5.0.min.js"></script>

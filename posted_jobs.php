@@ -279,16 +279,20 @@ include "connection.php";
                 color:#fff;
                 background: #fb246a;
             }
-.share_btn {
-    color: #8b92dd;
-    display: block;
-    width:100%;
-    border: 1px solid #8b92dd;
-    border-radius: 30px;
-    padding: 4px 33px;
-    text-align: center;
-    margin-bottom: 50px;
-}
+            .share_btn {
+                color: #8b92dd;
+                background-color:#fff;
+                display: block;
+                width:100%;
+                border: 1px solid #8b92dd;
+                border-radius: 30px;
+                padding: 4px 33px;
+                text-align: center;
+            }
+            .share_btn:hover{
+                color:#fff;
+                background: #8b92dd;
+            }
     
 </style>
 
@@ -319,7 +323,7 @@ include "connection.php";
                                 <h2>Posted Jobs</h2>
                                 <form class="d-flex mt-4" method="GET" action="posted_jobs.php">
                                     <button class="icon-btn" type="button" disabled><i class="fa-solid fa-magnifying-glass ml-2 mr-1"></i></button>
-                                    <input class="select-input" type="search" name="search" placeholder="Search by keyword or location" aria-label="Search">
+                                    <input class="select-input" type="search" name="search" placeholder="Search by keyword or location" aria-label="Search" required>
                                     <button class="search-btn" type="submit">Search</button>
                                 </form>
                             </div>
@@ -338,78 +342,121 @@ include "connection.php";
             <div  style='margin-left:7%; margin-right:7%;'>
                 <div class="row">
                 <h2 class="ml-5 mb-2">Posted Jobs</h2>
+                <?php
+                if($_SESSION['user_type'] === 'Recruiter'){?>
                 <div class="post_btn">
                     <a class="btn" href="post_job.php">Post New Jobs</a>
                 </div>
+                <?php }?>
             </div>
                 <hr>
                 <?php
-        // Initialize conditions and retrieve search query if it exists
-        $conditions = [];
-        if (!empty($_GET['search'])) {
-            $search = $conn->real_escape_string($_GET['search']);
-            $conditions[] = "(job_title LIKE '%$search%' OR discription LIKE '%$search%' OR company_location LIKE '%$search%' OR requirements LIKE '%$search%')";
-        }
+                // Pagination configuration
+$jobs_per_page = 10; // Number of jobs per page
+$current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($current_page - 1) * $jobs_per_page;
 
-        // Base SQL depending on user type
-        if ($_SESSION['user_type'] === 'Recruiter') {
-            $recruiter_id = $_SESSION['id'];
-            $sql = "SELECT * FROM job_post WHERE recruiter_id = '$recruiter_id' ORDER BY date DESC";
-        } else {
-            $sql = "SELECT * FROM job_post WHERE 1 ORDER BY date DESC"; // Sort by date in descending order
-        }
+// Modify the query to count total jobs for pagination
+$conditions = [];
+if (!empty($_GET['search'])) {
+    $search = $conn->real_escape_string($_GET['search']);
+    $conditions[] = "(job_title LIKE '%$search%' OR discription LIKE '%$search%' OR company_location LIKE '%$search%' OR requirements LIKE '%$search%')";
+}
 
-        // Add search conditions if any
-        if (count($conditions) > 0) {
-            $sql .= " AND " . implode(" AND ", $conditions);
-        }
+$base_query = "SELECT * FROM job_post ";
+$base_count_query = "SELECT COUNT(*) as total_jobs FROM job_post ";
 
-        // Execute query
-        $result = $conn->query($sql);
+// Adjust the query based on user type
+if ($_SESSION['user_type'] === 'Recruiter') {
+    $recruiter_id = $_SESSION['id'];
+    $base_query .= "WHERE recruiter_id = '$recruiter_id' ";
+    $base_count_query .= "WHERE recruiter_id = '$recruiter_id' ";
+}
 
-        if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                echo "<div class='single-job-items mb-30' style='margin-left:5%; margin-right:5%;'>";
-                echo "<div class='job-items'>";
-                echo "<div class='company-img'>";
-                echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'><img style='width:120px; height:120px;' src='/e-recruitment/upload/" . $row['company_logo'] . "'></a>";
-                echo "</div>";
-                echo "<div class='job-tittle job-tittle2'>";
-                echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'>";
-                echo "<h4>" . $row['job_title'] . "</h4>";
-                echo "</a>";
-                echo "<ul>";
-                echo "<li>" . $row['company_name'] . "</li>";
-                echo "<li> Category: " . $row['categories'] . "</li><br>";
-                
-                $discriptionPreview = substr($row['discription'], 0, 50) . (strlen($row['discription']) > 15 ? '...' : '');
-                echo "<li>" . $discriptionPreview . "</li><br>";
-                $requirementsPreview = substr($row['requirements'], 0, 50) . (strlen($row['requirements']) > 15 ? '...' : '');
-                echo "<li class='mt-2'>" . $requirementsPreview . "</li>";
-                echo "</ul>";
-                echo "</div>";
-                echo "</div>";
-                echo "<div class='items-link items-link2 f-right'>";
-                echo "<div class='dropdown'>
-                        <button class='btn-link dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                        <i class='fas fa-ellipsis-v fa-lg'></i></button>
-                        <div class='dropdown-menu dropdown-menu-right'>
-                            <a class='dropdown-item' href='edit_job.php?job_id=". $row['job_id'] ."'>Edit</a>
-                            <a class='dropdown-item' href='delete_job.php?job_id=". $row['job_id']. "'>Delete</a>
-                            <a class='dropdown-item' href='deactive_job.php?job_id=". $row['job_id'] ."' onclick='toggleJobStatus(" .$row['job_id'] .")'>". ($row['status'] === 'active' ? 'Deactivate' : 'Activate') ."</a>
-                        </div>
-                      </div>";
-                echo "</div>";
-                echo "</div>";
-            }
-        } else {
-            echo "No job posts found.";
-        }
-        ?>
+// Add search conditions if any
+if (count($conditions) > 0) {
+    $condition_sql = implode(" AND ", $conditions);
+    $base_query .= $_SESSION['user_type'] === 'Recruiter' ? "AND $condition_sql " : "WHERE $condition_sql ";
+    $base_count_query .= $_SESSION['user_type'] === 'Recruiter' ? "AND $condition_sql " : "WHERE $condition_sql ";
+}
+
+// Get the total number of jobs for pagination calculation
+$total_jobs_result = $conn->query($base_count_query);
+$total_jobs_row = $total_jobs_result->fetch_assoc();
+$total_jobs = $total_jobs_row['total_jobs'];
+$total_pages = ceil($total_jobs / $jobs_per_page);
+
+// Fetch paginated jobs
+$job_query = $base_query . "ORDER BY date DESC LIMIT $jobs_per_page OFFSET $offset";
+$result = $conn->query($job_query);
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        // Display each job post
+        echo "<div class='single-job-items mb-30' style='margin-left:5%; margin-right:5%;'>";
+        echo "<div class='job-items'>";
+        echo "<div class='company-img'>";
+        echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'><img style='width:120px; height:120px;' src='/e-recruitment/upload/" . $row['company_logo'] . "'></a>";
+        echo "</div>";
+        echo "<div class='job-tittle job-tittle2'>";
+        echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'>";
+        echo "<h4>" . $row['job_title'] . "</h4>";
+        echo "</a>";
+        echo "<ul>";
+        echo "<li>" . $row['company_name'] . "</li>";
+        echo "<li>Category: " . $row['categories'] . "</li><br>";
+        echo "<li>" . substr($row['discription'], 0, 50) . (strlen($row['discription']) > 15 ? '...' : '') . "</li><br>";
+        echo "<li class='mt-2'>" . substr($row['requirements'], 0, 50) . (strlen($row['requirements']) > 15 ? '...' : '') . "</li>";
+        echo "</ul>";
+        echo "</div>";
+        echo "</div>";
+        echo "</div>";
+    }
+} else {
+    echo "No job posts found.";
+}
+?>
                                 </div>
         </div>
 
-        
+ <!-- Pagination Links -->
+ <?php if ($total_jobs > 10): ?>
+<div class="pagination-area pb-115 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="single-wrap d-flex justify-content-center">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-start">
+                            <?php if ($current_page > 1): ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<?php echo $current_page - 1; ?>" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+
+                            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                <li class="page-item <?php echo $i == $current_page ? 'active' : ''; ?>">
+                                    <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                </li>
+                            <?php endfor; ?>
+
+                            <?php if ($current_page < $total_pages): ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<?php echo $current_page + 1; ?>" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
     </main>
 
     <!-- Share Modal Section -->

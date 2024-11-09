@@ -52,7 +52,6 @@ if (isset($_POST['schedule'])) {
                 $_SESSION['interview_scheduled'] = true;
                 $_SESSION['application_id'] = $application_id;
                 $_SESSION['schedule_email'] = $schedule_email;
-                $_SESSION['message'] = "Interview Scheduled Successfully!";
                 header("Location: application_status.php?application_id=$application_id");
                 exit;
             } else {

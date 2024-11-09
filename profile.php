@@ -2,35 +2,32 @@
 session_start();
 include "connection.php";
 
-// Check if the form is submitted
-if (isset($_POST['update'])) {
+// Profile update handler
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['rest'])) {
     $id= $_SESSION['id'];
     $name = $_POST['name'];
     $email = $_POST['email'];
     $birthdate = $_POST['birthdate'];
-    $country = $_POST['country'];
+    $city = $_POST['city'];
     $phone = $_POST['phone'];
 
-
-    // Update query
-    $user_id = $_SESSION['id']; // Assuming the user ID is stored in the session
-    $sql = "UPDATE user SET name='$name', email='$email', birthdate='$birthdate', country='$country', phone='$phone' WHERE id='$id'";
-
+    $sql = "UPDATE user SET name='$name', email='$email', birthdate='$birthdate', city='$city', phone='$phone' WHERE id='$id'";
     if ($conn->query($sql) === TRUE) {
-        // Update session variables with new data
+        // Update session variables
         $_SESSION['name'] = $name;
         $_SESSION['email'] = $email;
-        $_SESSION['country'] = $country;
+        $_SESSION['city'] = $city;
         $_SESSION['phone'] = $phone;
         $_SESSION['birthdate'] = $birthdate;
 
-        // Redirect or display success message
-        $_SESSION['post_success'] = true;
         header("Location: profile.php?success=1");
+        exit();
     } else {
         echo "Error updating record: " . $conn->error;
     }
 }
+
+// Password reset handler
 if (isset($_POST['rest'])) {
     $id = $_SESSION['id'];
     $oldPassword = $_POST['oldPassword'];
@@ -39,10 +36,9 @@ if (isset($_POST['rest'])) {
     $sql = "SELECT * FROM user WHERE id ='$id'";
     $result = mysqli_query($conn, $sql);
 
-    // Check if results are found
     if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
-        if ($id == $row['id'] && $oldPassword == $row['password']) {
+        if ($oldPassword == $row['password']) {
             $sql = "UPDATE user SET password='$newPassword' WHERE id='$id'";
             if ($conn->query($sql) === TRUE) {
                 $_SESSION['password_change_success'] = true;
@@ -52,11 +48,10 @@ if (isset($_POST['rest'])) {
                 echo "Error updating record: " . $conn->error;
             }
         } else {
-            echo "<script>alert('Your old password does not match.')</script>";
+            echo "<script>alert('Incorrect old password. Please try again.');</script>";
         }
     }
 }
-
 ?>
 
 
@@ -369,9 +364,22 @@ ul.summary-list > li:last-child  {
     font-weight: bold;
     cursor: pointer;
 }
-
+.close-model{
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
 .close:hover,
 .close:focus {
+    color: black;
+    text-decoration: none;
+}
+.close-model:hover,
+.close-model:focus{
     color: black;
     text-decoration: none;
 }
@@ -397,6 +405,9 @@ border-radius: 3px;
 position: absolute;
 top: -5px;
 right: -5px;
+}
+.close-model{
+    position: absolute;
 }
 .modal-confirm .modal-footer {
 border: none;
@@ -542,12 +553,12 @@ margin: 100px auto;
 <!-- Edit Profile Modal -->
 <div id="editProfileModal" class="modal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; overflow:auto; background-color: rgba(0,0,0,0.4);">
     <div class="modal-content">
-        <span class="close" >&times;</span>
+        <span class="close">&times;</span>
         <h2>Edit Profile</h2>
-        <form action="profile.php" method="post">
-        <input type="hidden" name="id" id="id" class="form-control" value="<?php echo $_SESSION['id']; ?>">
+        <form id="editProfileForm" method="post" action="profile.php">
+            <input type="hidden" name="id" value="<?php echo $_SESSION['id']; ?>">
             <div class="form-group">
-                <label for="name">First Name</label>
+                <label for="name">Name</label>
                 <input type="text" name="name" id="name" class="form-control" value="<?php echo $_SESSION['name']; ?>">
             </div>
             <div class="form-group">
@@ -559,18 +570,18 @@ margin: 100px auto;
                 <input type="date" name="birthdate" id="birthdate" class="form-control" value="<?php echo $_SESSION['birthdate']; ?>">
             </div>
             <div class="form-group">
-                <label for="country">City</label>
+                <label for="city">City</label>
                 <input type="text" name="city" id="city" class="form-control" value="<?php echo $_SESSION['city']; ?>">
             </div>
             <div class="form-group">
                 <label for="phone">Phone</label>
                 <input type="text" name="phone" id="phone" class="form-control" value="<?php echo $_SESSION['phone']; ?>">
             </div>
-            <!-- Add other fields as necessary -->
-            <button type="update" name="update" class="btn btn-primary">Save Changes</button>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
         </form>
     </div>
 </div>
+
 
 <!-- Success Modal HTML -->
 <div id="myModal" class="modal fade" >
@@ -594,10 +605,10 @@ margin: 100px auto;
 <!-- Change Password Modal -->
 <div id="changePasswordModal" class="modal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; overflow:auto; background-color: rgba(0,0,0,0.4);">
     <div class="modal-content">
-        <span class="close">&times;</span>
+        <span class="close-model">&times;</span>
         <h2>Change Password</h2>
         <form id="changePasswordForm" method="POST" action="profile.php">
-        <input type="hidden" name="id" id="id" class="form-control" value="<?php echo $_SESSION['id']; ?>">
+        <input type="hidden" name="id" class="form-control" value="<?php echo $_SESSION['id']; ?>">
             <div class="form-group mt-3">
                 <label for="oldPassword">Old Password:</label>
                 <input type="password" class="form-control" id="oldPassword" name="oldPassword" required>
@@ -642,93 +653,94 @@ margin: 100px auto;
 
 <!-- JS here -->
 <script>
+
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('changePasswordBtn').onclick = function() {
-    document.getElementById('changePasswordModal').style.display = 'block';
-};
-
-document.querySelectorAll('.close').forEach(button => {
-    button.onclick = function() {
-        button.closest('.modal').style.display = 'none';
+     // Open Change Password Modal
+     document.getElementById('changePasswordBtn').onclick = function() {
+        document.getElementById('changePasswordModal').style.display = 'block';
     };
-    
-});
 
-document.getElementById('changePasswordForm').onsubmit = function() {
-    const newPassword = document.getElementById('newPassword').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-    if (newPassword !== confirmPassword) {
-        alert('New Passwords and Conform password do not match.');
-        return false;
-    }
-};
-const urlParams = new URLSearchParams(window.location.search);
+    // Close Change Password Modal
+    document.querySelector('#changePasswordModal .close-model').onclick = function() {
+        document.getElementById('changePasswordModal').style.display = 'none';
+    };
+
+    // Form validation for Change Password
+    document.getElementById('changePasswordForm').onsubmit = function() {
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        if (newPassword !== confirmPassword) {
+            alert('New Password and Confirm Password do not match.');
+            return false;
+        }
+    };
+
+    // Detect if the modal success message should show
+    const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('password_success')) {
         $('#passwordSuccessModal').modal('show');
-        // Hide the modal after 3 seconds
-        setTimeout(function(){
+        setTimeout(function() {
             window.location.href = 'profile.php?success=1';
         }, 1500);
     }
-});
-document.addEventListener('DOMContentLoaded', function() {
 
-    var modal = document.getElementById("editProfileModal");  // Profile Edit Modal
-    var btn = document.querySelector(".btn.head-btn1");       // Update Button
-    var span = document.getElementsByClassName("close")[0];   // Close Button for Edit Modal
-
-    var successModal = $('#myModal');                         // Success Modal using jQuery
-    var form = document.querySelector("form");                // Profile Edit Form
-
-    // Open the modal when the Update button is clicked
-    btn.onclick = function() {
-        modal.style.display = "block";
-    }
-
-    // Close the modal when the close button (x) is clicked
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
-
-    // Close the modal when the user clicks anywhere outside of it
+    // Close modal when clicking outside of it
     window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
+        if (event.target == document.getElementById('changePasswordModal')) {
+            document.getElementById('changePasswordModal').style.display = 'none';
         }
-    }
+    };
+    
+    // Profile Edit Modal Setup
+    var editProfileModal = document.getElementById("editProfileModal");
+    var openEditProfileBtn = document.querySelector(".btn.head-btn1");
+    var closeModalBtns = document.querySelectorAll(".close");
 
-    // Handle form submission
-    form.onsubmit = function(event) {
-        event.preventDefault(); // Prevent the default form submission for now
-        
-        // Assuming the form is validated and the data is submitted via AJAX
+    // Open Edit Profile Modal
+    openEditProfileBtn.onclick = function() {
+        editProfileModal.style.display = "block";
+    };
+
+    // Close Edit Profile Modal
+    closeModalBtns.forEach(btn => {
+        btn.onclick = function() {
+            editProfileModal.style.display = "none";
+        };
+    });
+
+    // AJAX form submission for editing profile
+    $('#editProfileForm').on('submit', function(event) {
+        event.preventDefault();
+
         $.ajax({
-            url: 'profile.php',  // The backend PHP script to handle the update
+            url: 'profile.php',
             type: 'POST',
-            data: $(form).serialize(), // Serialize form data
+            data: $(this).serialize(),
             success: function(response) {
-                // Check if the response indicates success
                 if (response.includes('success')) {
-                    // Close the profile edit modal
-                    modal.style.display = "none";
-                    
-                    // Show the success modal
-                    successModal.modal('show');
-                    setTimeout(function(){
-                        window.location.href = 'profile.php?success=1';
-                    }, 2000);
-                    
-                    // You can reset the form or update the displayed profile info after successful update
+                    $('#editProfileModal').hide(); // Hide modal on success
+                    $('#myModal').modal('show');   // Show success modal
+
+                    // Reload the page to display updated session values
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 1500);
                 } else {
-                    // Handle error (if needed, display some message)
-                    alert("Error updating profile. Please try again.");
+                    alert("Failed to update profile: " + response);
                 }
             },
-            error: function() {
-                alert("An error occurred while submitting the form.");
+            error: function(xhr, status, error) {
+                alert("An error occurred: " + error);
             }
         });
-    }
+    });
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        if (event.target == editProfileModal) {
+            editProfileModal.style.display = "none";
+        }
+    };
 });
 </script>
 

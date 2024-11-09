@@ -454,10 +454,21 @@ if (isset($_GET['id'])) {
                             </thead>
                             <tbody>
                                 <?php
-                                    include "connection.php";
-                                
-                                    $sql = "SELECT * FROM hiring_managers  ";
-                                    $result = mysqli_query($conn, $sql);
+                                    $limit = 15;
+                                    $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+                                    $offset = ($current_page - 1) * $limit;
+                                    
+                                    // Total managers count
+                                    $total_managers_query = "SELECT COUNT(*) as total FROM hiring_managers";
+                                    $total_managers_result = $conn->query($total_managers_query);
+                                    $total_managers = $total_managers_result->fetch_assoc()['total'];
+                                    
+                                    // Total pages calculation
+                                    $total_pages = ceil($total_managers / $limit);
+                                    
+                                    // Fetch hiring managers for the current page
+                                    $sql = "SELECT * FROM hiring_managers LIMIT $limit OFFSET $offset";
+                                    $result = $conn->query($sql);
 
                                     if (mysqli_num_rows($result)>0) {
                                         while($row = mysqli_fetch_assoc($result)){
@@ -506,7 +517,45 @@ if (isset($_GET['id'])) {
                         </table>
                 </div>
             </div>
-            <!-- Job List Area End -->
+            
+             <!-- Pagination Links -->
+             <?php if ($total_managers > $limit): ?>
+                <div class="pagination-area pb-115 text-center">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="single-wrap d-flex justify-content-center">
+                                    <nav>
+                                        <ul class="pagination">
+                                            <?php if ($current_page > 1): ?>
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page=<?php echo $current_page - 1; ?>" aria-label="Previous">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                            <?php endif; ?>
+
+                                            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                                <li class="page-item <?php echo $i == $current_page ? 'active' : ''; ?>">
+                                                    <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                                </li>
+                                            <?php endfor; ?>
+
+                                            <?php if ($current_page < $total_pages): ?>
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page=<?php echo $current_page + 1; ?>" aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            <?php endif; ?>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
         </main>
 
         <div id="add" class="modal fade" tabindex="-1" role="dialog">

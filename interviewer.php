@@ -457,8 +457,21 @@ if (isset($_GET['id'])) {
                                 <?php
                                     include "connection.php";
                                 
-                                    $sql = "SELECT * FROM interviewer  ";
-                                    $result = mysqli_query($conn, $sql);
+                                    // Fetch total number of interviewers
+                                    $sql_total = "SELECT COUNT(*) AS total_interviewers FROM interviewer";
+                                    $result_total = $conn->query($sql_total);
+                                    $row_total = $result_total->fetch_assoc();
+                                    $total_interviewers = $row_total['total_interviewers'];
+
+                                    // Define pagination parameters
+                                    $limit = 15; // Number of records per page
+                                    $total_pages = ceil($total_interviewers / $limit);
+                                    $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
+                                    $start = ($current_page - 1) * $limit;
+
+                                    // Fetch interviewers with pagination
+                                    $sql = "SELECT * FROM interviewer LIMIT $start, $limit";
+                                    $result = $conn->query($sql);
 
                                     if (mysqli_num_rows($result)>0) {
                                         while($row = mysqli_fetch_assoc($result)){
@@ -507,7 +520,45 @@ if (isset($_GET['id'])) {
                         </table>
                 </div>
             </div>
-            <!-- Job List Area End -->
+            
+            <!-- Pagination Links -->
+<?php if ($total_interviewers > 15): ?>
+<div class="pagination-area pb-115 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="single-wrap d-flex justify-content-center">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-start">
+                            <?php if ($current_page > 1): ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<?php echo $current_page - 1; ?>" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+
+                            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                <li class="page-item <?php echo $i == $current_page ? 'active' : ''; ?>">
+                                    <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                </li>
+                            <?php endfor; ?>
+
+                            <?php if ($current_page < $total_pages): ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<?php echo $current_page + 1; ?>" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
         </main>
 
 

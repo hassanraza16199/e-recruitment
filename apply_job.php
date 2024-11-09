@@ -35,7 +35,7 @@ if(isset($_POST['submit'])) {
         $resumename = basename($_FILES['resume']['name']);
         $resumefile = time().$resumename;
 
-        if($resumefiletype != "pdf" && $resumefiletype != "doc" && $resumefiletype != "docx"){
+        if($resumefiletype != "pdf" ){
             echo "<script> alert('Check extension.')</script>";
         }else if($_FILES['resume']['size'] > 50000000){
             echo "<script> alert('image exceed the size.')</script>";
@@ -61,12 +61,8 @@ if(isset($_POST['submit'])) {
         }    
     }
         $conn->close();
-    } 
-
+    }
 ?>
-
-
-
 
 
 
@@ -284,7 +280,14 @@ margin: 100px auto;
 
         <div class="form-group">
             <label for="candidate_education">Education</label>
-            <textarea type="text" class="form-control" rows="4" id="candidate_education" name="candidate_education"></textarea>
+            <select class="form-select mb-4" name="candidate_education" id="candidate_education" >
+                <option selected disabled>Select Education</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="B.com">B.com</option>
+                <option value="Bachelor\'s Degree(BS)">Bachelor\'s Degree(BS)</option>
+                <option value="Associate Degree">Associate Degree</option>
+                <option value="Doctorate">Doctorate</option>
+            </select>
         </div>
 
         <div class="form-group">
@@ -294,12 +297,12 @@ margin: 100px auto;
 
         <div class="form-group">
             <label for="candidate_experience">Experience</label>
-            <textarea type="text" class="form-control" rows="4" id="candidate_experience" name="candidate_experience"></textarea>
+            <input type="number" class="form-control" id="candidate_experience" name="candidate_experience">
         </div>
         
         <div class="mb-3">
             <label  class="form-label">Upload Resume</label><br>
-            <input type="file" class="form-control" accept=".pdf, .doc, .docx" id="resume" name="resume" >
+            <input type="file" class="form-control" accept=".pdf" id="resume" name="resume" >
         </div>
 
         <button type="submit"  name='submit' class="btn head-btn2 mt-3">Submit</button>
@@ -344,22 +347,6 @@ margin: 100px auto;
         <?php unset($_SESSION['apply_success']); // Clear session flag after the modal is shown ?>
     <?php endif; ?>
 });
-
-        const uploadArea = document.querySelector('.upload-area');
-        const fileInput = document.querySelector('input[type="file"]');
-
-        uploadArea.addEventListener('click', () => {
-            fileInput.click();
-        });
-
-        fileInput.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                uploadArea.textContent = file.name;
-            } else {
-                uploadArea.textContent = 'Choose file or drop here';
-            }
-        });
         
         
     </script>
