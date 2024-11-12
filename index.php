@@ -595,7 +595,7 @@ form.search-box .select-form .nice-select::after {
                             <div class="job-items">
                                 <div class="company-img">
                                     <?php
-                                    echo "<a href='signup.php'><img style='width:120px; height:120px;' src='/E-Recruitment system/upload/" . $row['company_logo'] . "'></a>"
+                                    echo "<a href='signup.php'><img style='width:120px; height:120px;' src='/e-recruitment/upload/" . $row['company_logo'] . "'></a>"
                                     ?>
                                 </div>
                                 <div class="job-tittle">
