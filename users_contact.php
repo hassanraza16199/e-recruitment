@@ -287,7 +287,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <input type="hidden" class="form-control" id="modal_contact_id" name="contact_id">
                     <div class="form-group">
                         <label for="modal_sender_email">To:</label>
-                        <input type="email" class="form-control" id="modal_sender_email" name="to_email" readonly>
+                        <input type="email" class="form-control" id="modal_sender_email" name="to_email[]" readonly>
                     </div>
                     <div class="form-group">
                         <label for="modal_subject">Subject:</label>

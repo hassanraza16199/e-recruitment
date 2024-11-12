@@ -7,7 +7,7 @@ require 'vendor/PHPMailer/src/Exception.php';
 require 'vendor/PHPMailer/src/PHPMailer.php';
 require 'vendor/PHPMailer/src/SMTP.php';
 
-function sendMail($to, $subject, $message) {
+function sendMail($to, $subject, $message, $cc = []) {
     $mail = new PHPMailer(true);
 
     try {
@@ -21,8 +21,15 @@ function sendMail($to, $subject, $message) {
 
         // Recipients
         $mail->setFrom('hassan@ashlarglobal.com', 'E-Recruitment System');
-        $mail->addAddress($to);
         $mail->addReplyTo('hassan@ashlarglobal.com', 'E-Recruitment System');
+        
+        foreach ($to as $email) {
+            $mail->addAddress($email);
+        }
+
+        foreach ($cc as $ccEmail) {
+            $mail->addCC($ccEmail);
+        }
 
         // Content
         $mail->isHTML(true);
