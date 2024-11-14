@@ -19,6 +19,7 @@ if(isset($_POST['submit'])){
 
     if($conn->query($sql) === TRUE){
         header("Location: interviewer.php");
+        exit;
     }else{
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
@@ -483,10 +484,14 @@ if (isset($_GET['id'])) {
                                     <td><?php echo $row['name']; ?></td>
                                     <td><?php echo $row['email']; ?></td>
                                     <td><?php echo $row['designation']; ?></td>
-                                    <td>
+                                    <td> 
                                         <?php 
                                             $availability = json_decode($row['avalibility'], true); 
-                                            echo implode(' | ', $availability);
+                                            if (is_array($availability)) {
+                                                echo implode(' | ', $availability);
+                                            } else {
+                                                echo $availability; // Display single selected availability option
+                                            }
                                         ?>
                                     </td>
                                     <td>
@@ -576,15 +581,15 @@ if (isset($_GET['id'])) {
                     <input type="hidden" name="id" id="interviewerId"> <!-- Hidden input for ID (used for editing) -->
                     <div class="form-group">
                         <label for="name">Name:</label>
-                        <input type="text" class="form-control" id="name" name="name">
+                        <input type="text" class="form-control" id="name" name="name" required>
                     </div>
                     <div class="form-group">
                         <label for="email">Email:</label>
-                        <input type="email" class="form-control" id="email" name="email">
+                        <input type="email" class="form-control" id="email" name="email" required>
                     </div>
                     <div class="form-group">
                         <label for="designation">Designation:</label>
-                        <select class="form-select mb-4" name="designation" id="designation">
+                        <select class="form-select mb-4" name="designation" id="designation" required>
                             <option selected disabled>Select Job Category</option>
                             <option value="Design & Creative">Design & Creative</option>
                             <option value="Design & Development">Design & Development</option>
@@ -599,7 +604,7 @@ if (isset($_GET['id'])) {
                     </div>
                     <div class="form-group">
                         <label for="avalibility">Avalibility:</label>
-                        <select name="avalibility" id="avalibility" data-placeholder="Select avalibilty" multiple data-multi-select>
+                        <select name="avalibility" id="avalibility" data-placeholder="Select avalibilty" multiple data-multi-select required>
                             <option value="10:00am To 11:00am">10:00am To 11:00am</option>
                             <option value="11:00am To 12:00pm">11:00am To 12:00pm</option>
                             <option value="12:00pm To 01:00pm">12:00pm To 01:00pm</option>

@@ -421,57 +421,56 @@ if (isset($_POST['schedule'])) {
                     <input type="hidden" class="form-control" id="application_id" name="application_id" value="<?php echo $application_id; ?>" readonly>
 
                     <div class="form-group mb-5">
-                        <label for="interview_time">Interview Time:</label>
-                        <select class="form-select" name="interview_time" id="interview_time">
-                            <option value="" disabled selected>Select interview Schedule</option>
-                            <?php
-                            
-                            if ($status == 'Technical Interviewing') { 
-                                $sql = "SELECT * FROM interviewer";
-                                $inter_name = "Interviewer Name";
-                                $interviewer_id = $row['id'];
+    <label for="interview_time">Interview Time:</label>
+    <select class="form-select" name="interview_time" id="interview_time">
+        <option value="" disabled selected>Select interview Schedule</option>
+        <?php
+        // Ensure that $status is set and handle each case
+        if (isset($status) && $status == 'Technical Interviewing') {
+            $sql = "SELECT * FROM interviewer";
+            $inter_name = "Interviewer Name";
+        } elseif (isset($status) && $status == 'Final Interview') {
+            $sql = "SELECT * FROM hiring_managers";
+            $inter_name = "Manager Name";
+        } else {
+            echo "<option value=''>Invalid status for scheduling</option>";
+            exit; // Stop further execution if $status is invalid
+        }
 
-                            } elseif ($status == 'Final Interview') { 
-                                $sql = "SELECT * FROM hiring_managers";
-                                $inter_name = "Manager Name";
-                                $interviewer_id = $row['id'];
-                            }
+        // Execute the query and handle potential errors
+        $result = $conn->query($sql);
+        if ($result && $result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                // Initialize variables from row data within the loop
+                $interviewer_id = $row['id'];
+                $schedule_email = $row['email'];
 
-                            $result = $conn->query($sql);
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    // Check if 'avalibility' exists in the row
-                                    $schedule_email = $row['email'];
-                                    if (isset($row['avalibility'])) {
-                                        // Decode availability JSON into an array
-                                        $availability = json_decode($row['avalibility'], true);
+                // Check if 'avalibility' exists and decode it from JSON
+                if (isset($row['avalibility']) && !empty($row['avalibility'])) {
+                    $availability = json_decode($row['avalibility'], true);
 
-                                        // Ensure that availability is an array
-                                        if (is_array($availability)) {
-                                            $availabilityOptions = implode('|', $availability); // Combine times with "|"
-                                        } else {
-                                            $availabilityOptions = ''; // Default to empty if it's not an array
-                                        }
+                    // Ensure 'avalibility' is a valid array after decoding
+                    if (is_array($availability)) {
+                        $availabilityOptions = implode('|', $availability); // Combine times with "|"
+                    } else {
+                        $availabilityOptions = 'No available times';
+                    }
 
-                                        // Set option value as "id|time1|time2|..."
-                                        $optionValue = "{$row['id']}|{$availabilityOptions}|{$schedule_email}";
-                                        ?>
-                                        <option value="<?php echo $optionValue; ?>">
-                                            <?php 
-                                            echo "$inter_name: {$row['name']} | Category: {$row['designation']} | Availability: " . implode(' | ', $availability);
-                                            ?>
-                                        </option>
-                                        <?php 
-                                    } else {
-                                        // Handle the case where 'avalibility' is not set
-                                        // You can choose to skip this entry or provide a default message
-                                        echo "<option value=''>No availability data for {$row['name']}</option>";
-                                    }
-                                }
-                            }
-                            ?>
-                        </select>
-                    </div>
+                    // Prepare the option value and display text
+                    $optionValue = "{$row['id']}|{$availabilityOptions}|{$schedule_email}";
+                    echo "<option value=\"$optionValue\">$inter_name: {$row['name']} | Category: {$row['designation']} | Availability: " . implode(' | ', $availability) . "</option>";
+                } else {
+                    // Handle missing or empty 'avalibility' field
+                    echo "<option value=''>No availability data for {$row['name']}</option>";
+                }
+            }
+        } else {
+            echo "<option value=''>No available schedules</option>";
+        }
+        ?>
+    </select>
+</div>
+
 
                     <div class="form-group">
                         <label for="interview_date">Interview Date:</label>
