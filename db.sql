@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 21, 2024 at 07:23 AM
+-- Generation Time: Nov 17, 2024 at 09:25 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -60,7 +60,8 @@ INSERT INTO `applications` (`application_id`, `candidate_id`, `recruiter_id`, `j
 (64, 18, 21, 87, '', 'kiran', '12', 'eye@gmail.com', '23233232322323', 1111111111, '', '', 'dhg', 'dfhgd', 'dsfgh', '1728279571HussnainUmer-CV.pdf', '', '2024-10-07'),
 (65, 18, 21, 87, '', 'kiran', '12', 'eye@gmail.com', '', 1111111111, '', '', '', '', '', '1728279589HussnainUmer-CV.pdf', 'Pending', '2024-10-07'),
 (66, 18, 21, 87, 'Sign1', 'kiran', '12', 'eye@gmail.com', '', 1111111111, '', '', '', '', '', '1728279859HussnainUmer-CV.pdf', 'Shortlist', '2024-10-07'),
-(67, 18, 21, 106, 'Sign', 'kiran', 'Testing', 'eye@gmail.com', '23233232322323', 1111111111, '', '', 'dhg', 'dfhgd', 'dsfgh', '1729177475HussnainUmer-CV.pdf', '', '2024-10-17');
+(67, 18, 21, 106, 'Sign', 'kiran', 'Testing', 'eye@gmail.com', '23233232322323', 1111111111, '', '', 'dhg', 'dfhgd', 'dsfgh', '1729177475HussnainUmer-CV.pdf', '', '2024-10-17'),
+(68, 18, 21, 107, 'Front End', 'Andleeb', 'Umer', 'andleeb.umer.vu@gmail.com', '000000000000', 0, '1997-12-16', '', 'Bachelor\'s Degree(BS)', 'SQA', '2', '1731515866Fall 2024_MTH603_1.pdf', '', '2024-11-13');
 
 -- --------------------------------------------------------
 
@@ -153,7 +154,8 @@ INSERT INTO `feedback` (`feedback_id`, `user_id`, `recruiter_id`, `job_id`, `use
 (64, 18, 21, 87, 'Kiran', 'good', '', ''),
 (65, 21, 0, 0, 'Andleeb', 'good', '', 'Recruiter'),
 (66, 21, 0, 0, 'Andleeb', 'okay', '', 'Recruiter'),
-(67, 21, 0, 0, 'Andleeb', 'good', '', 'Recruiter');
+(67, 21, 0, 0, 'Andleeb', 'good', '', 'Recruiter'),
+(68, 18, 21, 107, 'Kiran1', 'amazing', 'Testing', '');
 
 -- --------------------------------------------------------
 
@@ -174,9 +176,8 @@ CREATE TABLE `hiring_managers` (
 --
 
 INSERT INTO `hiring_managers` (`id`, `name`, `email`, `designation`, `avalibility`) VALUES
-(1, 'hussnain', 'hussnain@gmail.com', 'Design & Creative', '11:00am To 12:00pm'),
-(3, 'Asma', 'asma342@gmail.com', 'Design & Development', '04:00pm To 05:00pm'),
-(4, 'ali', 'ality342@gmail.com', 'Mobile Application', '03:00am To 04:00pm');
+(5, 'Kiran1', 'kiran@gmail.com', 'Mobile Application', '[\"05:00pm To 06:00pm\",\"02:00pm To 03:00pm\"]'),
+(7, 'Hussnain2', 'hussnainumer23@gmail.com', 'Information Technology', '[\"01:00pm To 02:00pm\"]');
 
 -- --------------------------------------------------------
 
@@ -197,8 +198,7 @@ CREATE TABLE `interviewer` (
 --
 
 INSERT INTO `interviewer` (`id`, `name`, `email`, `designation`, `avalibility`) VALUES
-(3, 'ali', 'ality342@gmail.com', 'Design & Development', '12:00am To 01:00pm'),
-(4, 'umer', 'ality342@gmail.com', 'Design & Development', '11:00am To 12:00pm');
+(5, 'Asma', 'noreenasma368@gmail.com', 'Real Estate', '[\"10:00am To 11:00am\",\"06:00pm To 07:00pm\",\"03:00am To 04:00pm\"]');
 
 -- --------------------------------------------------------
 
@@ -364,7 +364,7 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `name`, `email`, `password`, `birthdate`, `city`, `phone`, `user_type`, `time`, `status`) VALUES
 (1, 'Admin', 'admin@gmail.com', '12345', '', '', '', 'admin', '2024-10-18 08:33:31', 'active'),
-(18, 'Kiran', 'kiran@gmail.com', '12345', '2000-11-11', '11111111111', '11111111111', 'Candidate', '2024-08-08 08:13:52', 'active'),
+(18, 'Kiran1', 'kiran@gmail.com', '12345', '2000-11-11', '11111111111', '11111111111', 'Candidate', '2024-08-08 08:13:52', 'active'),
 (21, 'Andleeb', 'andleeb@gmail.com', '12345', '1990-12-12', 'Pakistan', '03110765697', 'Recruiter', '2024-08-31 08:16:23', 'active');
 
 --
@@ -443,7 +443,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `applications`
 --
 ALTER TABLE `applications`
-  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT for table `contact_us`
@@ -455,19 +455,19 @@ ALTER TABLE `contact_us`
 -- AUTO_INCREMENT for table `feedback`
 --
 ALTER TABLE `feedback`
-  MODIFY `feedback_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `feedback_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT for table `hiring_managers`
 --
 ALTER TABLE `hiring_managers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `interviewer`
 --
 ALTER TABLE `interviewer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `interview_schedule`
