@@ -193,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             if($_SESSION['user_type'] === 'Recruiter') { ?>
                             <button style="border:none; background-color:#fff;" onclick="openModal('<?php echo $contact_id; ?>', '<?php echo $sender_email; ?>', '<?php echo $subject; ?>')">
                     <div class="tooltip-container">
-                        <span class="tooltip-icon"><i class="fa-solid fa-reply fa-lg" style="color: #35D7FF;"></i></span>
+                        <span class="tooltip-icon"><i class="fa-solid fa-reply" style="color: #35D7FF;"></i></span>
                         <div class="tooltip-text">
                         Reply 
                             <div class="tooltip-arrow"></div>
@@ -210,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <button type="submit" style="border:none; background:none;">
                                 
                                 <div class="tooltip-container">
-                                <span class="tooltip-icon"><i class="fa-solid fa-trash fa-lg" style="color:#FF0000; cursor: pointer;"></i></span>
+                                <span class="tooltip-icon"><i class="fa-solid fa-trash" style="color:#FF0000; cursor: pointer;"></i></span>
                                 <div class="tooltip-text">
                                     <!-- Replace the SVG with your text -->
                                     Delete 

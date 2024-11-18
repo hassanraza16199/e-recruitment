@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sql = "DELETE FROM feedback WHERE feedback_id = '$feedback_id'";
 
     if($conn->query($sql) === True){
-        header("Location: users_feedback.php"); // Replace with the actual page name
+        header("Location: candidate_feedback.php"); // Replace with the actual page name
     
     }
     exit();
@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="row">
                         <div class="col-xl-12">
                             <div class="hero-cap text-center">
-                                <h2>User Feedback</h2>
+                                <h2>Candidate Feedback</h2>
                             </div>
                         </div>
                     </div>
@@ -129,63 +129,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <!-- Hero Area End -->
     
         <main class="ml-5 mr-5 mt-5 mb-5">
-        <!-- Recruiter Feedback -->
-            <?php
-                if($_SESSION['user_type'] === 'admin'){
-            ?>
-            <div class="mb-5">
-                <h2 class="mt-3 mb-3">Recruiter Feedbacks</h2>
-                <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Sr</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Comment</th>
-                        <th scope="col">Rating</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                        $sql = "SELECT * FROM feedback";
-
-                        $result = $conn->query($sql);
-                        if ($result->num_rows > 0) {
-                            while($row = $result->fetch_assoc()) {
-                                $user_type = $row['user_type'];
-                                if($user_type === 'Recruiter'){
-                    ?>
-                    <tr>
-                        <th scope="row"><?php echo $row['feedback_id']; ?></th>
-                        <td><?php echo $row['user_name']; ?></td>
-                        <td class="message-cell"><?php echo $row['comment']; ?></td>
-                        <td><?php echo $row['rating']; ?></td>
-                        <td>
-                        <form action="users_feedback.php" method="POST" style="display:inline;">
-                            <input type="hidden" name="feedback_id" value="<?php echo $row['feedback_id']; ?>">
-                            
-                            <div class="tooltip-container">
-                                <span class="tooltip-icon"><button type="submit" style="border:none;background:none;">
-                                <i class="fa-solid fa-trash" style="color:#FF0000; cursor: pointer;"></i>
-                            </button></span>
-                                <div class="tooltip-text">
-                                <!-- Replace the SVG with your text -->
-                                Delete 
-                                <div class="tooltip-arrow"></div>
-                            </div>
-                        </form>
-
-                        </td>
-                    </tr>
-                    <?php
-                                }
-                            }
-                        }
-                    ?>
-
-                </tbody>
-                </table>
-            </div>
 
             <!-- Candidate Feedbacks -->
             <div class='mt-5'>
@@ -203,7 +146,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <tbody>
                         <?php
                             include "connection.php";
-                                $sql = "SELECT * FROM feedback";
+                            // Define the limit of feedback entries per page
+                            $limit = 15;
+
+                            // Get the current page number from the URL, default to 1
+                            $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+                            $current_page = max(1, $current_page);
+
+                            // Calculate the offset for the SQL query
+                            $offset = ($current_page - 1) * $limit;
+
+                            // Get the total number of feedback entries
+                            $total_sql = "SELECT COUNT(*) AS total FROM feedback WHERE user_type = 'Candidate'";
+                            $total_result = $conn->query($total_sql);
+                            $total_row = $total_result->fetch_assoc();
+                            $total_feedbacks = $total_row['total'];
+
+                            // Calculate the total number of pages
+                            $total_pages = ceil($total_feedbacks / $limit);
+
+                            // Fetch feedback entries for the current page
+                            $sql = "SELECT * FROM feedback WHERE user_type = 'Candidate' LIMIT $limit OFFSET $offset";
 
                             $result = $conn->query($sql);
 
@@ -217,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <td><?php echo $row['user_name']; ?></td>
                             <td class="message-cell"><?php echo $row['comment']; ?></td>
                             <td><?php echo $row['rating']; ?></td>
-                            <form action="users_feedback.php" method="POST" style="display:inline;">
+                            <form action="candidate_feedback.php" method="POST" style="display:inline;">
                                     <input type="hidden" name="feedback_id" value="<?php echo $row['feedback_id']; ?>">
                             <td>
                                 <div class="tooltip-container">
@@ -251,83 +214,47 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         ?>
                     </tbody>
                 </table>
-
             </div>
+            
+            <!-- Pagination -->
+    <?php if ($total_feedbacks > $limit): ?>
+        <div class="pagination-area pb-115 text-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="single-wrap d-flex justify-content-center">
+                            <nav>
+                                <ul class="pagination">
+                                    <?php if ($current_page > 1): ?>
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page=<?php echo $current_page - 1; ?>" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                    <?php endif; ?>
 
+                                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                        <li class="page-item <?php echo $i == $current_page ? 'active' : ''; ?>">
+                                            <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                        </li>
+                                    <?php endfor; ?>
 
-
-            <?php } elseif($_SESSION['user_type'] === 'Recruiter'){?>
-
-            <!-- Candidate Feedbacks -->
-            <div class='mt-5'>
-                <h2 class="mt-3 mb-3">Candidate Feedbacks</h2>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Sr</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Comment</th>
-                            <th scope="col">Rating</th>
-                            <th scope="col" colspan="2"><span style="margin-left:100px;">Action</span></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                            include "connection.php";
-                            $recruiter_id = $_SESSION['id'];
-                            $sql = "SELECT * FROM feedback WHERE recruiter_id = '$recruiter_id'";
-                            
-                            $result = $conn->query($sql);
-
-                            if ($result->num_rows > 0) {
-                                while($row = $result->fetch_assoc()) {
-                                    $user_type = $row['user_type'];
-                                    if($user_type === 'Candidate'){
-                        ?>
-                        <tr>
-                            <th scope="row"><?php echo $row['feedback_id']; ?></th>
-                            <td><?php echo $row['user_name']; ?></td>
-                            <td class="message-cell"><?php echo $row['comment']; ?></td>
-                            <td><?php echo $row['rating']; ?></td>
-                            <form action="users_feedback.php" method="POST" style="display:inline;">
-                                    <input type="hidden" name="feedback_id" value="<?php echo $row['feedback_id']; ?>">
-                            <td>
-                                <div class="tooltip-container">
-                                    <span class="tooltip-icon"><button type="submit" style="border:none;background:none;">
-                                    <i class="fa-solid fa-trash" style="color:#FF0000; cursor: pointer;"></i>
-                                    </button></span>
-                                    <div class="tooltip-text">
-                                        <!-- Replace the SVG with your text -->
-                                        Delete 
-                                        <div class="tooltip-arrow"></div>
-                                    </div>
-                            </td>
-                            <td>
-                               
-                                    <div class="tooltip-container">
-                                    <span class="tooltip-icon"> <a href='job_details.php?job_id=<?php echo $row['job_id']; ?>&recruiter_id=<?php echo $row['recruiter_id']; ?>'>
-                                        <i class="fa-solid fa-file-import  ml-2" style="color:#000080;"></i>
-                                    </a></span>
-                                    <div class="tooltip-text">
-                                        <!-- Replace the SVG with your text -->
-                                        Go to post
-                                        <div class="tooltip-arrow"></div>
-                                    </div>
-                            </td>
-                        </form>
-                        </tr>
-                        <?php
-                                    }
-                                }
-                            }
-                        ?>
-                    </tbody>
-                </table>
-
+                                    <?php if ($current_page < $total_pages): ?>
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page=<?php echo $current_page + 1; ?>" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    <?php endif; ?>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-<?php } ?>
-    </main>
+        </div>
+    <?php endif; ?>
+        </main>
 
 <?php include "footer.php"; ?>
   <!-- JS here -->

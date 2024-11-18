@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 18, 2024 at 03:36 PM
+-- Generation Time: Nov 18, 2024 at 05:31 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -55,11 +55,12 @@ CREATE TABLE `applications` (
 INSERT INTO `applications` (`application_id`, `candidate_id`, `recruiter_id`, `job_id`, `job_title`, `firstname`, `lastname`, `email_address`, `cnic`, `contact_number`, `date_birth`, `city`, `candidate_education`, `candidate_skill`, `candidate_experience`, `resume`, `status`, `date`) VALUES
 (62, 18, 21, 87, '', 'kiran', '12', 'eye@gmail.com', '23233232322323', 111111111, '2000-11-02', 'Pakistan', 'Mphil', 'dfhgd', '1', '1728119250HussnainUmer-CV.pdf', '', '2024-10-05'),
 (63, 18, 21, 87, '', 'kiran', '12', 'hussnain.umer.vu@gmail.com', '23233232322323', 1111111111, '', '', 'dhg', 'dfhgd', '1', '1728279530HussnainUmer-CV.pdf', 'Shortlist', '2024-10-07'),
-(64, 18, 21, 87, '', 'kiran', '12', 'eye@gmail.com', '23233232322323', 1111111111, '', '', 'dhg', 'dfhgd', 'dsfgh', '1728279571HussnainUmer-CV.pdf', '', '2024-10-07'),
+(64, 18, 21, 87, '', 'kiran', '12', 'eye@gmail.com', '23233232322323', 1111111111, '', '', 'dhg', 'dfhgd', 'dsfgh', '1728279571HussnainUmer-CV.pdf', 'Final Interview', '2024-10-07'),
 (65, 18, 21, 87, '', 'kiran', '12', 'eye@gmail.com', '', 1111111111, '', '', '', '', '', '1728279589HussnainUmer-CV.pdf', 'Pending', '2024-10-07'),
 (66, 18, 21, 87, 'Sign1', 'kiran', '12', 'eye@gmail.com', '', 1111111111, '', '', '', '', '', '1728279859HussnainUmer-CV.pdf', 'Shortlist', '2024-10-07'),
 (67, 18, 21, 106, 'Sign', 'kiran', 'Testing', 'eye@gmail.com', '23233232322323', 1111111111, '', '', 'dhg', 'dfhgd', 'dsfgh', '1729177475HussnainUmer-CV.pdf', '', '2024-10-17'),
-(68, 18, 21, 107, 'Front End', 'Andleeb', 'Umer', 'andleeb.umer.vu@gmail.com', '000000000000', 0, '1997-12-16', '', 'Bachelor\'s Degree(BS)', 'SQA', '2', '1731515866Fall 2024_MTH603_1.pdf', '', '2024-11-13');
+(68, 18, 21, 107, 'Front End', 'Andleeb', 'Umer', 'andleeb.umer.vu@gmail.com', '000000000000', 0, '1997-12-16', '', 'Bachelor\'s Degree(BS)', 'SQA', '2', '1731515866Fall 2024_MTH603_1.pdf', '', '2024-11-13'),
+(69, 18, 21, 109, 'Test', 'kiran', '12', 'eye@gmail.com', '', 1111111111, '', '', '', '', '', '1731945713HussnainUmer-CV (1).pdf', '', '2024-11-18');
 
 -- --------------------------------------------------------
 
@@ -124,8 +125,7 @@ CREATE TABLE `feedback` (
 
 INSERT INTO `feedback` (`feedback_id`, `user_id`, `recruiter_id`, `job_id`, `user_name`, `rating`, `comment`, `user_type`) VALUES
 (20, 21, 0, 0, 'Andleeb', 'amazing', 'Amazing', 'Recruiter'),
-(25, 18, 0, 0, 'Kiran', 'okay', '', 'Candidate'),
-(26, 18, 0, 0, 'Kiran', 'okay', '', ''),
+(26, 18, 0, 0, 'Kiran', 'okay', '', 'Candidate'),
 (27, 18, 0, 0, 'Kiran', 'good', '', ''),
 (28, 21, 0, 0, 'Andleeb', 'good', 'Good', ''),
 (29, 21, 0, 0, 'Andleeb', 'amazing', 'Amazing', ''),
@@ -142,20 +142,18 @@ INSERT INTO `feedback` (`feedback_id`, `user_id`, `recruiter_id`, `job_id`, `use
 (51, 21, 0, 0, 'Andleeb', 'good', '', ''),
 (52, 21, 0, 0, 'Andleeb', 'good', '', ''),
 (53, 21, 0, 0, 'Andleeb', 'good', '', ''),
-(54, 18, 0, 0, 'Kiran', 'good', '', 'Candidate'),
 (56, 21, 0, 0, 'Andleeb', 'good', '', 'Recruiter'),
 (57, 21, 0, 0, 'Andleeb', 'terrible', 'ttt', 'Recruiter'),
-(59, 21, 0, 0, 'Andleeb', 'okay', 'Waoooo', 'Recruiter'),
 (60, 18, 21, 86, 'Kiran', 'bad', 'Bad', ''),
 (61, 21, 0, 0, 'Andleeb', 'okay', 'Okay', 'Recruiter'),
-(62, 18, 21, 87, 'Kiran', 'good', '', ''),
 (63, 18, 21, 87, 'Kiran', 'okay', '', ''),
 (64, 18, 21, 87, 'Kiran', 'good', '', ''),
 (65, 21, 0, 0, 'Andleeb', 'good', '', 'Recruiter'),
 (66, 21, 0, 0, 'Andleeb', 'okay', '', 'Recruiter'),
 (67, 21, 0, 0, 'Andleeb', 'good', '', 'Recruiter'),
 (68, 18, 21, 107, 'Kiran1', 'amazing', 'Testing', ''),
-(69, 21, 0, 0, 'Andleeb', 'good', '', 'Recruiter');
+(69, 21, 0, 0, 'Andleeb', 'good', '', 'Recruiter'),
+(70, 18, 21, 109, 'Kiran', 'good', '', '');
 
 -- --------------------------------------------------------
 
@@ -177,7 +175,8 @@ CREATE TABLE `hiring_managers` (
 
 INSERT INTO `hiring_managers` (`id`, `name`, `email`, `designation`, `avalibility`) VALUES
 (5, 'Kiran1', 'kiran@gmail.com', 'Mobile Application', '[\"05:00pm To 06:00pm\",\"02:00pm To 03:00pm\"]'),
-(7, 'Hussnain2', 'hussnainumer23@gmail.com', 'Information Technology', '[\"01:00pm To 02:00pm\"]');
+(7, 'Hussnain2', 'hussnainumer23@gmail.com', 'Information Technology', '[\"01:00pm To 02:00pm\"]'),
+(8, 'kamran', 'kamran@gmail.com', 'Sales & Marketing', '[\"05:00pm To 06:00pm\",\"02:00pm To 03:00pm\"]');
 
 -- --------------------------------------------------------
 
@@ -198,7 +197,8 @@ CREATE TABLE `interviewer` (
 --
 
 INSERT INTO `interviewer` (`id`, `name`, `email`, `designation`, `avalibility`) VALUES
-(5, 'Asma', 'noreenasma368@gmail.com', 'Real Estate', '[\"10:00am To 11:00am\",\"06:00pm To 07:00pm\",\"03:00am To 04:00pm\"]');
+(5, 'Asma', 'noreenasma368@gmail.com', 'Real Estate', '[\"10:00am To 11:00am\",\"06:00pm To 07:00pm\",\"03:00am To 04:00pm\"]'),
+(6, 'Andleeb', 'andleeb.umer.vu@gmail.com', 'Information Technology', '[\"07:00pm To 08:00pm\",\"04:00pm To 05:00pm\"]');
 
 -- --------------------------------------------------------
 
@@ -330,7 +330,7 @@ INSERT INTO `notification` (`notification_id`, `job_or_status_id`, `recruiter_id
 (22, 59, 1, 0, 'Status', ' Your job application against  has been approved by the Admin.', '', '2024-10-18 00:58:00'),
 (23, 59, 21, 0, 'Status', ' Your job application against  has been approved by the Andleeb.', '', '2024-10-19 02:16:47'),
 (24, 59, 21, 0, 'Status', ' Your job application against  has been approved by the Andleeb.', '', '2024-10-19 02:16:59'),
-(25, 109, 21, 0, 'Job', 'Andleeb posted a new job Test.', '', '2024-11-18 06:05:58');
+(25, 109, 21, 0, 'Job', 'Andleeb posted a new job Test.', '1', '2024-11-18 06:05:58');
 
 -- --------------------------------------------------------
 
@@ -357,8 +357,9 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `name`, `email`, `password`, `birthdate`, `city`, `phone`, `user_type`, `time`, `status`) VALUES
 (1, 'Admin', 'admin@gmail.com', '12345', '', '', '', 'admin', '2024-10-18 08:33:31', 'active'),
-(18, 'Kiran', 'kiran@gmail.com', '', '11111111111', '11111111111', '2000-11-11', 'Candidate', '2024-08-08 08:13:52', 'active'),
-(21, 'Andleeb', 'andleeb@gmail.com', '12345', '1990-12-12', 'Pakistan', '03110765697', 'Recruiter', '2024-08-31 08:16:23', 'active');
+(18, 'Kiran1', 'kiran@gmail.com', '12345', '2000-11-12', 'Narowal', '03490445362', 'Candidate', '2024-08-08 08:13:52', 'active'),
+(21, 'Andleeb', 'andleeb@gmail.com', '12345', '1990-12-12', 'Pakistan', '03110765697', 'Recruiter', '2024-08-31 08:16:23', 'active'),
+(22, 'Asma', 'nooreenasma368@gmail.com', '12345', '11/11/2024', 'Narowal', '1111111111', 'Candidate', '2024-11-18 09:07:25', 'active');
 
 --
 -- Indexes for dumped tables
@@ -436,7 +437,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `applications`
 --
 ALTER TABLE `applications`
-  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT for table `contact_us`
@@ -448,19 +449,19 @@ ALTER TABLE `contact_us`
 -- AUTO_INCREMENT for table `feedback`
 --
 ALTER TABLE `feedback`
-  MODIFY `feedback_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `feedback_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `hiring_managers`
 --
 ALTER TABLE `hiring_managers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `interviewer`
 --
 ALTER TABLE `interviewer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `interview_schedule`
@@ -490,7 +491,7 @@ ALTER TABLE `notification`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- Constraints for dumped tables

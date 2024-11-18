@@ -134,7 +134,7 @@ $read_result = $conn->query($read_sql);
                                             <li><a href="#">Pages</a>
                                                 <ul class="submenu">
                                                     <li><a href="applications.php">Applications</a></li>
-                                                    <li><a href="users_feedback.php">Feedbacks</a></li>
+                                                    <li><a href="candidate_feedback.php">Candidate Feedback</a></li>
                                                 </ul>
                                             </li>
                                             <li><a href="users_contact.php">Contacts</a></li>
@@ -151,8 +151,12 @@ $read_result = $conn->query($read_sql);
                                                     <li><a href="interviewer.php">Interviewer</a></li>
                                                 </ul>
                                             </li>
-                                            
-                                            <li><a href="users_feedback.php">Feedbacks</a></li>
+                                            <li><a href="#">Feedbacks</a>
+                                                <ul class="submenu">
+                                                    <li><a href="candidate_feedback.php">Candidate Feedback</a></li>
+                                                    <li><a href="Recruiter_feedback.php">Recruiter Feedback</a></li>
+                                                </ul>
+                                            </li>
                                             <li><a href="users_contact.php">Users Contacts</a></li>
                                             <?php
                                                 }
