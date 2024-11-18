@@ -99,7 +99,19 @@ $read_result = $conn->query($read_sql);
                         <div class="col-lg-3 col-md-2">
                             <!-- Logo -->
                             <div class="logo">
-                                <a href="dashboard.php"><img src="assets/img/logo/logo.png" class="logohead" alt=""></a>
+                                <?php
+                                    if($_SESSION['user_type'] === 'Candidate'){
+                                ?>
+                                <a href="job_listing.php"><img src="assets/img/logo/logo.png" class="logohead" alt=""></a>
+                                <?php
+                                    }elseif($_SESSION['user_type'] === 'Recruiter'){
+                                ?>
+                                <a href="posted_jobs.php"><img src="assets/img/logo/logo.png" class="logohead" alt=""></a>
+                                <?php
+                                    }else{
+                                ?>
+                                <a href="users.php"><img src="assets/img/logo/logo.png" class="logohead" alt=""></a>
+                                <?php }?>
                             </div>  
                         </div>
                         <div class="col-lg-9 col-md-9">

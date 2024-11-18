@@ -634,7 +634,7 @@ if ($result->num_rows > 0) {
         echo "</ul>";
         echo "</div>";
         echo "</div>";
-        echo "<div class='items-link items-link2 f-right'>";
+        echo "<div class='items-link f-right'>";
         echo "<a href='job_details.php?job_id=" . $row['job_id'] . "&recruiter_id=" . $row['recruiter_id'] . "'>" . $row['timing'] . "</a> <br>";
 
         echo "<button class='share_btn' style='margin-top:-25px; cursor: pointer;' data-url='job_details.php?job_id=" . $row['job_id'] . "' data-toggle='modal' data-target='#shareModal'>Share</button> <br>";

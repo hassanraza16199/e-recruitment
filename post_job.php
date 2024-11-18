@@ -57,15 +57,15 @@ if (isset($_POST['submit'])) {
             $message = "$recruiter_name posted a new job $job_title.";
             
             // Insert notification data
-            $notification_sql = "INSERT INTO notification (job_or_status_id, recruiter_id, notification_title, message, created_at) 
+            $notification_sql1 = "INSERT INTO notification (job_or_status_id, recruiter_id, notification_title, message, created_at) 
                                  VALUES ('$job_id', '$recruiter_id', '$notification_title', '$message', '".date('Y-m-d h:i:s')."')";
             
-            if ($conn->query($notification_sql) === TRUE) {
+            if ($conn->query($notification_sql1) === TRUE) {
                 $_SESSION['post_success'] = true;
                 header("Location: feedback.php");
                 exit;
             } else {
-                echo "Error: " . $notification_sql . "<br>" . $conn->error;
+                echo "Error: " . $notification_sql1 . "<br>" . $conn->error;
             }
         } else {
             echo "Error: " . $sql . "<br>" . $conn->error;
