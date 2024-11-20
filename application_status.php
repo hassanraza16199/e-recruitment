@@ -16,7 +16,7 @@ if (isset($_POST['submit'])) {
         $notification_title = "Status";
         $job_title = $_POST['job_title'];
         $candidate_id = $_POST['candidate_id'];
-        $message = "Your job application '$job_title' has been approved by the '$recruiter_name'.";
+        $message = "Your job application $job_title has been approved by the $recruiter_name.";
          
         // Insert notification data
         $notification_sql = "INSERT INTO notification (job_or_status_id, recruiter_id, candidate_id, notification_title, message, created_at) 
@@ -215,7 +215,7 @@ if (isset($_POST['schedule'])) {
                 
             }
         </style>
-
+    </head>
     <body>
         <!-- Preloader Start -->
         <div id="preloader-active">
@@ -353,8 +353,8 @@ if (isset($_POST['schedule'])) {
                                     <option value="Rejected" <?php if($status =='Rejected') echo'selected'; ?>>Rejected </option>
                                 </select>
                             </div>
-                            <input type="hidden" name="job_title" value="<?php $job_title; ?>">
-                            <input type="hidden" name="candidate_id" value="<?php $candidate_id; ?>">
+                            <input type="hidden" name="job_title" value="<?php echo $job_title; ?>">
+                            <input type="hidden" name="candidate_id" value="<?php echo $candidate_id; ?>">
                             <button style="display:flex;" type="submit"  name='submit' class="btn head-btn2 mt-5">Submit</button>
                         </form>
                     </div>
