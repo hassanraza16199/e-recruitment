@@ -380,7 +380,7 @@ if (isset($_POST['schedule'])) {
                     
                     <div class="form-group">
                         <label for="to_email">To:</label>
-                        <input type="email" class="form-control" id="to_email" name="to_email" 
+                        <input type="email" class="form-control" id="to_email" name="to_email[]" 
                             value="<?php 
                                 if ($status == 'Technical Interviewing' || $status == 'Final Interview') {
                                     echo $email_address . (isset($_SESSION['schedule_email']) ? ', ' . $_SESSION['schedule_email'] : '');

@@ -14,14 +14,14 @@ function sendMail($to, $subject, $message, $cc = []) {
         $mail->isSMTP();
         $mail->Host       = 'smtp-relay.brevo.com';
         $mail->SMTPAuth   = true;
-        $mail->Username   = '7d6391001@smtp-brevo.com';
-        $mail->Password   = 'G2ZDJznHRIdYWcXx';
+        $mail->Username   = '805d75001@smtp-brevo.com';
+        $mail->Password   = 'UXhIC7DQcyb2zJ4q';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         $mail->Port       = 465;
 
         // Recipients
-        $mail->setFrom('hassan@ashlarglobal.com', 'E-Recruitment System');
-        $mail->addReplyTo('hassan@ashlarglobal.com', 'E-Recruitment System');
+        $mail->setFrom('hussnain.umer.vu@gmail.com', 'E-Recruitment System');
+        $mail->addReplyTo('hussnain.umer.vu@gmail.com', 'E-Recruitment System');
         
         foreach ($to as $email) {
             $mail->addAddress($email);
