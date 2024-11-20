@@ -148,10 +148,8 @@ include "connection.php";
                               <li>Application date : <span><?php echo $row['due_date'] ?></span></li>
                           </ul>
                          <div class="apply-btn2">
-                         <?php
-                                            if ($_SESSION['user_type'] == 'Recruiter') {
-                                                echo "<a href='applications.php?id=" . $job_id . "' class='btn'>Applied Application</a>";
-                                            }else if ($_SESSION['user_type'] == 'Candidate') {
+                            <?php
+                                            if ($_SESSION['user_type'] == 'Candidate') {
                                                 echo "<a href='apply_job.php?job_id=" . $job_id . "&recruiter_id=" . $recruiter_id . "&job_title=" . $job_title . "' class='btn'>Apply Now</a>";
                                             }
                                             ?>

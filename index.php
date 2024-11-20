@@ -2,11 +2,11 @@
 include "connection.php";
 if(isset($_POST['submit'])){
     $user_name = $_POST['user_name'];
-    $sender_email = $_POST['sender_email'];
+    $sender_email = $_POST['to_email'];
     $subject = $_POST['subject'];
     $message = $_POST['message'];
 
-    $sql = "INSERT INTO `contact_us`(`message`, `user_name`, `sender_email`, `subject`) VALUES ('$message','$user_name','$sender_email','$subject')";
+    $sql = "INSERT INTO `contact_us`(`message`, `user_name`, `to_email`, `subject`) VALUES ('$message','$user_name','$to_email','$subject')";
 
     if($conn->query($sql) ===True){
         header("Location: index.php");

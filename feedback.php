@@ -4,15 +4,15 @@ include "connection.php";
 
 if(isset($_POST['submit'])) {
     if ($_SESSION['user_type'] == 'Candidate') {
-    if (isset($_GET['job_id'])) {
-        $job_id = $_GET['job_id'];
-        $recruiter_id = $_GET['recruiter_id'];
-        $job_title=$_GET['job_title'];
-    } else {
-        echo "No job ID specified.";
-        exit;
+        if (isset($_GET['job_id'])) {
+            $job_id = $_GET['job_id'];
+            $recruiter_id = $_GET['recruiter_id'];
+            $job_title=$_GET['job_title'];
+        } else {
+            echo "No job ID specified.";
+            exit;
+        }
     }
-}
     $user_type = $_SESSION['user_type'];
     $user_id = $_SESSION['id'];
     $user_name = $_SESSION['name'];
@@ -22,7 +22,7 @@ if(isset($_POST['submit'])) {
     if ($_SESSION['user_type'] == 'Recruiter') {
     $sql = "INSERT INTO `feedback` (user_id, user_name, rating , comment, user_type) VALUES('$user_id', '$user_name', '$rating', '$comment', '$user_type')";
     }else if ($_SESSION['user_type'] == 'Candidate') {
-        $sql = "INSERT INTO `feedback` (user_id, job_id, recruiter_id, user_name, rating , comment) VALUES('$user_id', '$job_id', '$recruiter_id', '$user_name', '$rating', '$comment')";
+        $sql = "INSERT INTO `feedback` (user_id, job_id, recruiter_id, user_name, rating , comment, user_type) VALUES('$user_id', '$job_id', '$recruiter_id', '$user_name', '$rating', '$comment' , '$user_type')";
     }
 
     if($conn->query($sql) == TRUE){

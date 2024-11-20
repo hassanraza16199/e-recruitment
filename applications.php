@@ -72,19 +72,29 @@ if (isset($_GET['application_id'])) {
                             Filters<img src="assets/img/filter.png" width="16px" alt="">
                         </p>
                         <a href="<?php 
-                            // Check if there are any search parameters
-                            if (!empty($_GET['candidate_education']) || !empty($_GET['candidate_skill']) || !empty($_GET['candidate_experience'])) {
-                                // If there are search parameters, export with filters
-                                echo "export_application.php?candidate_education=" . urlencode($_GET['candidate_education']) . 
-                                 "&candidate_skill=" . urlencode($_GET['candidate_skill']) . 
-                                "&candidate_experience=" . urlencode($_GET['candidate_experience']);
-                            } else {
-                                // If no search parameters, export all applications
-                                echo "export_application.php";
+                            // Initialize an array to store query parameters
+                            $query_params = [];
+                            
+                            // Add non-empty filter parameters to the array
+                            if (!empty($_GET['candidate_education'])) {
+                                $query_params[] = "candidate_education=" . urlencode($_GET['candidate_education']);
                             }
-                            ?>">
+                            if (!empty($_GET['candidate_skill'])) {
+                                $query_params[] = "candidate_skill=" . urlencode($_GET['candidate_skill']);
+                            }
+                            if (!empty($_GET['candidate_experience'])) {
+                                $query_params[] = "candidate_experience=" . urlencode($_GET['candidate_experience']);
+                            }
+                            
+                            // Construct the final query string
+                            $query_string = implode('&', $query_params);
+
+                            // Output the export URL
+                            echo "export_application.php" . (!empty($query_string) ? "?" . $query_string : "");
+                        ?>">
                             <button>Export</button>
                         </a>
+
                         
                     </div>
                 </div>
@@ -94,7 +104,7 @@ if (isset($_GET['application_id'])) {
                         <form  action="applications.php" method="GET" id="filterForm">
                             <div id="education-field mt-2" >
                                 <label for="Experience">Education:</label> <br>
-                                <select class="form-select" name="candidate_education" id="candidate_education" >
+                                <select class="form-select" name="candidate_education" id="candidate_education" required>
                                     <option selected disabled>Select Education</option>
                                     <option value="Intermediate">Intermediate</option>
                                     <option value="B.com">B.com</option>
@@ -105,11 +115,11 @@ if (isset($_GET['application_id'])) {
                             </div>
                             <div id="skills-field mt-2" >
                                 <label for="Skills">Skills:</label><br>
-                                <input type="text" class="form-control" id="candidate_skill" name="candidate_skill" placeholder="Enter the Skills">
+                                <input type="text" class="form-control" id="candidate_skill" name="candidate_skill" placeholder="Enter the Skills" required>
                             </div>
                             <div id="experience-field mt-2">
                                 <label for="Experience">Experience:</label><br>
-                                <input type="text" id="candidate_experience" name="candidate_experience" class="form-control" placeholder="Enter the Experience">
+                                <input type="text" id="candidate_experience" name="candidate_experience" class="form-control" placeholder="Enter the Experience" required>
                             </div>
                             <button class="form-control btn mt-3">Apply</button>
                         </form>
@@ -176,12 +186,21 @@ $total_applications_row = $total_applications_result->fetch_assoc();
 $total_applications = $total_applications_row['total_applications'];
 $total_pages = ceil($total_applications / $applications_per_page);
 
-// Fetch applications for the current page
-$sql = "SELECT * FROM applications ";
-if ($_SESSION['user_type'] === 'Recruiter') {
-    $sql .= "WHERE recruiter_id = '$recruiter_id' ";
+// Build the WHERE clause dynamically
+$where_clause = '';
+if (!empty($filters)) {
+    $where_clause = "WHERE " . implode(" AND ", $filters);
 }
-$sql .= "LIMIT $applications_per_page OFFSET $offset";
+
+// If recruiter-specific filtering is required
+if ($_SESSION['user_type'] === 'Recruiter') {
+    $recruiter_condition = "recruiter_id = '$recruiter_id'";
+    $where_clause .= !empty($where_clause) ? " AND $recruiter_condition" : "WHERE $recruiter_condition";
+}
+
+// Final query with pagination
+$sql = "SELECT * FROM applications $where_clause LIMIT $applications_per_page OFFSET $offset";
+
 $result = $conn->query($sql);
 
 // Check if results are found

@@ -19,6 +19,7 @@ if(isset($_POST['submit'])){
 
     if($conn->query($sql) === TRUE){
         header("Location: hiring_manager.php");
+        exit;
     }else{
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
@@ -454,6 +455,7 @@ if (isset($_GET['id'])) {
                             </thead>
                             <tbody>
                                 <?php
+                                include "connection.php";
                                     $limit = 15;
                                     $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
                                     $offset = ($current_page - 1) * $limit;
@@ -471,7 +473,7 @@ if (isset($_GET['id'])) {
                                     $result = $conn->query($sql);
 
                                     if (mysqli_num_rows($result)>0) {
-                                        while($row = mysqli_fetch_assoc($result)){
+                                        while($row = $result->fetch_assoc()){
                                         ?>
                         
                             
@@ -480,12 +482,18 @@ if (isset($_GET['id'])) {
                                     <td><?php echo $row['name']; ?></td>
                                     <td><?php echo $row['email']; ?></td>
                                     <td><?php echo $row['designation']; ?></td>
-                                    <td>
+                                    <td> 
                                         <?php 
                                             $availability = json_decode($row['avalibility'], true); 
-                                            echo implode(' | ', $availability);
+                                            if (is_array($availability)) {
+                                                echo implode(' | ', $availability);
+                                            } else {
+                                                echo $availability; // Display single selected availability option
+                                            }
                                         ?>
                                     </td>
+
+
                                     <td>
                                         <div class="tooltip-container ml-5">
                                             <span class="tooltip-icon"><i  style="color:blue" class="fa-regular fa-pen-to-square fa-sm" ></i></span>
@@ -505,8 +513,6 @@ if (isset($_GET['id'])) {
                                     </div>
                                     </td>
                                 </tr>
-                            
-        
                         <?php 
                                 }
                             }else{
@@ -572,15 +578,15 @@ if (isset($_GET['id'])) {
                     <input type="hidden" name="id" id="hiringmanagerId"> <!-- Hidden input for ID (used for editing) -->
                     <div class="form-group">
                         <label for="name">Name:</label>
-                        <input type="text" class="form-control" id="name" name="name">
+                        <input type="text" class="form-control" id="name" name="name" required>
                     </div>
                     <div class="form-group">
                         <label for="email">Email:</label>
-                        <input type="email" class="form-control" id="email" name="email">
+                        <input type="email" class="form-control" id="email" name="email" required>
                     </div>
                     <div class="form-group">
                         <label for="designation">Designation:</label>
-                        <select class="form-select mb-4" name="designation" id="designation">
+                        <select class="form-select mb-4" name="designation" id="designation" required>
                             <option selected disabled>Select Job Category</option>
                             <option value="Design & Creative">Design & Creative</option>
                             <option value="Design & Development">Design & Development</option>
@@ -595,7 +601,7 @@ if (isset($_GET['id'])) {
                     </div>
                     <div class="form-group">
                         <label for="avalibility">Avalibility:</label>
-                        <select name="avalibility" id="avalibility" data-placeholder="Select avalibilty" multiple data-multi-select>
+                        <select name="avalibility" id="avalibility" data-placeholder="Select avalibilty" multiple data-multi-select required>
                             <option value="10:00am To 11:00am">10:00am To 11:00am</option>
                             <option value="11:00am To 12:00pm">11:00am To 12:00pm</option>
                             <option value="12:00pm To 01:00pm">12:00pm To 01:00pm</option>

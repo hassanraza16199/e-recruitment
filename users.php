@@ -377,7 +377,7 @@ if ($result->num_rows > 0) {
             </div>
             <div class="form-group">
                 <label for="phone">Password:</label>
-                <input type="text" name="password" id="password" class="form-control">
+                <input type="text" name="password" id="password" class="form-control" required>
             </div>
             <div class="form-group">
                 <label for="phone">Phone:</label>
@@ -415,15 +415,14 @@ document.addEventListener('DOMContentLoaded', function() {
             var userId = tr.querySelector('th').innerText;
             var userName = tr.querySelector('td:nth-child(2)').innerText;
             var userEmail = tr.querySelector('td:nth-child(3)').innerText;
-            var userPhone = tr.querySelector('td:nth-child(5)').innerText;
-            var userBirthdate = tr.querySelector('td:nth-child(4)').innerText;
+            var userPhone = tr.querySelector('td:nth-child(4)').innerText;
+            var userBirthdate = tr.querySelector('td:nth-child(5)').innerText;
             var userCity = tr.querySelector('td:nth-child(6)').innerText;
 
             // Populate the modal form fields
             document.getElementById('id').value = userId;
             document.getElementById('name').value = userName;
             document.getElementById('email').value = userEmail;
-            document.getElementById('password').value = ''; // Blank by default for security
             document.getElementById('phone').value = userPhone;
             document.getElementById('birthdate').value = userBirthdate;
             document.getElementById('city').value = userCity;
