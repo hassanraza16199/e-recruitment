@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Nov 18, 2024 at 05:31 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Host: localhost:3306
+-- Generation Time: Nov 20, 2024 at 06:41 PM
+-- Server version: 8.0.30
+-- PHP Version: 8.2.23
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,23 +28,23 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `applications` (
-  `application_id` int(11) NOT NULL,
-  `candidate_id` int(11) NOT NULL,
-  `recruiter_id` int(11) NOT NULL,
-  `job_id` int(11) NOT NULL,
-  `job_title` varchar(250) NOT NULL,
-  `firstname` text NOT NULL,
-  `lastname` text NOT NULL,
-  `email_address` varchar(250) NOT NULL,
-  `cnic` varchar(160) NOT NULL,
-  `contact_number` int(15) NOT NULL,
-  `date_birth` varchar(150) NOT NULL,
-  `city` varchar(150) NOT NULL,
-  `candidate_education` varchar(1100) NOT NULL,
-  `candidate_skill` varchar(1100) NOT NULL,
-  `candidate_experience` varchar(100) NOT NULL,
-  `resume` varchar(255) NOT NULL,
-  `status` varchar(200) NOT NULL,
+  `application_id` int NOT NULL,
+  `candidate_id` int NOT NULL,
+  `recruiter_id` int NOT NULL,
+  `job_id` int NOT NULL,
+  `job_title` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `firstname` text COLLATE utf8mb4_general_ci NOT NULL,
+  `lastname` text COLLATE utf8mb4_general_ci NOT NULL,
+  `email_address` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `cnic` varchar(160) COLLATE utf8mb4_general_ci NOT NULL,
+  `contact_number` int NOT NULL,
+  `date_birth` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `city` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `candidate_education` varchar(1100) COLLATE utf8mb4_general_ci NOT NULL,
+  `candidate_skill` varchar(1100) COLLATE utf8mb4_general_ci NOT NULL,
+  `candidate_experience` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `resume` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `status` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
   `date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -53,7 +53,7 @@ CREATE TABLE `applications` (
 --
 
 INSERT INTO `applications` (`application_id`, `candidate_id`, `recruiter_id`, `job_id`, `job_title`, `firstname`, `lastname`, `email_address`, `cnic`, `contact_number`, `date_birth`, `city`, `candidate_education`, `candidate_skill`, `candidate_experience`, `resume`, `status`, `date`) VALUES
-(62, 18, 21, 87, '', 'kiran', '12', 'eye@gmail.com', '23233232322323', 111111111, '2000-11-02', 'Pakistan', 'Mphil', 'dfhgd', '1', '1728119250HussnainUmer-CV.pdf', '', '2024-10-05'),
+(62, 18, 21, 87, 'New Job', 'kiran', '12', 'eye@gmail.com', '23233232322323', 111111111, '2000-11-02', 'Pakistan', 'Mphil', 'dfhgd', '1', '1728119250HussnainUmer-CV.pdf', 'Technical Interviewing', '2024-10-05'),
 (63, 18, 21, 87, '', 'kiran', '12', 'hussnain.umer.vu@gmail.com', '23233232322323', 1111111111, '', '', 'dhg', 'dfhgd', '1', '1728279530HussnainUmer-CV.pdf', 'Shortlist', '2024-10-07'),
 (64, 18, 21, 87, '', 'kiran', '12', 'eye@gmail.com', '23233232322323', 1111111111, '', '', 'dhg', 'dfhgd', 'dsfgh', '1728279571HussnainUmer-CV.pdf', 'Final Interview', '2024-10-07'),
 (65, 18, 21, 87, '', 'kiran', '12', 'eye@gmail.com', '', 1111111111, '', '', '', '', '', '1728279589HussnainUmer-CV.pdf', 'Pending', '2024-10-07'),
@@ -69,11 +69,11 @@ INSERT INTO `applications` (`application_id`, `candidate_id`, `recruiter_id`, `j
 --
 
 CREATE TABLE `contact_us` (
-  `contact_id` int(11) NOT NULL,
-  `message` varchar(250) NOT NULL,
-  `user_name` varchar(111) NOT NULL,
-  `to_email` varchar(111) NOT NULL,
-  `subject` varchar(111) NOT NULL
+  `contact_id` int NOT NULL,
+  `message` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `user_name` varchar(111) COLLATE utf8mb4_general_ci NOT NULL,
+  `to_email` varchar(111) COLLATE utf8mb4_general_ci NOT NULL,
+  `subject` varchar(111) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -109,14 +109,14 @@ INSERT INTO `contact_us` (`contact_id`, `message`, `user_name`, `to_email`, `sub
 --
 
 CREATE TABLE `feedback` (
-  `feedback_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `recruiter_id` int(11) NOT NULL,
-  `job_id` int(11) NOT NULL,
-  `user_name` varchar(100) NOT NULL,
-  `rating` varchar(250) NOT NULL,
-  `comment` varchar(250) NOT NULL,
-  `user_type` varchar(250) NOT NULL
+  `feedback_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `recruiter_id` int NOT NULL,
+  `job_id` int NOT NULL,
+  `user_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `rating` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `comment` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `user_type` varchar(250) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -162,11 +162,11 @@ INSERT INTO `feedback` (`feedback_id`, `user_id`, `recruiter_id`, `job_id`, `use
 --
 
 CREATE TABLE `hiring_managers` (
-  `id` int(11) NOT NULL,
-  `name` varchar(200) NOT NULL,
-  `email` varchar(200) NOT NULL,
-  `designation` varchar(200) NOT NULL,
-  `avalibility` varchar(250) NOT NULL
+  `id` int NOT NULL,
+  `name` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `designation` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `avalibility` varchar(250) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -185,11 +185,11 @@ INSERT INTO `hiring_managers` (`id`, `name`, `email`, `designation`, `avalibilit
 --
 
 CREATE TABLE `interviewer` (
-  `id` int(11) NOT NULL,
-  `name` varchar(110) NOT NULL,
-  `email` varchar(250) NOT NULL,
-  `designation` varchar(150) NOT NULL,
-  `avalibility` varchar(250) NOT NULL
+  `id` int NOT NULL,
+  `name` varchar(110) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `designation` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `avalibility` varchar(250) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -207,13 +207,13 @@ INSERT INTO `interviewer` (`id`, `name`, `email`, `designation`, `avalibility`) 
 --
 
 CREATE TABLE `interview_schedule` (
-  `schedule_id` int(11) NOT NULL,
-  `application_id` int(11) NOT NULL,
-  `interviewer_id` int(11) NOT NULL,
-  `schedule_email` varchar(222) NOT NULL,
-  `interview_time` varchar(250) NOT NULL,
-  `interview_date` varchar(250) NOT NULL,
-  `meeting_link` varchar(250) NOT NULL
+  `schedule_id` int NOT NULL,
+  `application_id` int NOT NULL,
+  `interviewer_id` int NOT NULL,
+  `schedule_email` varchar(222) COLLATE utf8mb4_general_ci NOT NULL,
+  `interview_time` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `interview_date` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `meeting_link` varchar(250) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -230,26 +230,26 @@ INSERT INTO `interview_schedule` (`schedule_id`, `application_id`, `interviewer_
 --
 
 CREATE TABLE `job_post` (
-  `job_id` int(11) NOT NULL,
-  `recruiter_id` int(99) NOT NULL,
-  `job_title` varchar(111) NOT NULL,
-  `recruiter_name` varchar(100) NOT NULL,
-  `company_logo` varchar(250) NOT NULL,
-  `company_name` text NOT NULL,
-  `requirements` text NOT NULL,
-  `company_location` text NOT NULL,
-  `company_web` varchar(250) NOT NULL,
-  `company_email` varchar(110) NOT NULL,
-  `salary` varchar(150) NOT NULL,
-  `timing` text NOT NULL,
+  `job_id` int NOT NULL,
+  `recruiter_id` int NOT NULL,
+  `job_title` varchar(111) COLLATE utf8mb4_general_ci NOT NULL,
+  `recruiter_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `company_logo` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `company_name` text COLLATE utf8mb4_general_ci NOT NULL,
+  `requirements` text COLLATE utf8mb4_general_ci NOT NULL,
+  `company_location` text COLLATE utf8mb4_general_ci NOT NULL,
+  `company_web` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `company_email` varchar(110) COLLATE utf8mb4_general_ci NOT NULL,
+  `salary` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `timing` text COLLATE utf8mb4_general_ci NOT NULL,
   `date` date NOT NULL,
-  `categories` varchar(250) NOT NULL,
-  `discription` varchar(1100) NOT NULL,
-  `experience` varchar(244) NOT NULL,
-  `due_date` varchar(100) NOT NULL,
-  `vacancy` varchar(255) NOT NULL,
-  `status` enum('active','inactive') NOT NULL DEFAULT 'active',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `categories` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `discription` varchar(1100) COLLATE utf8mb4_general_ci NOT NULL,
+  `experience` varchar(244) COLLATE utf8mb4_general_ci NOT NULL,
+  `due_date` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `vacancy` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `status` enum('active','inactive') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'active',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -275,13 +275,13 @@ INSERT INTO `job_post` (`job_id`, `recruiter_id`, `job_title`, `recruiter_name`,
 --
 
 CREATE TABLE `mail` (
-  `mail_id` int(11) NOT NULL,
-  `candidate_id` int(11) NOT NULL,
-  `recruiter_id` int(11) NOT NULL,
-  `mail_type` varchar(250) NOT NULL,
-  `to_email` varchar(100) NOT NULL,
-  `subject` varchar(100) NOT NULL,
-  `message` varchar(1100) NOT NULL
+  `mail_id` int NOT NULL,
+  `candidate_id` int NOT NULL,
+  `recruiter_id` int NOT NULL,
+  `mail_type` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `to_email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `subject` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `message` varchar(1100) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -291,14 +291,14 @@ CREATE TABLE `mail` (
 --
 
 CREATE TABLE `notification` (
-  `notification_id` int(11) NOT NULL,
-  `job_or_status_id` int(11) NOT NULL,
-  `recruiter_id` int(11) NOT NULL,
-  `candidate_id` int(11) NOT NULL,
-  `notification_title` varchar(250) NOT NULL,
-  `message` varchar(250) NOT NULL,
-  `read_as` varchar(100) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `notification_id` int NOT NULL,
+  `job_or_status_id` int NOT NULL,
+  `recruiter_id` int NOT NULL,
+  `candidate_id` int NOT NULL,
+  `notification_title` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `message` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `read_as` tinyint NOT NULL DEFAULT '0',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -306,31 +306,41 @@ CREATE TABLE `notification` (
 --
 
 INSERT INTO `notification` (`notification_id`, `job_or_status_id`, `recruiter_id`, `candidate_id`, `notification_title`, `message`, `read_as`, `created_at`) VALUES
-(1, 104, 21, 0, 'Job', 'Andleeb posted a new job Front End', '1', '2024-10-10 19:00:00'),
-(2, 65, 21, 18, 'Status', ' Your job application against  has been approved by tha ', '1', '2024-10-11 00:34:45'),
-(3, 65, 21, 19, 'Status', ' Your job application against  has been approved by tha ', '', '2024-10-11 00:36:05'),
-(4, 65, 21, 19, 'Status', ' Your job application against  has been approved by tha Andleeb', '', '2024-10-11 02:14:00'),
-(5, 105, 21, 0, 'Job', 'Andleeb posted a new job Sign', '1', '2024-10-12 01:26:34'),
-(6, 105, 21, 0, 'Job', 'Andleeb posted a new job Sign', '1', '2024-10-12 01:26:34'),
-(7, 104, 21, 0, 'Job', 'Andleeb posted a new job Front End', '1', '2024-10-10 19:00:00'),
-(8, 104, 21, 0, 'Job', 'Andleeb posted a new job Front End', '1', '2024-10-10 19:00:00'),
-(9, 104, 21, 0, 'Job', 'Andleeb posted a new job Front End', '1', '2024-10-10 19:00:00'),
-(10, 65, 21, 19, 'Status', ' Your job application against  has been approved by tha ', '', '2024-10-11 00:36:05'),
-(11, 104, 21, 0, 'Job', 'Andleeb posted a new job Front End', '1', '2024-10-10 19:00:00'),
-(12, 104, 21, 0, 'Job', 'Andleeb posted a new job Front End', '1', '2024-10-10 19:00:00'),
-(13, 104, 21, 0, 'Job', 'Andleeb posted a new job Front End', '1', '2024-10-10 19:00:00'),
-(14, 104, 21, 0, 'Job', 'Andleeb posted a new job Front End', '1', '2024-10-10 19:00:00'),
-(15, 65, 21, 18, 'Status', ' Your job application against  has been approved by tha ', '1', '2024-10-11 00:34:45'),
-(16, 63, 1, 0, 'Status', ' Your job application against  has been approved by the Admin.', '', '2024-10-16 04:21:03'),
-(17, 104, 21, 0, 'Job', 'Andleeb posted a new job Front End', '1', '2024-10-16 19:00:00'),
-(18, 59, 1, 0, 'Status', ' Your job application against  has been approved by the Admin.', '', '2024-10-18 03:58:23'),
-(19, 59, 1, 0, 'Status', ' Your job application against  has been approved by the Admin.', '', '2024-10-18 04:07:07'),
-(20, 59, 1, 0, 'Status', ' Your job application against  has been approved by the Admin.', '', '2024-10-18 04:18:42'),
-(21, 59, 1, 0, 'Status', ' Your job application against  has been approved by the Admin.', '', '2024-10-18 04:18:54'),
-(22, 59, 1, 0, 'Status', ' Your job application against  has been approved by the Admin.', '', '2024-10-18 00:58:00'),
-(23, 59, 21, 0, 'Status', ' Your job application against  has been approved by the Andleeb.', '', '2024-10-19 02:16:47'),
-(24, 59, 21, 0, 'Status', ' Your job application against  has been approved by the Andleeb.', '', '2024-10-19 02:16:59'),
-(25, 109, 21, 0, 'Job', 'Andleeb posted a new job Test.', '1', '2024-11-18 06:05:58');
+(1, 104, 21, 0, 'Job', 'Andleeb posted a new job Front End', 0, '2024-10-10 19:00:00'),
+(2, 65, 21, 18, 'Status', ' Your job application against  has been approved by tha ', 0, '2024-10-11 00:34:45'),
+(3, 65, 21, 19, 'Status', ' Your job application against  has been approved by tha ', 0, '2024-10-11 00:36:05'),
+(4, 65, 21, 19, 'Status', ' Your job application against  has been approved by tha Andleeb', 0, '2024-10-11 02:14:00'),
+(5, 105, 21, 0, 'Job', 'Andleeb posted a new job Sign', 0, '2024-10-12 01:26:34'),
+(6, 105, 21, 0, 'Job', 'Andleeb posted a new job Sign', 0, '2024-10-12 01:26:34'),
+(7, 104, 21, 0, 'Job', 'Andleeb posted a new job Front End', 0, '2024-10-10 19:00:00'),
+(8, 104, 21, 0, 'Job', 'Andleeb posted a new job Front End', 0, '2024-10-10 19:00:00'),
+(9, 104, 21, 0, 'Job', 'Andleeb posted a new job Front End', 0, '2024-10-10 19:00:00'),
+(10, 65, 21, 19, 'Status', ' Your job application against  has been approved by tha ', 0, '2024-10-11 00:36:05'),
+(11, 104, 21, 0, 'Job', 'Andleeb posted a new job Front End', 0, '2024-10-10 19:00:00'),
+(12, 104, 21, 0, 'Job', 'Andleeb posted a new job Front End', 0, '2024-10-10 19:00:00'),
+(13, 104, 21, 0, 'Job', 'Andleeb posted a new job Front End', 0, '2024-10-10 19:00:00'),
+(14, 104, 21, 0, 'Job', 'Andleeb posted a new job Front End', 0, '2024-10-10 19:00:00'),
+(15, 65, 21, 18, 'Status', ' Your job application against  has been approved by tha ', 0, '2024-10-11 00:34:45'),
+(16, 63, 1, 0, 'Status', ' Your job application against  has been approved by the Admin.', 0, '2024-10-16 04:21:03'),
+(17, 104, 21, 0, 'Job', 'Andleeb posted a new job Front End', 0, '2024-10-16 19:00:00'),
+(18, 59, 1, 0, 'Status', ' Your job application against  has been approved by the Admin.', 0, '2024-10-18 03:58:23'),
+(19, 59, 1, 0, 'Status', ' Your job application against  has been approved by the Admin.', 0, '2024-10-18 04:07:07'),
+(20, 59, 1, 0, 'Status', ' Your job application against  has been approved by the Admin.', 0, '2024-10-18 04:18:42'),
+(21, 59, 1, 0, 'Status', ' Your job application against  has been approved by the Admin.', 0, '2024-10-18 04:18:54'),
+(22, 59, 1, 0, 'Status', ' Your job application against  has been approved by the Admin.', 0, '2024-10-18 00:58:00'),
+(23, 59, 21, 0, 'Status', ' Your job application against  has been approved by the Andleeb.', 0, '2024-10-19 02:16:47'),
+(24, 59, 21, 0, 'Status', ' Your job application against  has been approved by the Andleeb.', 0, '2024-10-19 02:16:59'),
+(25, 109, 21, 0, 'Job', 'Andleeb posted a new job Test.', 0, '2024-11-18 06:05:58'),
+(26, 62, 21, 18, 'Status', 'Your job application New Job has been approved by the Andleeb.', 0, '2024-11-19 23:25:25'),
+(27, 62, 21, 18, 'Status', 'Your job application New Job has been approved by the Andleeb.', 0, '2024-11-19 23:25:29'),
+(28, 62, 21, 18, 'Status', 'Your job application New Job has been approved by the Andleeb.', 0, '2024-11-19 23:25:40'),
+(29, 62, 21, 18, 'Status', 'Your job application New Job has been approved by the Andleeb.', 0, '2024-11-19 23:25:54'),
+(30, 62, 21, 18, 'Status', 'Your job application New Job has been approved by the Andleeb.', 0, '2024-11-19 23:26:10'),
+(31, 62, 21, 18, 'Status', 'Your job application New Job has been approved by the Andleeb.', 0, '2024-11-19 23:26:45'),
+(32, 62, 21, 18, 'Status', 'Your job application New Job has been approved by the Andleeb.', 0, '2024-11-19 23:26:51'),
+(33, 62, 21, 18, 'Status', 'Your job application New Job has been approved by the Andleeb.', 0, '2024-11-19 23:27:00'),
+(34, 62, 21, 18, 'Status', 'Your job application New Job has been approved by the Andleeb.', 0, '2024-11-19 23:27:06'),
+(35, 62, 21, 18, 'Status', 'Your job application New Job has been approved by the Andleeb.', 0, '2024-11-20 01:33:27');
 
 -- --------------------------------------------------------
 
@@ -339,16 +349,16 @@ INSERT INTO `notification` (`notification_id`, `job_or_status_id`, `recruiter_id
 --
 
 CREATE TABLE `user` (
-  `id` int(255) NOT NULL,
-  `name` text NOT NULL,
-  `email` varchar(250) NOT NULL,
-  `password` varchar(150) NOT NULL,
-  `birthdate` varchar(250) NOT NULL,
-  `city` varchar(110) NOT NULL,
-  `phone` varchar(15) NOT NULL,
-  `user_type` varchar(250) NOT NULL,
+  `id` int NOT NULL,
+  `name` text COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `birthdate` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `city` varchar(110) COLLATE utf8mb4_general_ci NOT NULL,
+  `phone` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
+  `user_type` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
   `time` datetime NOT NULL,
-  `status` enum('active','inactive') NOT NULL DEFAULT 'active'
+  `status` enum('active','inactive') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'active'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -437,61 +447,61 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `applications`
 --
 ALTER TABLE `applications`
-  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `application_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT for table `contact_us`
 --
 ALTER TABLE `contact_us`
-  MODIFY `contact_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `contact_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `feedback`
 --
 ALTER TABLE `feedback`
-  MODIFY `feedback_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `feedback_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `hiring_managers`
 --
 ALTER TABLE `hiring_managers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `interviewer`
 --
 ALTER TABLE `interviewer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `interview_schedule`
 --
 ALTER TABLE `interview_schedule`
-  MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `schedule_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `job_post`
 --
 ALTER TABLE `job_post`
-  MODIFY `job_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
+  MODIFY `job_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
 
 --
 -- AUTO_INCREMENT for table `mail`
 --
 ALTER TABLE `mail`
-  MODIFY `mail_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `mail_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `notification_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- Constraints for dumped tables
