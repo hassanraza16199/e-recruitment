@@ -1,6 +1,15 @@
 <?php
 session_start();
-include "connection.php"; // Ensure that $conn is available here.
+include "connection.php";
+
+if (!isset($_SESSION['name'])) {
+    echo "<script>alert('Access Denied! Please login first.');</script>";
+    exit;
+}elseif ($_SESSION['user_type'] != 'Recruiter' && $_SESSION['user_type'] != 'Admin') {
+    echo "Access denied.";
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $recruiter_id = $_SESSION['id'];

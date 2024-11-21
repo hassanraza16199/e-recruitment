@@ -1,7 +1,12 @@
 <?php
-
 session_start();
 include "connection.php";
+
+if (!isset($_SESSION['name'])) {
+    echo "<script>alert('Access Denied! Please login first.');</script>";
+    exit;
+}
+
 $resume_upload = 0;
 
 if(isset($_POST['submit'])) {
@@ -297,7 +302,14 @@ margin: 100px auto;
 
         <div class="form-group">
             <label for="candidate_experience">Experience</label>
-            <input type="number" class="form-control" id="candidate_experience" name="candidate_experience">
+            <select class="form-select mb-4" name="candidate_experience" id="candidate_experience" >
+                <option selected disabled>Select Experience</option>
+                <option value="1 year">1 year</option>
+                <option value="2 year">2 year</option>
+                <option value="3 year">3 year</option>
+                <option value="4 year">4 year</option>
+                <option value="4+ year">4+ year</option>
+            </select>
         </div>
         
         <div class="mb-3">

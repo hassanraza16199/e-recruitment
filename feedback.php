@@ -2,6 +2,11 @@
 session_start();
 include "connection.php";
 
+if (!isset($_SESSION['name'])) {
+    echo "<script>alert('Access Denied! Please login first.');</script>";
+    exit;
+}
+
 if(isset($_POST['submit'])) {
     if ($_SESSION['user_type'] == 'Candidate') {
         if (isset($_GET['job_id'])) {

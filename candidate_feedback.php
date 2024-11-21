@@ -2,6 +2,14 @@
 session_start();
 include "connection.php";
 
+if (!isset($_SESSION['name'])) {
+    echo "<script>alert('Access Denied! Please login first.');</script>";
+    exit;
+}elseif ($_SESSION['user_type'] != 'Recruiter' && $_SESSION['user_type'] != 'Admin') {
+    echo "<script>alert('Access Denied!');</script>";
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $feedback_id = $_POST['feedback_id'];
 

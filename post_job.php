@@ -1,7 +1,10 @@
 <?php
 session_start();
 
-if ($_SESSION['user_type'] != 'Recruiter') {
+if (!isset($_SESSION['name'])) {
+    echo "<script>alert('Access Denied! Please login first.');</script>";
+    exit;
+}elseif ($_SESSION['user_type'] != 'Recruiter') {
     echo "Access denied.";
     exit;
 }
@@ -98,185 +101,184 @@ if (isset($_POST['submit'])) {
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
             <style>
-.modal-confirm {
-color: #fb246a;
-width: 325px;
-}
-.modal-confirm .modal-content {
-padding: 20px;
-border-radius: 5px;
-margin-top:40%;
-border: none;
-}
-.modal-confirm .modal-header {
-border-bottom: none;
-position: relative;
-}
-.modal-confirm h4 {
-text-align: center;
-font-size: 26px;
-margin: 30px 0 -15px;
-}
-.modal-confirm .form-control, .modal-confirm .btn {
-min-height: 40px;
-border-radius: 3px;
-}
-.modal-confirm .close {
-position: absolute;
-top: -5px;
-right: -5px;
-}
-.modal-confirm .modal-footer {
-border: none;
-text-align: center;
-border-radius: 5px;
-font-size: 13px;
-}
-.modal-confirm .icon-box {
-color: #fff;
-position: absolute;
-margin: 0 auto;
-left: 0;
-right: 0;
-top: -70px;
-width: 95px;
-height: 95px;
-border-radius: 50%;
-z-index: 9;
-background: #fb246a;
-padding: 15px;
-text-align: center;
-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
-}
-.modal-confirm .icon-box i {
-font-size: 58px;
-position: relative;
-top: 3px;
-}
-.modal-confirm.modal-dialog {
-margin-top: 80px;
-}
-.modal-confirm .btn {
-color: #fff;
-border-radius: 4px;
-background: #fb246a;
-text-decoration: none;
-transition: all 0.4s;
-line-height: normal;
-border: none;
-}
-.modal-confirm .btn:hover, .modal-confirm .btn:focus {
-background: #fb246a;
-outline: none;
-}
-.trigger-btn {
-display: inline-block;
-margin: 100px auto;
-}
- /* Add some basic styling to make the form look better */
- .form-container {
-        max-width: 800px;
-        margin: 40px auto;
-        padding: 20px;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
+                .modal-confirm {
+                    color: #fb246a;
+                    width: 325px;
+                }
+                .modal-confirm .modal-content {
+                    padding: 20px;
+                    border-radius: 5px;
+                    margin-top:40%;
+                    border: none;
+                }
+                .modal-confirm .modal-header {
+                    border-bottom: none;
+                    position: relative;
+                }
+                .modal-confirm h4 {
+                    text-align: center;
+                    font-size: 26px;
+                    margin: 30px 0 -15px;
+                }
+                .modal-confirm .form-control, .modal-confirm .btn {
+                    min-height: 40px;
+                    border-radius: 3px;
+                }
+                .modal-confirm .close {
+                    position: absolute;
+                    top: -5px;
+                    right: -5px;
+                }
+                .modal-confirm .modal-footer {
+                    border: none;
+                    text-align: center;
+                    border-radius: 5px;
+                    font-size: 13px;
+                }
+                .modal-confirm .icon-box {
+                    color: #fff;
+                    position: absolute;
+                    margin: 0 auto;
+                    left: 0;
+                    right: 0;
+                    top: -70px;
+                    width: 95px;
+                    height: 95px;
+                    border-radius: 50%;
+                    z-index: 9;
+                    background: #fb246a;
+                    padding: 15px;
+                    text-align: center;
+                    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+                }
+                .modal-confirm .icon-box i {
+                    font-size: 58px;
+                    position: relative;
+                    top: 3px;
+                }
+                .modal-confirm.modal-dialog {
+                    margin-top: 80px;
+                }
+                .modal-confirm .btn {
+                    color: #fff;
+                    border-radius: 4px;
+                    background: #fb246a;
+                    text-decoration: none;
+                    transition: all 0.4s;
+                    line-height: normal;
+                    border: none;
+                }
+                .modal-confirm .btn:hover, .modal-confirm .btn:focus {
+                    background: #fb246a;
+                    outline: none;
+                }
+                .trigger-btn {
+                    display: inline-block;
+                    margin: 100px auto;
+                }
+                .form-container {
+                    max-width: 800px;
+                    margin: 40px auto;
+                    padding: 20px;
+                    border: 1px solid #ddd;
+                    border-radius: 10px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                }
 
-    /* Make the form responsive */
-    @media (max-width: 768px) {
-        .form-container {
-            margin: 20px auto;
-        }
-        .inputfirst {
-            padding-left: 0;
-        }
-    }
+                /* Make the form responsive */
+                @media (max-width: 768px) {
+                    .form-container {
+                        margin: 20px auto;
+                    }
+                    .inputfirst {
+                        padding-left: 0;
+                    }
+                }
 
-    @media (max-width: 480px) {
-        .form-container {
-            padding: 10px;
-        }
-        .form-group {
-            margin-bottom: 10px;
-        }
-        
-    }
-    .modal-confirm {
-color: #fb246a;
-width: 325px;
-}
-.modal-confirm .modal-content {
-padding: 20px;
-border-radius: 5px;
-margin-top:35%;
-border: none;
-}
-.modal-confirm .modal-header {
-border-bottom: none;
-position: relative;
-}
-.modal-confirm h4 {
-text-align: center;
-font-size: 26px;
-margin: 30px 0 -15px;
-}
-.modal-confirm .form-control, .modal-confirm .btn {
-min-height: 40px;
-border-radius: 3px;
-}
-.modal-confirm .close {
-position: absolute;
-top: -5px;
-right: -5px;
-}
-.modal-confirm .modal-footer {
-border: none;
-text-align: center;
-border-radius: 5px;
-font-size: 13px;
-}
-.modal-confirm .icon-box {
-color: #fff;
-position: absolute;
-margin: 0 auto;
-left: 0;
-right: 0;
-top: -70px;
-width: 95px;
-height: 95px;
-border-radius: 50%;
-z-index: 9;
-background: #fb246a;
-padding: 15px;
-text-align: center;
-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
-}
-.modal-confirm .icon-box i {
-font-size: 58px;
-position: relative;
-top: 3px;
-}
-.modal-confirm.modal-dialog {
-margin-top: 80px;
-}
-.modal-confirm .btn {
-color: #fff;
-border-radius: 4px;
-background: #fb246a;
-text-decoration: none;
-transition: all 0.4s;
-line-height: normal;
-border: none;
-}
-.modal-confirm .btn:hover, .modal-confirm .btn:focus {
-background: #fb246a;
-outline: none;
-}
-.trigger-btn {
-display: inline-block;
-margin: 100px auto;
-}
+                @media (max-width: 480px) {
+                    .form-container {
+                        padding: 10px;
+                    }
+                    .form-group {
+                        margin-bottom: 10px;
+                    }
+                    
+                }
+                .modal-confirm {
+                    color: #fb246a;
+                    width: 325px;
+                }
+                .modal-confirm .modal-content {
+                    padding: 20px;
+                    border-radius: 5px;
+                    margin-top:35%;
+                    border: none;
+                }
+                .modal-confirm .modal-header {
+                    border-bottom: none;
+                    position: relative;
+                }
+                .modal-confirm h4 {
+                    text-align: center;
+                    font-size: 26px;
+                    margin: 30px 0 -15px;
+                }
+                .modal-confirm .form-control, .modal-confirm .btn {
+                    min-height: 40px;
+                    border-radius: 3px;
+                }
+                .modal-confirm .close {
+                    position: absolute;
+                    top: -5px;
+                    right: -5px;
+                }
+                .modal-confirm .modal-footer {
+                    border: none;
+                    text-align: center;
+                    border-radius: 5px;
+                    font-size: 13px;
+                }
+                .modal-confirm .icon-box {
+                    color: #fff;
+                    position: absolute;
+                    margin: 0 auto;
+                    left: 0;
+                    right: 0;
+                    top: -70px;
+                    width: 95px;
+                    height: 95px;
+                    border-radius: 50%;
+                    z-index: 9;
+                    background: #fb246a;
+                    padding: 15px;
+                    text-align: center;
+                    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+                }
+                .modal-confirm .icon-box i {
+                    font-size: 58px;
+                    position: relative;
+                    top: 3px;
+                }
+                .modal-confirm.modal-dialog {
+                    margin-top: 80px;
+                }
+                .modal-confirm .btn {
+                    color: #fff;
+                    border-radius: 4px;
+                    background: #fb246a;
+                    text-decoration: none;
+                    transition: all 0.4s;
+                    line-height: normal;
+                    border: none;
+                }
+                .modal-confirm .btn:hover, .modal-confirm .btn:focus {
+                    background: #fb246a;
+                    outline: none;
+                }
+                .trigger-btn {
+                    display: inline-block;
+                    margin: 100px auto;
+                }
             </style>
    </head>
 

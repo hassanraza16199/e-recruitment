@@ -1,5 +1,12 @@
 <?php
     require "connection.php";
+    if (!isset($_SESSION['name'])) {
+        echo "<script>alert('Access Denied! Please login first.');</script>";
+        exit;
+    }elseif ($_SESSION['user_type'] != 'Admin') {
+        echo "Access denied.";
+        exit;
+    }
 
     $sql = "SELECT * FROM user";
     $result = $conn->query($sql);

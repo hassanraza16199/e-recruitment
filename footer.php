@@ -31,6 +31,7 @@
 
         /* Flexbox for full-height content and footer positioning */
         body {
+            overflow-x: hidden;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
@@ -40,18 +41,18 @@
             flex: 1; /* Fills available space above footer */
         }
 
-        /* Footer Styling */
         .footer-area {
             background: #010b1d;
             color: #7f7f7f;
-            padding: 50px 0;
+            padding: 70px 0;
             text-align: center;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            transition: none; /* Ensures no animation on padding */
+            will-change: transform;
         }
+
 
         .footer-copy-right p {
             margin: 0;

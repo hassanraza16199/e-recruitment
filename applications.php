@@ -2,6 +2,14 @@
 session_start();
 include "connection.php";
 
+if (!isset($_SESSION['name'])) {
+    echo "<script>alert('Access Denied! Please login first.');</script>";
+    exit;
+}elseif ($_SESSION['user_type'] != 'Recruiter' && $_SESSION['user_type'] != 'Admin') {
+    echo "<script>alert('Access Denied!');</script>";
+    exit;
+}
+
 if (isset($_GET['application_id'])) {
     $application_id = intval($_GET['application_id']);
 
@@ -117,9 +125,16 @@ if (isset($_GET['application_id'])) {
                                 <label for="Skills">Skills:</label><br>
                                 <input type="text" class="form-control" id="candidate_skill" name="candidate_skill" placeholder="Enter the Skills" required>
                             </div>
-                            <div id="experience-field mt-2">
-                                <label for="Experience">Experience:</label><br>
-                                <input type="text" id="candidate_experience" name="candidate_experience" class="form-control" placeholder="Enter the Experience" required>
+                            <div class="form-group">
+                                <label for="candidate_experience">Experience</label>
+                                <select class="form-select mb-4" name="candidate_experience" id="candidate_experience" required>
+                                    <option selected disabled>Select Experience:</option>
+                                    <option value="1 year">1 year</option>
+                                    <option value="2 year">2 year</option>
+                                    <option value="3 year">3 year</option>
+                                    <option value="4 year">4 year</option>
+                                    <option value="4+ year">4+ year</option>
+                                </select>
                             </div>
                             <button class="form-control btn mt-3">Apply</button>
                         </form>
@@ -128,133 +143,133 @@ if (isset($_GET['application_id'])) {
             </div>
                 
                 <table class="table w-100">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Name</th>
-      <th scope="col">Email</th>
-      <th scope="col">Education</th>
-      <th scope="col">Skill</th>
-      <th scope="col">Experience</th>
-      <th scope="col">Job type</th>
-      <th scope="col">Status</th>
-      <th scope="col">Resume</th>
-      <?php
-      if($_SESSION['user_type'] === 'admin'){ ?>
-        <th scope="col" colspan="2"><center>Action</center></th>
-      <?php } else { ?>
-        <th scope="col" >Action</th>
-      <?php }?>
-    </tr>
-  </thead>
-  <tbody>
-  <?php
-include "connection.php";
-
-$filters = [];
-
-// Check if a filter is set and build the query conditionally
-if (isset($_GET['candidate_education']) && !empty($_GET['candidate_education'])) {
-    $education = mysqli_real_escape_string($conn, $_GET['candidate_education']);
-    $filters[] = "candidate_education LIKE '%$education%'";
-}
-
-if (isset($_GET['candidate_skill']) && !empty($_GET['candidate_skill'])) {
-    $skill = mysqli_real_escape_string($conn, $_GET['candidate_skill']);
-    $filters[] = "candidate_skill LIKE '%$skill%'";
-}
-
-if (isset($_GET['candidate_experience']) && !empty($_GET['candidate_experience'])) {
-    $experience = mysqli_real_escape_string($conn, $_GET['candidate_experience']);
-    $filters[] = "candidate_experience LIKE '%$experience%'";
-}
-
-// Pagination configuration
-$applications_per_page = 15; // Number of applications per page
-$current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$offset = ($current_page - 1) * $applications_per_page;
-
-// Query to count the total number of applications
-$total_applications_query = "SELECT COUNT(*) as total_applications FROM applications";
-if ($_SESSION['user_type'] === 'Recruiter') {
-    $recruiter_id = $_SESSION['id'];
-    $total_applications_query .= " WHERE recruiter_id = '$recruiter_id'";
-}
-
-$total_applications_result = $conn->query($total_applications_query);
-$total_applications_row = $total_applications_result->fetch_assoc();
-$total_applications = $total_applications_row['total_applications'];
-$total_pages = ceil($total_applications / $applications_per_page);
-
-// Build the WHERE clause dynamically
-$where_clause = '';
-if (!empty($filters)) {
-    $where_clause = "WHERE " . implode(" AND ", $filters);
-}
-
-// If recruiter-specific filtering is required
-if ($_SESSION['user_type'] === 'Recruiter') {
-    $recruiter_condition = "recruiter_id = '$recruiter_id'";
-    $where_clause .= !empty($where_clause) ? " AND $recruiter_condition" : "WHERE $recruiter_condition";
-}
-
-// Final query with pagination
-$sql = "SELECT * FROM applications $where_clause LIMIT $applications_per_page OFFSET $offset";
-
-$result = $conn->query($sql);
-
-// Check if results are found
-if (mysqli_num_rows($result) > 0) {
-    while ($row = mysqli_fetch_assoc($result)) {
-        $application_id = $row['application_id'];
-?>
-    <tr>
-      <th scope="row"><?php echo $row['application_id']; ?></th>
-      <td><?php echo $row['firstname'] . ' ' . $row['lastname'] ; ?></td>
-      <td><?php echo $row['email_address']; ?></td>
-      <td><?php echo $row['candidate_education']; ?></td>
-      <td><?php echo $row['candidate_skill']; ?></td>
-      <td><?php echo $row['candidate_experience']; ?></td>
-      <td><?php echo $row['job_title']; ?></td>
-      <td><?php echo $row['status']; ?></td>
-      <td>
-        <div class="tooltip-container ml-2">
-                <span class="tooltip-icon"><i class="fa-regular fa-file open-pdf" data-pdf="/e-recruitment/cv/<?php echo $row['resume']; ?>" style="color:#010b1d; cursor: pointer;"></i></span>
-                <div class="tooltip-text">
-                    <!-- Replace the SVG with your text -->
-                    Preview Resume 
-                <div class="tooltip-arrow"></div>
-            </div>
-      </td>
-      <td>
-        <div class="tooltip-container ml-2">
-                <span class="tooltip-icon"><a href="application_status.php?application_id=<?php echo $application_id; ?>"><i class="fa-regular fa-eye "  style="color:#010b1d; cursor: pointer;"></i></a></span>
-                <div class="tooltip-text">
-                    <!-- Replace the SVG with your text -->
-                    View Application 
-                <div class="tooltip-arrow"></div>
-            </div>
-    </td>
-        <td>
+                    <thead>
+                        <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Education</th>
+                        <th scope="col">Skill</th>
+                        <th scope="col">Experience</th>
+                        <th scope="col">Job type</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Resume</th>
+                        <?php
+                        if($_SESSION['user_type'] === 'admin'){ ?>
+                            <th scope="col" colspan="2"><center>Action</center></th>
+                        <?php } else { ?>
+                            <th scope="col" >Action</th>
+                        <?php }?>
+                        </tr>
+                    </thead>
+                    <tbody>
                 <?php
-                if($_SESSION['user_type'] === 'admin'){
-                    ?>
-                <div class="tooltip-container ml-2">
-                <span class="tooltip-icon"><i id ="delete-<?php echo $row['application_id']; ?>" class="fa-solid fa-trash" style="color:#FF0000; cursor: pointer;"></i></span>
-                <div class="tooltip-text">
-                    <!-- Replace the SVG with your text -->
-                    Delete 
-                <div class="tooltip-arrow"></div>
-            </div>
-            <?php } ?>
-      </td>
-    </tr>
-    <?php
-    }
-}
-?>
-  </tbody>
-</table>
+                include "connection.php";
+
+                $filters = [];
+
+                // Check if a filter is set and build the query conditionally
+                if (isset($_GET['candidate_education']) && !empty($_GET['candidate_education'])) {
+                    $education = mysqli_real_escape_string($conn, $_GET['candidate_education']);
+                    $filters[] = "candidate_education LIKE '%$education%'";
+                }
+
+                if (isset($_GET['candidate_skill']) && !empty($_GET['candidate_skill'])) {
+                    $skill = mysqli_real_escape_string($conn, $_GET['candidate_skill']);
+                    $filters[] = "candidate_skill LIKE '%$skill%'";
+                }
+
+                if (isset($_GET['candidate_experience']) && !empty($_GET['candidate_experience'])) {
+                    $experience = mysqli_real_escape_string($conn, $_GET['candidate_experience']);
+                    $filters[] = "candidate_experience LIKE '%$experience%'";
+                }
+
+                // Pagination configuration
+                $applications_per_page = 15; // Number of applications per page
+                $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+                $offset = ($current_page - 1) * $applications_per_page;
+
+                // Query to count the total number of applications
+                $total_applications_query = "SELECT COUNT(*) as total_applications FROM applications";
+                if ($_SESSION['user_type'] === 'Recruiter') {
+                    $recruiter_id = $_SESSION['id'];
+                    $total_applications_query .= " WHERE recruiter_id = '$recruiter_id'";
+                }
+
+                $total_applications_result = $conn->query($total_applications_query);
+                $total_applications_row = $total_applications_result->fetch_assoc();
+                $total_applications = $total_applications_row['total_applications'];
+                $total_pages = ceil($total_applications / $applications_per_page);
+
+                // Build the WHERE clause dynamically
+                $where_clause = '';
+                if (!empty($filters)) {
+                    $where_clause = "WHERE " . implode(" AND ", $filters);
+                }
+
+                // If recruiter-specific filtering is required
+                if ($_SESSION['user_type'] === 'Recruiter') {
+                    $recruiter_condition = "recruiter_id = '$recruiter_id'";
+                    $where_clause .= !empty($where_clause) ? " AND $recruiter_condition" : "WHERE $recruiter_condition";
+                }
+
+                // Final query with pagination
+                $sql = "SELECT * FROM applications $where_clause LIMIT $applications_per_page OFFSET $offset";
+
+                $result = $conn->query($sql);
+
+                // Check if results are found
+                if (mysqli_num_rows($result) > 0) {
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        $application_id = $row['application_id'];
+                ?>
+                    <tr>
+                    <th scope="row"><?php echo $row['application_id']; ?></th>
+                    <td><?php echo $row['firstname'] . ' ' . $row['lastname'] ; ?></td>
+                    <td><?php echo $row['email_address']; ?></td>
+                    <td><?php echo $row['candidate_education']; ?></td>
+                    <td><?php echo $row['candidate_skill']; ?></td>
+                    <td><?php echo $row['candidate_experience']; ?></td>
+                    <td><?php echo $row['job_title']; ?></td>
+                    <td><?php echo $row['status']; ?></td>
+                    <td>
+                        <div class="tooltip-container ml-2">
+                                <span class="tooltip-icon"><i class="fa-regular fa-file open-pdf" data-pdf="/e-recruitment/cv/<?php echo $row['resume']; ?>" style="color:#010b1d; cursor: pointer;"></i></span>
+                                <div class="tooltip-text">
+                                    <!-- Replace the SVG with your text -->
+                                    Preview Resume 
+                                <div class="tooltip-arrow"></div>
+                            </div>
+                    </td>
+                    <td>
+                        <div class="tooltip-container ml-2">
+                                <span class="tooltip-icon"><a href="application_status.php?application_id=<?php echo $application_id; ?>"><i class="fa-regular fa-eye "  style="color:#010b1d; cursor: pointer;"></i></a></span>
+                                <div class="tooltip-text">
+                                    <!-- Replace the SVG with your text -->
+                                    View Application 
+                                <div class="tooltip-arrow"></div>
+                            </div>
+                    </td>
+                        <td>
+                                <?php
+                                if($_SESSION['user_type'] === 'admin'){
+                                    ?>
+                                <div class="tooltip-container ml-2">
+                                <span class="tooltip-icon"><i id ="delete-<?php echo $row['application_id']; ?>" class="fa-solid fa-trash" style="color:#FF0000; cursor: pointer;"></i></span>
+                                <div class="tooltip-text">
+                                    <!-- Replace the SVG with your text -->
+                                    Delete 
+                                <div class="tooltip-arrow"></div>
+                            </div>
+                            <?php } ?>
+                    </td>
+                    </tr>
+                    <?php
+                    }
+                }
+                ?>
+                </tbody>
+                </table>
             </div>
         </div>
         

@@ -1,8 +1,9 @@
 <?php
 session_start();
 include 'connection.php';
-if(!isset($_SESSION['name'])){
-    header("Location: login.php");
+if (!isset($_SESSION['name'])) {
+    echo "<script>alert('Access Denied! Please login first.');</script>";
+    exit;
 }
 
 $recruiter_id = $_SESSION['id'];

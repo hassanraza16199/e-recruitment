@@ -2,6 +2,14 @@
 session_start();
 include "connection.php";
 
+if (!isset($_SESSION['name'])) {
+    echo "<script>alert('Access Denied! Please login first.');</script>";
+    exit;
+}elseif ($_SESSION['user_type'] != 'Admin') {
+    echo "Access denied.";
+    exit;
+}
+
 if (isset($_POST['submit'])){
     $id = $_POST['id'];
     $name = $_POST['name'];
