@@ -2178,42 +2178,42 @@ hr {
 }
 
 .section-pad-t30 {
-	padding-top: 195px;
-	padding-bottom: 195px
+	padding-top: 95px;
+	padding-bottom: 95px
 }
 
 @media only screen and (min-width: 1200px) and (max-width: 1600px) {
-	.section-pad-t30 {
-		padding-top: 195px;
-		padding-bottom: 195px
-	}
-}
-
-@media only screen and (min-width: 992px) and (max-width: 1199px) {
-	.section-pad-t30 {
-		padding-top: 195px;
-		padding-bottom: 195px
-	}
-}
-
-@media only screen and (min-width: 768px) and (max-width: 991px) {
 	.section-pad-t30 {
 		padding-top: 95px;
 		padding-bottom: 95px
 	}
 }
 
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+	.section-pad-t30 {
+		padding-top: 95px;
+		padding-bottom: 95px
+	}
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+	.section-pad-t30 {
+		padding-top: 55px;
+		padding-bottom: 55px
+	}
+}
+
 @media only screen and (min-width: 576px) and (max-width: 767px) {
 	.section-pad-t30 {
-		padding-top: 65px;
-		padding-bottom: 65px
+		padding-top: 35px;
+		padding-bottom: 35px
 	}
 }
 
 @media (max-width: 767px) {
 	.section-pad-t30 {
-		padding-top: 65px;
-		padding-bottom: 65px
+		padding-top: 35px;
+		padding-bottom: 35px
 	}
 }
 
@@ -5712,7 +5712,7 @@ del {
 }
 
 .slider-height {
-	min-height: 850px;
+	min-height: 550px;
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: cover

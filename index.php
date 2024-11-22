@@ -243,60 +243,15 @@ if(isset($_POST['submit'])){
 		padding-bottom: 40px
 	}
 }
-
-
-form.search-box .search-form button {
-	width: 100%;
-	height: 70px;
-	background: #fb246a;
-	font-size: 20px;
-	line-height: 1;
-	text-align: center;
-	color: #fff;
-	display: block;
-	padding: 15px;
-	border-radius: 0px;
-    border:none;
-	text-transform: capitalize;
-	font-family: "Muli", sans-serif;
-	letter-spacing: 0.1em;
-	line-height: 1.2;
-	line-height: 38px;
-	font-size: 14px
+.slider-height {
+	min-height: 550px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover
 }
-form.search-box .select-form .nice-select {
-	width: 100%;
-	height: 70px;
-	background: #fff;
-	border-radius: 0px;
-	padding: 11px 19px 11px 10px;
-	color: #616875;
-	line-height: 54px;
-	border: 0;
-    cursor: auto;
-}
-
-@media (max-width: 767px) {
-	form.search-box .select-form .nice-select {
-		margin-bottom: 20px;
-		padding-left: 25px
-	}
-}
-
-@media only screen and (min-width: 576px) and (max-width: 767px) {
-	form.search-box .select-form .nice-select {
-		margin-bottom: 20px;
-		padding-left: 25px
-	}
-}
-
-form.search-box .select-form .nice-select::after {
-	border-bottom: 1px solid #a9b6cd;
-	border-right: 1px solid #a9b6cd;
-	height: 12px;
-	width: 12px;
-	margin-top: -4px;
-	right: 29px
+.section-pad-t30 {
+	padding-top: 95px;
+	padding-bottom: 95px
 }
             </style>
    </head>
@@ -627,7 +582,7 @@ form.search-box .select-form .nice-select::after {
         </section>
         <!-- Featured_job_end -->
         <!-- How  Apply Process Start-->
-        <div class="apply-process-area apply-bg pt-150 pb-150" data-background="assets/img/gallery/how-applybg.png">
+        <div class="apply-process-area apply-bg pt-90 pb-100" data-background="assets/img/gallery/how-applybg.png">
             <div class="container">
                 <!-- Section Tittle -->
                 <div class="row">
