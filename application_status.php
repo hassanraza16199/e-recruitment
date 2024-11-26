@@ -10,68 +10,13 @@ if (!isset($_SESSION['name'])) {
     exit;
 }
 
-if (isset($_POST['submit'])) {
-    if (isset($_GET['application_id'])) {
-        $application_id = $_GET['application_id'];
-    }
-    $status = $_POST['status'];
-    $sql = "UPDATE applications SET status = '$status' WHERE application_id = '$application_id'";
+$interviewersSQL = "SELECT * FROM interviewer";
+$interviewers = $conn->query($interviewersSQL);
+$interviewers = (mysqli_num_rows($interviewers) > 0) ? $interviewers->fetch_all(MYSQLI_ASSOC) : [];
 
-    if ($conn->query($sql) === TRUE) {
-        // Prepare notification message
-        $recruiter_id = $_SESSION['id'];
-        $recruiter_name = $_SESSION['name'];
-        $notification_title = "Status";
-        $job_title = $_POST['job_title'];
-        $candidate_id = $_POST['candidate_id'];
-        $message = "Your job application $job_title has been approved by the $recruiter_name.";
-         
-        // Insert notification data
-        $notification_sql = "INSERT INTO notification (job_or_status_id, recruiter_id, candidate_id, notification_title, message, created_at) 
-                          VALUES ('$application_id', '$recruiter_id', '$candidate_id', '$notification_title', '$message', '" . date('Y-m-d h:i:s') . "')";
-        if ($conn->query($notification_sql) === TRUE) {
-            header("location: application_status.php?application_id=$application_id");
-        } else {
-            echo "Error: " . $notification_sql . "<br>" . $conn->error;
-        }
-    }
-}
-
-if (isset($_POST['schedule'])) {
-    $application_id = $_POST['application_id'];
-    $interview_date = $_POST['interview_date'];
-    $meeting_link = $_POST['meeting_link'];
-    
-    if (isset($_POST['interview_time'])) {
-        // Split the selected interview time data by '|'
-        $interview_selection = explode('|', $_POST['interview_time']);
-        $interviewer_id = $interview_selection[0];
-        $available_times = array_slice($interview_selection, 1, -1);
-        $schedule_email = end($interview_selection);  // Now it is defined
-
-        // Check if available times are set
-        if (!empty($available_times)) {
-            $selected_times_json = json_encode($available_times);
-            
-            $sql = "INSERT INTO interview_schedule (application_id, interview_time, interviewer_id, interview_date, meeting_link, schedule_email)
-                    VALUES ('$application_id', '$selected_times_json', '$interviewer_id', '$interview_date', '$meeting_link', '$schedule_email')";
-
-            if ($conn->query($sql) === TRUE) {
-                $_SESSION['interview_scheduled'] = true;
-                $_SESSION['application_id'] = $application_id;
-                $_SESSION['schedule_email'] = $schedule_email;
-                header("location: application_status.php?application_id=$application_id");
-                exit;
-            } else {
-                echo "Error: " . $sql . "<br>" . $conn->error;
-            }
-        } else {
-            echo "Interview time is not set.";
-        }
-    } else {
-        echo "Interview time is not set.";
-    }
-}
+$managersSQL = "SELECT * FROM hiring_managers";
+$managers = $conn->query($managersSQL);
+$managers = (mysqli_num_rows($managers) > 0) ? $managers->fetch_all(MYSQLI_ASSOC) : [];
 ?>
 
 
@@ -285,6 +230,7 @@ if (isset($_POST['schedule'])) {
                     
                     if (mysqli_num_rows($result)>0) {
                         while($row = mysqli_fetch_assoc($result)){
+                            $candidate_name = $row['firstname'] . ' ' . $row['lastname'];
                             $email_address = $row['email_address'];
                             $candidate_id = $row['candidate_id'];
                             $status = $row['status'];
@@ -328,15 +274,7 @@ if (isset($_POST['schedule'])) {
                     <div class="status-div">
                         <div style="display:flex; margin-bottom:20px;">
                             <h2>Application Status</h2>
-                            <?php if ($status === 'Hired') { ?>
-                                <span class="email-btn">
-                                    <button class="btn head-btn1" data-toggle="modal" data-target="#emailModal">Email</button>
-                                </span>
-                            <?php }elseif($status === 'Rejected'){ ?>
-                                <span class="email-btn">
-                                    <button class="btn head-btn1" data-toggle="modal" data-target="#emailModal">Rejected Email</button>
-                                </span>
-                            <?php }elseif($status === 'Technical Interviewing'){?>
+                            <?php if($status === 'Technical Interviewing'){?>
                                 <span class="email-btn">
                                     <button class="btn head-btn1" data-toggle="modal" data-target="#scheduleModal">Schedule Interview</button>
                                 </span>
@@ -347,7 +285,7 @@ if (isset($_POST['schedule'])) {
                             <?php } ?>
                         </div>
                         
-                        <form action="application_status.php?application_id=<?php echo $_GET['application_id']; ?>" method="POST" enctype="multipart/form-data" >
+                        <form action="functions.php" method="POST" enctype="multipart/form-data" >
                             <div class="form-group mb-5">
                                 <label  class="form-label">Status</label>
                                 <select class="form-select mb-4" name="status" id="status" >
@@ -361,9 +299,12 @@ if (isset($_POST['schedule'])) {
                                     <option value="Rejected" <?php if($status =='Rejected') echo'selected'; ?>>Rejected </option>
                                 </select>
                             </div>
+                            <input type="hidden" name="application_id" value="<?php echo $_GET['application_id']; ?>">
                             <input type="hidden" name="job_title" value="<?php echo $job_title; ?>">
                             <input type="hidden" name="candidate_id" value="<?php echo $candidate_id; ?>">
-                            <button style="display:flex;" type="submit"  name='submit' class="btn head-btn2 mt-5">Submit</button>
+                            <input type="hidden" name="candidate_name" value="<?php echo $candidate_name; ?>">
+                            <input type="hidden" name="candidate_email" value="<?php echo $email_address; ?>">
+                            <button style="display:flex;" type="submit"  name='submit_application_status' class="btn head-btn2 mt-5">Submit</button>
                         </form>
                     </div>
                 </div>
@@ -425,67 +366,50 @@ if (isset($_POST['schedule'])) {
                 </button>
             </div>
             <div class="modal-body">
-                <form id="scheduleInterviewForm" action="application_status.php" method="POST">
+                <form id="scheduleInterviewForm" action="functions.php" method="POST">
                     <input type="hidden" class="form-control" id="application_id" name="application_id" value="<?php echo $application_id; ?>" readonly>
+                    <input type="hidden" class="form-control" id="email_address" name="email_address" value="<?php echo $email_address; ?>" readonly>
+                    <input type="hidden" class="form-control" id="candidate_name" name="candidate_name" value="<?php echo $candidate_name; ?>" readonly>
+                    <input type="hidden" class="form-control" id="interviewer_email" name="interviewer_email" readonly>
+                    <input type="hidden" class="form-control" id="job_title" name="job_title" value="<?php echo $job_title; ?>" readonly>
+                    <input type="hidden" class="form-control" id="interview_type" name="interview_type" value="<?= ($status == 'Technical Interviewing') ? 'Technical' : 'Final'; ?>" readonly>
+
+                    <?php if($status == 'Technical Interviewing') { ?>
+                    <div class="form-group mb-5">
+                        <label for="interviewer">Interviewer</label>
+                        <select class="form-select" name="interviewer" id="interviewer">
+                            <option value="" disabled selected>Select Interviewer</option>
+                            <?php 
+                                if (count($interviewers) > 0) {
+                                    foreach ($interviewers as $index => $interviewer) {
+                                        echo "<option value='" . $interviewer['id'] . "' data-availablility='" . $interviewer['avalibility'] . "' data-interviewer-email='" . $interviewer['email'] . "'>" . $interviewer['name'] . "</option>";
+                                    }
+                                }
+                            ?>
+                        </select>
+                    </div>
+                    <?php } ?>
+
+                    <?php if($status == 'Final Interview') { ?>
+                    <div class="form-group mb-5">
+                        <label for="manager">Hiring Managers</label>
+                        <select class="form-select" name="manager" id="manager">
+                            <option value="" disabled selected>Select Manager</option>
+                            <?php 
+                                if (count($managers) > 0) {
+                                    foreach ($managers as $index => $manager) {
+                                        echo "<option value='" . $manager['id'] . "' data-availablility='" . $manager['avalibility'] . "' data-interviewer-email='" . $manager['email'] . "'>" . $manager['name'] . "</option>";
+                                    }
+                                }
+                            ?>
+                        </select>
+                    </div>
+                    <?php } ?>
 
                     <div class="form-group mb-5">
                         <label for="interview_time">Interview Time:</label>
                         <select class="form-select" name="interview_time" id="interview_time">
-                            <option value="" disabled selected>Select interview Schedule</option>
-                            <?php
-                            // Initialize variables
-                            $sql = "";
-                            $inter_name = "";
-
-                            // Ensure $status is set and handle each case
-                            if (isset($status)) {
-                                if ($status === 'Technical Interviewing') {
-                                    $sql = "SELECT * FROM interviewer";
-                                    $inter_name = "Interviewer Name";
-                                } elseif ($status === 'Final Interview') {
-                                    $sql = "SELECT * FROM hiring_managers";
-                                    $inter_name = "Manager Name";
-                                } else {
-                                    echo "<option value=''>Invalid status for scheduling</option>";
-                                    // Don't exit here; let the dropdown render with this message.
-                                }
-
-                                // Proceed if SQL query is set
-                                if (!empty($sql)) {
-                                    $result = $conn->query($sql);
-
-                                    if ($result && $result->num_rows > 0) {
-                                        while ($row = $result->fetch_assoc()) {
-                                            $interviewer_id = $row['id'];
-                                            $schedule_email = $row['email'];
-
-                                            // Handle 'avalibility' data
-                                            if (isset($row['avalibility']) && !empty($row['avalibility'])) {
-                                                $availability = json_decode($row['avalibility'], true);
-
-                                                // Validate that 'avalibility' is a proper array
-                                                if (is_array($availability) && count($availability) > 0) {
-                                                    $availabilityOptions = implode('|', $availability);
-                                                    $optionValue = "{$row['id']}|{$availabilityOptions}|{$schedule_email}";
-                                                    $displayText = "$inter_name: {$row['name']} | Category: {$row['designation']} | Availability: " . implode(' | ', $availability);
-
-                                                    echo "<option value=\"$optionValue\">$displayText</option>";
-                                                } else {
-                                                    echo "<option value=''>No availability for {$row['name']}</option>";
-                                                }
-                                            } else {
-                                                // Handle empty or missing availability
-                                                echo "<option value=''>No availability data for {$row['name']}</option>";
-                                            }
-                                        }
-                                    } else {
-                                        echo "<option value=''>No available schedules</option>";
-                                    }
-                                }
-                            } else {
-                                echo "<option value=''>Status not set</option>";
-                            }
-                            ?>
+                            <option value="" disabled selected>Select interview Time</option>
                         </select>
                     </div>
 
@@ -499,11 +423,6 @@ if (isset($_POST['schedule'])) {
                         <input type="text" class="form-control" id="meeting_link" name="meeting_link" placeholder="Enter Interview Meeting Link" required>
                     </div>
                     <button type="submit" name="schedule" class="btn head-btn1 mr-5">Schedule Interview</button>
-
-                    <?php if (isset($_SESSION['interview_scheduled'])) { ?>
-                        <!-- Show email button after interview is scheduled -->
-                        <button type="button" class="btn head-btn2 ml-5" data-toggle="modal" data-target="#emailModal">Interview Email</button>
-                    <?php } ?>
                 </form> 
             </div>
         </div>
@@ -530,21 +449,36 @@ if (isset($_POST['schedule'])) {
                         $("#validationAlert").addClass('d-none');
                     }
                 });
-            });
-            <?php
-            if (isset($_SESSION['interview_scheduled'])) {
-                echo "<script>console.log('Modal will open. Session is set.')</script>";
-            ?>
-                <script>
-                    $(document).ready(function () {
-                        console.log('Opening modal...');
-                        $('#scheduleModal').modal('show');
-                    });
-                </script>
-            <?php
-                unset($_SESSION['interview_scheduled']);
-            } ?>
 
+                $('#interviewer, #manager').on('change', function () {
+                    const selectedOption = $(this).find('option:selected');
+                    const availablility = selectedOption.data('availablility');
+                    const interviewer_email = selectedOption.data('interviewer-email');
+
+                    $('#interviewer_email').val(interviewer_email);
+                    $('#interview_time').empty();
+
+                    let newOption = $('<option>', {
+                                        value: "",
+                                        text: "Select Interview Time"
+                                    });
+
+                    $('#interview_time').append(newOption);
+
+                    if(availablility.length > 0) {
+                        $.each(availablility, function (index, value) {
+                            let newOption = $('<option>', {
+                                value: value,
+                                text: value
+                            });
+                            
+                            $('#interview_time').append(newOption);
+                        });
+    
+                        $('#interview_time').niceSelect('update');
+                    }
+                });
+            });
         </script>
 
 	    <!-- JS here -->

@@ -7,16 +7,14 @@ $offset = isset($_GET['offset']) ? $_GET['offset'] : 0;
 
 // Fetch notifications with limit and offset
 $sql = "SELECT * FROM notification 
-        WHERE created_at >= NOW() - INTERVAL 20 DAY 
-        AND (notification_title = 'Job' OR (notification_title = 'Status' AND candidate_id = $candidate_id)) 
+        WHERE candidate_id = $candidate_id 
         ORDER BY created_at DESC 
         LIMIT $limit OFFSET $offset";
 $result = $conn->query($sql);
 
 // Fetch unread notification count
 $unread_count_sql = "SELECT COUNT(*) as unread_count FROM notification 
-        WHERE created_at >= NOW() - INTERVAL 20 DAY 
-        AND (notification_title = 'Job' OR (notification_title = 'Status' AND candidate_id = $candidate_id)) 
+        WHERE candidate_id = $candidate_id
         AND read_as = 0";
 $unread_count_result = $conn->query($unread_count_sql);
 $unread_count = 0;
@@ -26,8 +24,7 @@ if ($unread_count_result && $unread_count_result->num_rows > 0) {
 }
 
 $unread_sql = "SELECT * FROM notification 
-        WHERE created_at >= NOW() - INTERVAL 20 DAY 
-        AND (notification_title = 'Job' OR (notification_title = 'Status' AND candidate_id = $candidate_id)) 
+        WHERE candidate_id = $candidate_id
         AND read_as = 0 
         ORDER BY created_at DESC 
         LIMIT $limit OFFSET $offset";
@@ -35,8 +32,7 @@ $unread_result = $conn->query($unread_sql);
 
 // Fetch read notifications
 $read_sql = "SELECT * FROM notification 
-        WHERE created_at >= NOW() - INTERVAL 20 DAY 
-        AND (notification_title = 'Job' OR (notification_title = 'Status' AND candidate_id = $candidate_id)) 
+        WHERE candidate_id = $candidate_id 
         AND read_as = 1 
         ORDER BY created_at DESC 
         LIMIT $limit OFFSET $offset";
