@@ -26,7 +26,7 @@ if(isset($_POST['submit'])) {
     $email_address = $_POST['email_address'];
     $contact_number = $_POST['contact_number'];
     $date_birth = $_POST['date_birth'];
-    $country = $_POST['country'];
+    $city = $_POST['city'];
     $candidate_education = $_POST['candidate_education'];
     $candidate_skill = $_POST['candidate_skill'];
     $candidate_experience = $_POST['candidate_experience'];
