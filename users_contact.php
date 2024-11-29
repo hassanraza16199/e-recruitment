@@ -5,7 +5,7 @@ include "connection.php";
 if (!isset($_SESSION['name'])) {
     echo "<script>alert('Access Denied! Please login first.');</script>";
     exit;
-}elseif ($_SESSION['user_type'] != 'Recruiter' && $_SESSION['user_type'] != 'Admin') {
+}elseif ($_SESSION['user_type'] != 'Recruiter' && $_SESSION['user_type'] != 'admin') {
     echo "Access denied.";
     exit;
 }
@@ -50,9 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <link rel="stylesheet" href="assets/css/style.css">
             <style>
                 .message-cell {
-    max-width: 250px; /* Adjust the width according to your design */
-    word-wrap: break-word; /* Break long words */
-    white-space: pre-wrap; /* Preserve white spaces and wrap text */
+    max-width: 200px; /* Adjust the width according to your design */
     overflow-wrap: break-word; /* Break long words if necessary */
 }
 .tooltip-container {
@@ -152,7 +150,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <main class="ml-5 mr-5 mt-5 mb-5">
             
             <h2 class="mt-3 mb-3">Users Contact</h2>
-            <hr>
             <table class="table">
                 <thead>
                     <tr>
@@ -161,55 +158,70 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <th scope="col">Email</th>
                     <th scope="col">Subject</th>
                     <th scope="col">Message</th>
-                    <th scope="col">Action</th>
+                    <th colspan="2"><center>Action</center></th>
                     </tr>
                 </thead>
                 <tbody>
                 <?php
-
-                // Set pagination parameters
                 $contacts_per_page = 15;
                 $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
                 $offset = ($current_page - 1) * $contacts_per_page;
 
-                // Get total number of contacts
                 $sql_count = "SELECT COUNT(*) AS total_contacts FROM contact_us";
                 $result_count = $conn->query($sql_count);
                 $row_count = $result_count->fetch_assoc();
                 $total_contacts = $row_count['total_contacts'];
                 $total_pages = ceil($total_contacts / $contacts_per_page);
 
-                // Fetch contacts with limit and offset
                 $sql = "SELECT * FROM contact_us LIMIT $contacts_per_page OFFSET $offset";
                 $result = mysqli_query($conn, $sql);
 
                 if (mysqli_num_rows($result)>0) {
                     while($row = mysqli_fetch_assoc($result)) {
                         $sender_email = $row['to_email'];
+                        $user_name = $row['user_name'];
                         $subject = $row['subject'];
                         $contact_id = $row['contact_id'];
                 ?>
                     <tr>
                     <th scope="row"><?php echo $contact_id; ?></th>
-                    <td><?php echo $row['user_name']; ?></td>
+                    <td><?php echo $user_name; ?></td>
                     <td><?php echo $sender_email; ?></td>
                     <td><?php echo $subject; ?></td>
-                    <td class="message-cell"><?php echo $row['message']; ?></td>
+                    <td class="message-cell">
+                        <?php 
+                        $message = $row['message'];
+                        echo (strlen($message) > 25) ? substr($message, 0, 25) . '...' : $message;
+                        ?>
+                    </td>
+
                     <td>
-                    
+                        <button class="ml-5" style="border:none; background-color:#fff;" onclick="viewContactModal('<?php echo $contact_id; ?>', '<?php echo $user_name; ?>', '<?php echo $sender_email; ?>', '<?php echo $subject; ?>', '<?php echo addslashes($message); ?>')">
+                            <div class="tooltip-container">
+                                <span class="tooltip-icon"><i class="fa-regular fa-eye" style="color: #35D7FF;"></i></span>
+                                <div class="tooltip-text">
+                                    View 
+                                    <div class="tooltip-arrow"></div>
+                                </div>
+                            </div>
+                        </button>
+                    </td>
+
+
+
+                    <td>
                             <?php 
                             if($_SESSION['user_type'] === 'Recruiter') { ?>
                             <button style="border:none; background-color:#fff;" onclick="openModal('<?php echo $contact_id; ?>', '<?php echo $sender_email; ?>', '<?php echo $subject; ?>')">
-                    <div class="tooltip-container">
-                        <span class="tooltip-icon"><i class="fa-solid fa-reply" style="color: #35D7FF;"></i></span>
-                        <div class="tooltip-text">
-                        Reply 
-                            <div class="tooltip-arrow"></div>
-                        </div>
-                    </div>
-                </button>
-
-
+                                <div class="tooltip-container">
+                                    <span class="tooltip-icon"><i class="fa-solid fa-reply" style="color: #35D7FF;"></i></span>
+                                    <div class="tooltip-text">
+                                    Reply 
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                                </div>
+                            </button>
+                            
 
                             <?php
                             } else { ?>
@@ -280,6 +292,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php endif; ?>
     </main>
 
+    <!-- View Contact Modal -->
+<div id="viewContactModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="margin-top:120px;">
+            <div class="modal-header">
+                <h5 class="modal-title">View Contact</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="view_user_name">Name:</label>
+                        <input type="text" class="form-control" id="view_user_name" name="user_name" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="view_sender_email">Email:</label>
+                        <input type="email" class="form-control" id="view_sender_email" name="to_email" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="view_subject">Subject:</label>
+                        <input type="text" class="form-control" id="view_subject" name="subject" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="view_message">Message:</label>
+                        <textarea class="form-control" id="view_message" name="message" rows="4" readonly></textarea>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
     <div id="emailModal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content" style='margin-top:120px;'>
@@ -295,11 +342,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <input type="hidden" class="form-control" id="modal_contact_id" name="contact_id">
                     <div class="form-group">
                         <label for="modal_sender_email">To:</label>
-                        <input type="email" class="form-control" id="modal_sender_email" name="to_email[]" readonly>
+                        <input type="email" class="form-control" id="modal_sender_email" name="to_email[]" value="<?php echo $sender_email;?>" readonly>
                     </div>
                     <div class="form-group">
                         <label for="modal_subject">Subject:</label>
-                        <input type="text" class="form-control" id="modal_subject" name="subject">
+                        <input type="text" class="form-control" id="modal_subject" name="subject" value="<?php echo $subject;?>">
                     </div>
                     <div class="form-group">
                         <label for="emailBody">Message:</label>
@@ -318,6 +365,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <!-- JS here -->
   <script src="vendor/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
   <script>
+function viewContactModal(contact_id, user_name, sender_email, subject, message) {
+    // Set the modal fields dynamically
+    document.getElementById('view_user_name').value = user_name;
+    document.getElementById('view_sender_email').value = sender_email;
+    document.getElementById('view_subject').value = subject;
+    document.getElementById('view_message').value = message;
+
+    // Show the modal using jQuery
+    $('#viewContactModal').modal('show');
+    $('.close').on('click', function() {
+        $('#viewContactModal').modal('hide');
+    });
+}
+
 function openModal(contact_id, sender_email, subject) {
     // Set the modal fields dynamically
     document.getElementById('modal_contact_id').value = contact_id;

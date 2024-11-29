@@ -2,7 +2,7 @@
 include "connection.php";
 if(isset($_POST['submit'])){
     $user_name = $_POST['user_name'];
-    $sender_email = $_POST['to_email'];
+    $to_email = $_POST['to_email'];
     $subject = $_POST['subject'];
     $message = $_POST['message'];
 
@@ -288,9 +288,8 @@ if(isset($_POST['submit'])){
                                     <nav class="d-none d-lg-block">
                                         <ul id="navigation">
                                             <li><a href="index.php">Home</a></li>
-                                            
+                                            <li><a href="#recentjob">Recent Jobs</a></li>
                                             <li><a href="#aboutus">About us</a></li>
-                                            
                                             <li><a href="#contactus">Contact us</a></li>
                                         </ul>
                                     </nav>
@@ -507,7 +506,7 @@ if(isset($_POST['submit'])){
         </div>>
         <!-- Our Services End -->
         <!-- Online CV Area Start -->
-         <div class="online-cv cv-bg section-overly pt-90 pb-120" id="aboutus"  data-background="assets/img/gallery/cv_bg.jpg">
+         <div class="online-cv cv-bg section-overly pt-90 pb-100" id="aboutus"  data-background="assets/img/gallery/cv_bg.jpg">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-xl-10">
@@ -527,7 +526,7 @@ if(isset($_POST['submit'])){
         </div>
         <!-- Online CV Area End-->
         <!-- Featured_job_start -->
-        <section class="featured-job-area feature-padding">
+        <section class="featured-job-area feature-padding" id="recentjob">
             <div class="container">
                 <!-- Section Tittle -->
                 <div class="row">

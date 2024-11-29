@@ -191,7 +191,7 @@ if(isset($_POST['submit'])) {
     <main>
 
         <!-- Job List Area Start -->
-        <div class="job-listing-area pt-120 pb-120">
+        <div class="job-listing-area pt-20 pb-30">
             <div class="ml-5 mr-5">
             <div class="feedback-container">
             <h2 class="mb-4 ml-4">Feedback</h2>

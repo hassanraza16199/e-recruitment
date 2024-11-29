@@ -3,7 +3,7 @@
     if (!isset($_SESSION['name'])) {
         echo "<script>alert('Access Denied! Please login first.');</script>";
         exit;
-    }elseif ($_SESSION['user_type'] != 'Admin') {
+    }elseif ($_SESSION['user_type'] != 'admin') {
         echo "Access denied.";
         exit;
     }

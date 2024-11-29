@@ -84,6 +84,12 @@ $read_result = $conn->query($read_sql);
                 font-size:12px;
                 cursor: pointer;
                 }
+                #unread-messages, #read-messages {
+                    max-height: 200px; 
+                    overflow-y: auto; 
+                    padding-right: 10px;
+                }
+
             </style>
    </head>
 

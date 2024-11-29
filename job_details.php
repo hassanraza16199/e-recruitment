@@ -71,7 +71,7 @@ if (!isset($_SESSION['name'])) {
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="hero-cap text-center">
-                            <h2><?php echo $row['categories'] ?></h2>
+                            <h2>Job Details</h2>
                         </div>
                     </div>
                 </div>
@@ -99,7 +99,6 @@ if (!isset($_SESSION['name'])) {
                                     <ul>
                                         <li><?php echo $row['company_name'] ?></li>
                                         <li><i class="fas fa-map-marker-alt"></i><?php echo $row['company_location'] ?></li>
-                                        <li><?php echo $row['salary'] ?></li>
                                     </ul>
                                 </div>
                             </div>
@@ -143,12 +142,13 @@ if (!isset($_SESSION['name'])) {
                                <h4>Job Overview</h4>
                            </div>
                           <ul>
+                              <li>Job Category : <span><?php echo $row['categories'] ?></span></li>
                               <li>Posted date : <span><?php echo $row['date'] ?></span></li>
                               <li>Location : <span><?php echo $row['company_location'] ?></span></li>
                               <li>Vacancy : <span><?php echo $row['vacancy'] ?></span></li>
                               <li>Job nature : <span><?php echo $row['timing'] ?></span></li>
-                              <li>Salary :  <span>Rs. <?php echo $row['salary'] ?> Monthly</span></li>
-                              <li>Application date : <span><?php echo $row['due_date'] ?></span></li>
+                              <li>Salary :  <span><?php echo $row['salary'] ?> Monthly</span></li>
+                              <li>Due date : <span><?php echo $row['due_date'] ?></span></li>
                           </ul>
                          <div class="apply-btn2">
                             <?php
@@ -169,8 +169,7 @@ if (!isset($_SESSION['name'])) {
                               <span><?php echo $row['company_name'] ?></span>
                               <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p>
                             <ul>
-                                <li>Name: <span><?php echo $row['recruiter_name']; ?> </span></li>
-                                <li>Web : <span> <?php echo $row['company_web'] ?></span></li>
+                                <li>Web: <span> <?php echo $row['company_web'] ?></span></li>
                                 <li>Email: <span class="mr-4"><?php echo $row['company_email'] ?></span></li>
                             </ul>
                        </div>

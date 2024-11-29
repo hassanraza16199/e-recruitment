@@ -5,7 +5,7 @@ include "connection.php";
 if (!isset($_SESSION['name'])) {
     echo "<script>alert('Access Denied! Please login first.');</script>";
     exit;
-}elseif ($_SESSION['user_type'] != 'Admin') {
+}elseif ($_SESSION['user_type'] != 'admin') {
     echo "Access denied.";
     exit;
 }
@@ -26,6 +26,7 @@ if(isset($_POST['submit'])){
     }
 
     if($conn->query($sql) === TRUE){
+        $_SESSION['add_success'] = true;
         header("Location: hiring_manager.php");
         exit;
     }else{
@@ -77,335 +78,416 @@ if (isset($_GET['id'])) {
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <style>
+            .modal-confirm {
+            color: #fb246a;
+            width: 325px;
+            }
+
+            .modal-confirm .modal-header {
+            border-bottom: none;
+            position: relative;
+            }
+            .modal-confirm h4 {
+            text-align: center;
+            font-size: 26px;
+            margin: 30px 0 -15px;
+            }
+            .modal-confirm .form-control, .modal-confirm .btn {
+            min-height: 40px;
+            border-radius: 3px;
+            }
+            .modal-confirm .close {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            }
+            .close-model{
+                position: absolute;
+            }
+            .modal-confirm .modal-footer {
+            border: none;
+            text-align: center;
+            border-radius: 5px;
+            font-size: 13px;
+            }
+            .modal-confirm .icon-box {
+            color: #fff;
+            position: absolute;
+            margin: 0 auto;
+            left: 0;
+            right: 0;
+            top: -70px;
+            width: 95px;
+            height: 95px;
+            border-radius: 50%;
+            z-index: 9;
+            background: #fb246a;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+            }
+            .modal-confirm .icon-box i {
+            font-size: 58px;
+            position: relative;
+            top: 3px;
+            }
+            .modal-confirm.modal-dialog {
+            margin-top: 80px;
+            }
+            .modal-confirm .btn {
+            color: #fff;
+            border-radius: 4px;
+            background: #fb246a;
+            text-decoration: none;
+            transition: all 0.4s;
+            line-height: normal;
+            border: none;
+            }
+            .modal-confirm .btn:hover, .modal-confirm .btn:focus {
+            background: #fb246a;
+            outline: none;
+            }
+            .trigger-btn {
+            display: inline-block;
+            margin: 100px auto;
+            }
+            .modal-content {
+            background-color: #fefefe;
+            margin: 170px auto; /* Centers the modal with a top margin of 150px */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+            max-width: 600px; /* Ensures it doesn't get too wide on larger screens */
+            }
            .tooltip-container {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-}
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            }
 
-.tooltip-icon {
-  font-size: 24px;
-  padding: 5px;
-  border: none;
-}
+            .tooltip-icon {
+            font-size: 24px;
+            padding: 5px;
+            border: none;
+            }
 
-.tooltip-text {
-  visibility: hidden;
-  width: 100px;
-  background-color: #fff;
-  color: #000;
-  text-align: center;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  padding: 10px;
-  position: absolute;
-  top: 130%; /* Adjusts tooltip to appear below the icon */
-  left: 50%;
-  transform: translateX(-50%);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  z-index: 1;
-  white-space: nowrap;
-}
+            .tooltip-text {
+            visibility: hidden;
+            width: 100px;
+            background-color: #fff;
+            color: #000;
+            text-align: center;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            position: absolute;
+            top: 130%; /* Adjusts tooltip to appear below the icon */
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            white-space: nowrap;
+            }
 
-.tooltip-text svg {
-  display: block;
-  margin: 0 auto;
-}
+            .tooltip-text svg {
+            display: block;
+            margin: 0 auto;
+            }
 
-.tooltip-arrow {
-  width: 0;
-  height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 10px solid #ccc;
-  position: absolute;
-  bottom: 100%; /* Places the arrow above the tooltip */
-  left: 50%;
-  transform: translateX(-50%);
-}
+            .tooltip-arrow {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 10px solid #ccc;
+            position: absolute;
+            bottom: 100%; /* Places the arrow above the tooltip */
+            left: 50%;
+            transform: translateX(-50%);
+            }
 
-.tooltip-container:hover .tooltip-text {
-  visibility: visible;
-}
+            .tooltip-container:hover .tooltip-text {
+            visibility: visible;
+            }
 
-.main-div {
-  display: flex;
-  flex-direction: column;
-  max-width: 1300px;
-  padding: 20px;
-  margin: 0 60px;
-  box-sizing: border-box; /* Ensures padding is included in the element's total width/height */
-}
+            .main-div {
+            display: flex;
+            flex-direction: column;
+            max-width: 1300px;
+            padding: 20px;
+            margin: 0 60px;
+            box-sizing: border-box; /* Ensures padding is included in the element's total width/height */
+            }
 
-.main-div-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  flex-wrap: wrap; /* Makes it responsive */
-}
+            .main-div-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap; /* Makes it responsive */
+            }
 
-.add-btn {
-  margin-left: auto; /* Aligns the button to the right */
-}
+            .add-btn {
+            margin-left: auto; /* Aligns the button to the right */
+            }
 
-/* Modal Styling */
-.modal-content {
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  padding: 20px;
-}
+            /* Modal Styling */
+            .modal-content {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            }
 
-.modal-header {
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 10px;
-}
+            .modal-header {
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 10px;
+            }
 
-.modal-title {
-  font-size: 20px;
-  color: #333;
-}
+            .modal-title {
+            font-size: 20px;
+            color: #333;
+            }
 
-.modal-body {
-  padding: 20px;
-}
+            .modal-body {
+            padding: 20px;
+            }
 
-.modal-body .form-group label {
-  color: #555;
-  font-size: 14px;
-  margin-bottom: 5px;
-}
+            .modal-body .form-group label {
+            color: #555;
+            font-size: 14px;
+            margin-bottom: 5px;
+            }
 
-/* Mobile and Tablet Responsive Adjustments */
-@media (max-width: 992px) {
-  .main-div {
-      margin: 0 30px; /* Reduce side margins for smaller devices */
-  }
+            /* Mobile and Tablet Responsive Adjustments */
+            @media (max-width: 992px) {
+            .main-div {
+                margin: 0 30px; /* Reduce side margins for smaller devices */
+            }
 
-  .table {
-      width: 100%; /* Ensure table is responsive */
-      display: block; /* Make table elements more stackable */
-      overflow-x: auto; /* Allow horizontal scroll if needed */
-  }
-}
+            .table {
+                width: 100%; /* Ensure table is responsive */
+                display: block; /* Make table elements more stackable */
+                overflow-x: auto; /* Allow horizontal scroll if needed */
+            }
+            }
 
-/* Responsive Styling */
-@media (max-width: 768px) {
-  /* Adjust the modal content padding for smaller screens */
-  .modal-body {
-      padding: 15px;
-  }
+            /* Responsive Styling */
+            @media (max-width: 768px) {
+            /* Adjust the modal content padding for smaller screens */
+            .modal-body {
+                padding: 15px;
+            }
 
-  .submit {
-      margin: 0 auto;
-      display: block;
-  }
+            .submit {
+                margin: 0 auto;
+                display: block;
+            }
 
-  .main-div {
-      margin: 0 15px; /* Further reduce side margins for smaller screens */
-      padding: 15px;
-  }
+            .main-div {
+                margin: 0 15px; /* Further reduce side margins for smaller screens */
+                padding: 15px;
+            }
 
-  .main-div-header {
-      flex-direction: column; /* Stack header elements */
-      align-items: flex-start;
-  }
+            .main-div-header {
+                flex-direction: column; /* Stack header elements */
+                align-items: flex-start;
+            }
 
-  .add-btn {
-      margin-top: 10px;
-      margin-left: 0;
-      width: 100%; /* Full width button on mobile */
-  }
+            .add-btn {
+                margin-top: 10px;
+                margin-left: 0;
+                width: 100%; /* Full width button on mobile */
+            }
 
-  .add-btn button {
-      width: 100%; /* Full width button on mobile */
-  }
-}
+            .add-btn button {
+                width: 100%; /* Full width button on mobile */
+            }
+            }
 
-@media (max-width: 576px) {
-  .main-div {
-      margin: 0 10px;
-      padding: 10px;
-  }
+            @media (max-width: 576px) {
+            .main-div {
+                margin: 0 10px;
+                padding: 10px;
+            }
 
-  .table {
-      font-size: 14px; /* Adjust table text size */
-  }
+            .table {
+                font-size: 14px; /* Adjust table text size */
+            }
 
-  .modal-body {
-      padding: 10px; /* Adjust padding for smaller modals */
-  }
+            .modal-body {
+                padding: 10px; /* Adjust padding for smaller modals */
+            }
 
-  .main-div-header h2 {
-      font-size: 24px; /* Reduce header font size */
-  }
+            .main-div-header h2 {
+                font-size: 24px; /* Reduce header font size */
+            }
 
-  .add-btn button {
-      padding: 10px 15px; /* Adjust button padding */
-      font-size: 14px; /* Reduce button text size */
-  }
-}
+            .add-btn button {
+                padding: 10px 15px; /* Adjust button padding */
+                font-size: 14px; /* Reduce button text size */
+            }
+            }
 
-@media (max-width: 480px) {
+            @media (max-width: 480px) {
 
-  .form-group {
-      margin-bottom: 10px;
-  }
+            .form-group {
+                margin-bottom: 10px;
+            }
 
-  .modal-body {
-      padding: 10px;
-  }
-}
-.multi-select {
-  display: flex;
-  box-sizing: border-box;
-  flex-direction: column;
-  position: relative;
-  width: 100%;
-  user-select: none;
-}
-.multi-select .multi-select-header {
-  border: 1px solid #dee2e6;
-  padding: 7px 30px 7px 12px;
-  overflow: hidden;
-  gap: 7px;
-  min-height: 45px;
-}
-.multi-select .multi-select-header::after {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 50%;
-  right: 15px;
-  transform: translateY(-50%);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23949ba3' viewBox='0 0 16 16'%3E%3Cpath d='M8 13.1l-8-8 2.1-2.2 5.9 5.9 5.9-5.9 2.1 2.2z'/%3E%3C/svg%3E");
-  height: 12px;
-  width: 12px;
-}
-.multi-select .multi-select-header.multi-select-header-active {
-  border-color: #c1c9d0;
-}
-.multi-select .multi-select-header.multi-select-header-active::after {
-  transform: translateY(-50%) rotate(180deg);
-}
-.multi-select .multi-select-header.multi-select-header-active + .multi-select-options {
-  display: flex;
-}
-.multi-select .multi-select-header .multi-select-header-placeholder {
-  color: #65727e;
-}
-.multi-select .multi-select-header .multi-select-header-option {
-  display: inline-flex;
-  align-items: center;
-  background-color: #f3f4f7;
-  font-size: 14px;
-  padding: 3px 8px;
-  border-radius: 5px;
-}
-.multi-select .multi-select-header .multi-select-header-max {
-  font-size: 14px;
-  color: #65727e;
-}
-.multi-select .multi-select-options {
-  display: none;
-  box-sizing: border-box;
-  flex-flow: wrap;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  z-index: 999;
-  margin-top: 5px;
-  padding: 5px;
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  max-height: 200px;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-.multi-select .multi-select-options::-webkit-scrollbar {
-  width: 5px;
-}
-.multi-select .multi-select-options::-webkit-scrollbar-track {
-  background: #f0f1f3;
-}
-.multi-select .multi-select-options::-webkit-scrollbar-thumb {
-  background: #cdcfd1;
-}
-.multi-select .multi-select-options::-webkit-scrollbar-thumb:hover {
-  background: #b2b6b9;
-}
-.multi-select .multi-select-options .multi-select-option, .multi-select .multi-select-options .multi-select-all {
-  padding: 4px 12px;
-  height: 42px;
-}
-.multi-select .multi-select-options .multi-select-option .multi-select-option-radio, .multi-select .multi-select-options .multi-select-all .multi-select-option-radio {
-  margin-right: 14px;
-  height: 16px;
-  width: 16px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-}
-.multi-select .multi-select-options .multi-select-option .multi-select-option-text, .multi-select .multi-select-options .multi-select-all .multi-select-option-text {
-  box-sizing: border-box;
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: inherit;
-  font-size: 16px;
-  line-height: 20px;
-}
-.multi-select .multi-select-options .multi-select-option.multi-select-selected .multi-select-option-radio, .multi-select .multi-select-options .multi-select-all.multi-select-selected .multi-select-option-radio {
-  border-color: #40c979;
-  background-color: #40c979;
-}
-.multi-select .multi-select-options .multi-select-option.multi-select-selected .multi-select-option-radio::after, .multi-select .multi-select-options .multi-select-all.multi-select-selected .multi-select-option-radio::after {
-  content: "";
-  display: block;
-  width: 3px;
-  height: 7px;
-  margin: 0.12em 0 0 0.27em;
-  border: solid #fff;
-  border-width: 0 0.15em 0.15em 0;
-  transform: rotate(45deg);
-}
-.multi-select .multi-select-options .multi-select-option.multi-select-selected .multi-select-option-text, .multi-select .multi-select-options .multi-select-all.multi-select-selected .multi-select-option-text {
-  color: #40c979;
-}
-.multi-select .multi-select-options .multi-select-option:hover, .multi-select .multi-select-options .multi-select-option:active, .multi-select .multi-select-options .multi-select-all:hover, .multi-select .multi-select-options .multi-select-all:active {
-  background-color: #f3f4f7;
-}
-.multi-select .multi-select-options .multi-select-all {
-  border-bottom: 1px solid #f1f3f5;
-  border-radius: 0;
-}
-.multi-select .multi-select-options .multi-select-search {
-  padding: 7px 10px;
-  border: 1px solid #dee2e6;
-  border-radius: 5px;
-  margin: 10px 10px 5px 10px;
-  width: 100%;
-  outline: none;
-  font-size: 16px;
-}
-.multi-select .multi-select-options .multi-select-search::placeholder {
-  color: #b2b5b9;
-}
-.multi-select .multi-select-header, .multi-select .multi-select-option, .multi-select .multi-select-all {
-  display: flex;
-  flex-wrap: wrap;
-  box-sizing: border-box;
-  align-items: center;
-  border-radius: 5px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  font-size: 16px;
-  color: #212529;
-}
+            .modal-body {
+                padding: 10px;
+            }
+            }
+            .multi-select {
+            display: flex;
+            box-sizing: border-box;
+            flex-direction: column;
+            position: relative;
+            width: 100%;
+            user-select: none;
+            }
+            .multi-select .multi-select-header {
+            border: 1px solid #dee2e6;
+            padding: 7px 30px 7px 12px;
+            overflow: hidden;
+            gap: 7px;
+            min-height: 45px;
+            }
+            .multi-select .multi-select-header::after {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23949ba3' viewBox='0 0 16 16'%3E%3Cpath d='M8 13.1l-8-8 2.1-2.2 5.9 5.9 5.9-5.9 2.1 2.2z'/%3E%3C/svg%3E");
+            height: 12px;
+            width: 12px;
+            }
+            .multi-select .multi-select-header.multi-select-header-active {
+            border-color: #c1c9d0;
+            }
+            .multi-select .multi-select-header.multi-select-header-active::after {
+            transform: translateY(-50%) rotate(180deg);
+            }
+            .multi-select .multi-select-header.multi-select-header-active + .multi-select-options {
+            display: flex;
+            }
+            .multi-select .multi-select-header .multi-select-header-placeholder {
+            color: #65727e;
+            }
+            .multi-select .multi-select-header .multi-select-header-option {
+            display: inline-flex;
+            align-items: center;
+            background-color: #f3f4f7;
+            font-size: 14px;
+            padding: 3px 8px;
+            border-radius: 5px;
+            }
+            .multi-select .multi-select-header .multi-select-header-max {
+            font-size: 14px;
+            color: #65727e;
+            }
+            .multi-select .multi-select-options {
+            display: none;
+            box-sizing: border-box;
+            flex-flow: wrap;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 999;
+            margin-top: 5px;
+            padding: 5px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-height: 200px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            }
+            .multi-select .multi-select-options::-webkit-scrollbar {
+            width: 5px;
+            }
+            .multi-select .multi-select-options::-webkit-scrollbar-track {
+            background: #f0f1f3;
+            }
+            .multi-select .multi-select-options::-webkit-scrollbar-thumb {
+            background: #cdcfd1;
+            }
+            .multi-select .multi-select-options::-webkit-scrollbar-thumb:hover {
+            background: #b2b6b9;
+            }
+            .multi-select .multi-select-options .multi-select-option, .multi-select .multi-select-options .multi-select-all {
+            padding: 4px 12px;
+            height: 42px;
+            }
+            .multi-select .multi-select-options .multi-select-option .multi-select-option-radio, .multi-select .multi-select-options .multi-select-all .multi-select-option-radio {
+            margin-right: 14px;
+            height: 16px;
+            width: 16px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            }
+            .multi-select .multi-select-options .multi-select-option .multi-select-option-text, .multi-select .multi-select-options .multi-select-all .multi-select-option-text {
+            box-sizing: border-box;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: inherit;
+            font-size: 16px;
+            line-height: 20px;
+            }
+            .multi-select .multi-select-options .multi-select-option.multi-select-selected .multi-select-option-radio, .multi-select .multi-select-options .multi-select-all.multi-select-selected .multi-select-option-radio {
+            border-color: #40c979;
+            background-color: #40c979;
+            }
+            .multi-select .multi-select-options .multi-select-option.multi-select-selected .multi-select-option-radio::after, .multi-select .multi-select-options .multi-select-all.multi-select-selected .multi-select-option-radio::after {
+            content: "";
+            display: block;
+            width: 3px;
+            height: 7px;
+            margin: 0.12em 0 0 0.27em;
+            border: solid #fff;
+            border-width: 0 0.15em 0.15em 0;
+            transform: rotate(45deg);
+            }
+            .multi-select .multi-select-options .multi-select-option.multi-select-selected .multi-select-option-text, .multi-select .multi-select-options .multi-select-all.multi-select-selected .multi-select-option-text {
+            color: #40c979;
+            }
+            .multi-select .multi-select-options .multi-select-option:hover, .multi-select .multi-select-options .multi-select-option:active, .multi-select .multi-select-options .multi-select-all:hover, .multi-select .multi-select-options .multi-select-all:active {
+            background-color: #f3f4f7;
+            }
+            .multi-select .multi-select-options .multi-select-all {
+            border-bottom: 1px solid #f1f3f5;
+            border-radius: 0;
+            }
+            .multi-select .multi-select-options .multi-select-search {
+            padding: 7px 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin: 10px 10px 5px 10px;
+            width: 100%;
+            outline: none;
+            font-size: 16px;
+            }
+            .multi-select .multi-select-options .multi-select-search::placeholder {
+            color: #b2b5b9;
+            }
+            .multi-select .multi-select-header, .multi-select .multi-select-option, .multi-select .multi-select-all {
+            display: flex;
+            flex-wrap: wrap;
+            box-sizing: border-box;
+            align-items: center;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            font-size: 16px;
+            color: #212529;
+            }
         </style>
 
     <body>
@@ -600,9 +682,7 @@ if (isset($_GET['id'])) {
                             <option value="Design & Development">Design & Development</option>
                             <option value="Sales & Marketing">Sales & Marketing</option>
                             <option value="Mobile Application">Mobile Application</option>
-                            <option value="Construction">Construction</option>
                             <option value="Information Technology">Information Technology</option>
-                            <option value="Real Estate">Real Estate</option>
                             <option value="Content Writer">Content Writer</option>
                             <option value="Other">Other</option>
                         </select>
@@ -629,11 +709,42 @@ if (isset($_GET['id'])) {
     </div>
 </div>
 
-
+    <div id="myModal" class="modal fade">
+        <div class="modal-dialog modal-confirm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="icon-box">
+                        <i class="material-icons">&#xE876;</i>
+                    </div>
+                    <h4 class="modal-title">Awesome!</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center">Your interviewer has been add successfully!</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success btn-block" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
         <?php include "footer.php"; ?>
+
         <script>
-           document.querySelectorAll('.fa-pen-to-square').forEach(function(editBtn) {
-    editBtn.onclick = function(event) {
+            $(document).ready(function() {
+                <?php if(isset($_SESSION['add_success'])): ?>
+                    $('#myModal').modal('show'); // Show the success modal
+
+                    // Set a timeout of 3 seconds, then reload or redirect to remove the session flag
+                    setTimeout(function(){
+                        window.location.href = 'hiring_manager.php';
+                    }, 3000);
+
+                    <?php unset($_SESSION['add_success']); // Clear session flag after the modal is shown ?>
+                <?php endif; ?>
+            });
+
+        document.querySelectorAll('.fa-pen-to-square').forEach(function(editBtn) {
+        editBtn.onclick = function(event) {
         // Get the row data
         var row = event.target.closest('tr');
         var id = row.querySelector('th').textContent;

@@ -396,9 +396,7 @@ $sql .= " ORDER BY created_at DESC LIMIT $offset, $jobs_per_page";
                                             <option value="Design & Development">Design & Development</option>
                                             <option value="Sales & Marketing">Sales & Marketing</option>
                                             <option value="Mobile Application">Mobile Application</option>
-                                            <option value="Construction">Construction</option>
                                             <option value="Information Technology">Information Technology</option>
-                                            <option value="Real Estate">Real Estate</option>
                                             <option value="Content Writer">Content Writer</option>
                                             <option value="Other">Other</option>
                                         </select>

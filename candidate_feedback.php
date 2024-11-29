@@ -5,7 +5,7 @@ include "connection.php";
 if (!isset($_SESSION['name'])) {
     echo "<script>alert('Access Denied! Please login first.');</script>";
     exit;
-}elseif ($_SESSION['user_type'] != 'Recruiter' && $_SESSION['user_type'] != 'Admin') {
+}elseif ($_SESSION['user_type'] != 'Recruiter' && $_SESSION['user_type'] != 'admin') {
     echo "<script>alert('Access Denied!');</script>";
     exit;
 }
@@ -181,7 +181,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             if ($result->num_rows > 0) {
                                 while($row = $result->fetch_assoc()) {
                                     $user_type = $row['user_type'];
-                                    if($user_type === 'Candidate'){
+                                    $recruiter_id = $row['recruiter_id'];
+                                    if($user_type === 'Candidate' && $_SESSION['id'] === $recruiter_id){
                         ?>
                         <tr>
                             <th scope="row"><?php echo $row['feedback_id']; ?></th>

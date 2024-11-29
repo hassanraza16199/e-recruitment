@@ -316,7 +316,7 @@ if (isset($_POST['submit'])) {
         </div>
         <!-- Hero Area End -->
         <!-- Job List Area Start -->
-        <div class="job-listing-area pt-120 pb-120">
+        <div class="job-listing-area pt-80 pb-80">
             
 
         <div class="form-container">
@@ -357,9 +357,7 @@ if (isset($_POST['submit'])) {
                         <option value="Design & Development">Design & Development</option>
                         <option value="Sales & Marketing">Sales & Marketing</option>
                         <option value="Mobile Application">Mobile Application</option>
-                        <option value="Construction">Construction</option>
                         <option value="Information Technology">Information Technology</option>
-                        <option value="Real Estate">Real Estate</option>
                         <option value="Content Writer">Content Writer</option>
                         <option value="Other">Other</option>
                     </select>
