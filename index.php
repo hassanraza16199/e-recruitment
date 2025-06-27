@@ -316,7 +316,12 @@ form.search-box .select-form .nice-select::after {
                                 <div class="main-menu">
                                     <nav class="d-none d-lg-block">
                                         <ul id="navigation">
-                                            <li><a href="index.php">Home</a></li>
+                                            <?php 
+                                                $a = 4;
+                                                $b = 0;
+                                                $num = $a + $b;
+                                            ?>
+                                            <li><a href="index.php">Home <?php echo $numo ?></a></li>
                                             
                                             <li><a href="#aboutus">About us</a></li>
                                             
