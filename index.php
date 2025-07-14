@@ -1,5 +1,9 @@
 <?php
+session_start();
 include "connection.php";
+if (!isset($conn) || !$conn) {
+    die("Database connection not established.");
+}
 require_once 'sentry-init.php';
 ?>
 
