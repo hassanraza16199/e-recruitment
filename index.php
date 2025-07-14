@@ -1,6 +1,14 @@
 <?php
 include "connection.php";
 require_once 'sentry-init.php';
+// Ensure session is started for session usage
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+// Ensure $conn is defined
+if (!isset($conn) || !$conn) {
+    die('Database connection not established. Please check connection.php.');
+}
 ?>
 
 <!doctype html>
