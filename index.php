@@ -831,7 +831,7 @@ form.search-box .select-form .nice-select::after {
                                             $count_result = $conn->query($count_sql);
                                             $count_row = $count_result->fetch_assoc();
                                             $total_user_entries = $count_row['total'];
-                                            $conn->close();
+                                            // $conn->close(); // Removed premature close
                                             ?>
                         <span><?php echo $total_user_entries; ?> +</span>
                         <p>Talented Hunter</p>
@@ -843,7 +843,7 @@ form.search-box .select-form .nice-select::after {
                                             $count_result = $conn->query($count_sql);
                                             $count_row = $count_result->fetch_assoc();
                                             $total_entries = $count_row['total'];
-                                            $conn->close();
+                                            // $conn->close(); // Removed premature close
                                             ?>
                         <div class="footer-tittle-bottom">
                             <span><?php echo $total_entries; ?> +</span>
@@ -856,7 +856,7 @@ form.search-box .select-form .nice-select::after {
                                             $count_result = $conn->query($count_sql);
                                             $count_row = $count_result->fetch_assoc();
                                             $total_application_entries = $count_row['total'];
-                                            $conn->close();
+                                            $conn->close(); // Only close at the very end
                                             ?>
                         <!-- Footer Bottom Tittle -->
                         <div class="footer-tittle-bottom">
