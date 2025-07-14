@@ -1,5 +1,5 @@
 <?php
-include "connectionnn.php";
+include "connection.php";
 require_once 'sentry-init.php';
 ?>
 
@@ -594,7 +594,6 @@ form.search-box .select-form .nice-select::after {
                     <div class="col-xl-10">
                         <!-- single-job-content -->
                          <?php
-                        include "connection.php";
                         $sql = "SELECT * FROM job_post LIMIT 5";
                         $result = $conn->query($sql);
                         if ($result->num_rows > 0) {
@@ -828,7 +827,6 @@ form.search-box .select-form .nice-select::after {
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
                     <div class="footer-tittle-bottom">
                     <?php
-                                            include 'connection.php';
                                             $count_sql = "SELECT COUNT(*) AS total FROM user";
                                             $count_result = $conn->query($count_sql);
                                             $count_row = $count_result->fetch_assoc();
@@ -841,7 +839,6 @@ form.search-box .select-form .nice-select::after {
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
                     <?php
-                                            include 'connection.php';
                                             $count_sql = "SELECT COUNT(*) AS total FROM job_post";
                                             $count_result = $conn->query($count_sql);
                                             $count_row = $count_result->fetch_assoc();
@@ -855,7 +852,6 @@ form.search-box .select-form .nice-select::after {
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
                     <?php
-                                            include 'connection.php';
                                             $count_sql = "SELECT COUNT(*) AS total FROM applications";
                                             $count_result = $conn->query($count_sql);
                                             $count_row = $count_result->fetch_assoc();
