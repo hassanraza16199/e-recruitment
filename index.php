@@ -410,7 +410,7 @@ form.search-box .select-form .nice-select::after {
                                <?php
                                 $categories = "Design & Creative";
                                 $count_sql = "SELECT COUNT(*) AS total FROM job_post WHERE categories = '$categories'";
-                                $count_result = $conn1->query($count_sql);
+                                $count_result = $conn->query($count_sql);
                                 $count_row = $count_result->fetch_assoc();
                                 $total_entries = $count_row['total'];
 
@@ -429,7 +429,7 @@ form.search-box .select-form .nice-select::after {
                                <?php
                                 $categories = "Design & Development";
                                 $count_sql = "SELECT COUNT(*) AS total FROM job_post WHERE categories = '$categories'";
-                                $count_result = $conn1->query($count_sql);
+                                $count_result = $conn->query($count_sql);
                                 $count_row = $count_result->fetch_assoc();
                                 $total_entries = $count_row['total'];
 
@@ -448,7 +448,7 @@ form.search-box .select-form .nice-select::after {
                                <?php
                                 $categories = "Sales & Marketing";
                                 $count_sql = "SELECT COUNT(*) AS total FROM job_post WHERE categories = '$categories'";
-                                $count_result = $conn1->query($count_sql);
+                                $count_result = $conn->query($count_sql);
                                 $count_row = $count_result->fetch_assoc();
                                 $total_entries = $count_row['total'];
 
@@ -467,7 +467,7 @@ form.search-box .select-form .nice-select::after {
                                <?php
                                 $categories = "Mobile Application";
                                 $count_sql = "SELECT COUNT(*) AS total FROM job_post WHERE categories = '$categories'";
-                                $count_result = $conn1->query($count_sql);
+                                $count_result = $conn->query($count_sql);
                                 $count_row = $count_result->fetch_assoc();
                                 $total_entries = $count_row['total'];
 
@@ -486,7 +486,7 @@ form.search-box .select-form .nice-select::after {
                                <?php
                                 $categories = "Construction";
                                 $count_sql = "SELECT COUNT(*) AS total FROM job_post WHERE categories = '$categories'";
-                                $count_result = $conn1->query($count_sql);
+                                $count_result = $conn->query($count_sql);
                                 $count_row = $count_result->fetch_assoc();
                                 $total_entries = $count_row['total'];
 
@@ -505,7 +505,7 @@ form.search-box .select-form .nice-select::after {
                                <?php
                                 $categories = "Information Technology";
                                 $count_sql = "SELECT COUNT(*) AS total FROM job_post WHERE categories = '$categories'";
-                                $count_result = $conn1->query($count_sql);
+                                $count_result = $conn->query($count_sql);
                                 $count_row = $count_result->fetch_assoc();
                                 $total_entries = $count_row['total'];
 
@@ -524,7 +524,7 @@ form.search-box .select-form .nice-select::after {
                                <?php
                                 $categories = "Real Estate";
                                 $count_sql = "SELECT COUNT(*) AS total FROM job_post WHERE categories = '$categories'";
-                                $count_result = $conn1->query($count_sql);
+                                $count_result = $conn->query($count_sql);
                                 $count_row = $count_result->fetch_assoc();
                                 $total_entries = $count_row['total'];
 
@@ -543,7 +543,7 @@ form.search-box .select-form .nice-select::after {
                                <?php
                                 $categories = "Content Writer";
                                 $count_sql = "SELECT COUNT(*) AS total FROM job_post WHERE categories = '$categories'";
-                                $count_result = $conn1->query($count_sql);
+                                $count_result = $conn->query($count_sql);
                                 $count_row = $count_result->fetch_assoc();
                                 $total_entries = $count_row['total'];
 
@@ -596,7 +596,7 @@ form.search-box .select-form .nice-select::after {
                          <?php
                         include "connection.php";
                         $sql = "SELECT * FROM job_post LIMIT 5";
-                        $result = $conn1->query($sql);
+                        $result = $conn->query($sql);
                         if ($result->num_rows > 0) {
                             while($row = $result->fetch_assoc()) {
                          ?>
@@ -830,10 +830,10 @@ form.search-box .select-form .nice-select::after {
                     <?php
                                             include 'connection.php';
                                             $count_sql = "SELECT COUNT(*) AS total FROM user";
-                                            $count_result = $conn1->query($count_sql);
+                                            $count_result = $conn->query($count_sql);
                                             $count_row = $count_result->fetch_assoc();
                                             $total_user_entries = $count_row['total'];
-                                            $conn1->close();
+                                            $conn->close();
                                             ?>
                         <span><?php echo $total_user_entries; ?> +</span>
                         <p>Talented Hunter</p>
@@ -843,10 +843,10 @@ form.search-box .select-form .nice-select::after {
                     <?php
                                             include 'connection.php';
                                             $count_sql = "SELECT COUNT(*) AS total FROM job_post";
-                                            $count_result = $conn1->query($count_sql);
+                                            $count_result = $conn->query($count_sql);
                                             $count_row = $count_result->fetch_assoc();
                                             $total_entries = $count_row['total'];
-                                            $conn1->close();
+                                            $conn->close();
                                             ?>
                         <div class="footer-tittle-bottom">
                             <span><?php echo $total_entries; ?> +</span>
@@ -857,10 +857,10 @@ form.search-box .select-form .nice-select::after {
                     <?php
                                             include 'connection.php';
                                             $count_sql = "SELECT COUNT(*) AS total FROM applications";
-                                            $count_result = $conn1->query($count_sql);
+                                            $count_result = $conn->query($count_sql);
                                             $count_row = $count_result->fetch_assoc();
                                             $total_application_entries = $count_row['total'];
-                                            $conn1->close();
+                                            $conn->close();
                                             ?>
                         <!-- Footer Bottom Tittle -->
                         <div class="footer-tittle-bottom">
